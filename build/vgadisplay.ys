@@ -1,6 +1,0 @@
-read_verilog src/orangecrab_reset.v
-read_verilog src/vgadisplay.v
-read_verilog src/vgasync.v
-read_verilog generated/pll_108.v
-synth_ecp5 -top vgadisplay
-write_json "build/vgadisplay.json"
