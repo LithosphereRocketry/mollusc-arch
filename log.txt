@@ -1,0 +1,1417 @@
+yosys -s "build/vgadisplay.ys"
+
+ /----------------------------------------------------------------------------\
+ |                                                                            |
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |                                                                            |
+ |  Copyright (C) 2012 - 2020  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |                                                                            |
+ |  Permission to use, copy, modify, and/or distribute this software for any  |
+ |  purpose with or without fee is hereby granted, provided that the above    |
+ |  copyright notice and this permission notice appear in all copies.         |
+ |                                                                            |
+ |  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES  |
+ |  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF          |
+ |  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR   |
+ |  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    |
+ |  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN     |
+ |  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF   |
+ |  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.            |
+ |                                                                            |
+ \----------------------------------------------------------------------------/
+
+ Yosys 0.38+54 (git sha1 f8d4d7128, clang 14.0.0-1ubuntu1.1 -fPIC -Os)
+
+
+-- Executing script file `build/vgadisplay.ys' --
+
+1. Executing Verilog-2005 frontend: src/orangecrab_reset.v
+Parsing Verilog input from `src/orangecrab_reset.v' to AST representation.
+Generating RTLIL representation for module `\orangecrab_reset'.
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: src/vgadisplay.v
+Parsing Verilog input from `src/vgadisplay.v' to AST representation.
+Generating RTLIL representation for module `\vgadisplay'.
+Successfully finished Verilog frontend.
+
+3. Executing Verilog-2005 frontend: src/vgasync.v
+Parsing Verilog input from `src/vgasync.v' to AST representation.
+Generating RTLIL representation for module `\vgasync'.
+Successfully finished Verilog frontend.
+
+4. Executing Verilog-2005 frontend: generated/pll_108.v
+Parsing Verilog input from `generated/pll_108.v' to AST representation.
+Generating RTLIL representation for module `\pll_108'.
+Successfully finished Verilog frontend.
+
+5. Executing SYNTH_ECP5 pass.
+
+5.1. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v' to AST representation.
+Generating RTLIL representation for module `\LUT4'.
+Generating RTLIL representation for module `\$__ABC9_LUT5'.
+Generating RTLIL representation for module `\$__ABC9_LUT6'.
+Generating RTLIL representation for module `\$__ABC9_LUT7'.
+Generating RTLIL representation for module `\L6MUX21'.
+Generating RTLIL representation for module `\CCU2C'.
+Generating RTLIL representation for module `\TRELLIS_RAM16X2'.
+Generating RTLIL representation for module `\PFUMX'.
+Generating RTLIL representation for module `\TRELLIS_DPR16X4'.
+Generating RTLIL representation for module `\DPR16X4C'.
+Generating RTLIL representation for module `\LUT2'.
+Generating RTLIL representation for module `\TRELLIS_FF'.
+Generating RTLIL representation for module `\TRELLIS_IO'.
+Generating RTLIL representation for module `\INV'.
+Generating RTLIL representation for module `\TRELLIS_COMB'.
+Generating RTLIL representation for module `\DP16KD'.
+Generating RTLIL representation for module `\FD1P3AX'.
+Generating RTLIL representation for module `\FD1P3AY'.
+Generating RTLIL representation for module `\FD1P3BX'.
+Generating RTLIL representation for module `\FD1P3DX'.
+Generating RTLIL representation for module `\FD1P3IX'.
+Generating RTLIL representation for module `\FD1P3JX'.
+Generating RTLIL representation for module `\FD1S3AX'.
+Generating RTLIL representation for module `\FD1S3AY'.
+Generating RTLIL representation for module `\FD1S3BX'.
+Generating RTLIL representation for module `\FD1S3DX'.
+Generating RTLIL representation for module `\FD1S3IX'.
+Generating RTLIL representation for module `\FD1S3JX'.
+Generating RTLIL representation for module `\IFS1P3BX'.
+Generating RTLIL representation for module `\IFS1P3DX'.
+Generating RTLIL representation for module `\IFS1P3IX'.
+Generating RTLIL representation for module `\IFS1P3JX'.
+Generating RTLIL representation for module `\OFS1P3BX'.
+Generating RTLIL representation for module `\OFS1P3DX'.
+Generating RTLIL representation for module `\OFS1P3IX'.
+Generating RTLIL representation for module `\OFS1P3JX'.
+Generating RTLIL representation for module `\IB'.
+Generating RTLIL representation for module `\IBPU'.
+Generating RTLIL representation for module `\IBPD'.
+Generating RTLIL representation for module `\OB'.
+Generating RTLIL representation for module `\OBZ'.
+Generating RTLIL representation for module `\OBZPU'.
+Generating RTLIL representation for module `\OBZPD'.
+Generating RTLIL representation for module `\OBCO'.
+Generating RTLIL representation for module `\BB'.
+Generating RTLIL representation for module `\BBPU'.
+Generating RTLIL representation for module `\BBPD'.
+Generating RTLIL representation for module `\ILVDS'.
+Generating RTLIL representation for module `\OLVDS'.
+Successfully finished Verilog frontend.
+
+5.2. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_bb.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_bb.v' to AST representation.
+Generating RTLIL representation for module `\MULT18X18D'.
+Generating RTLIL representation for module `\ALU54B'.
+Generating RTLIL representation for module `\EHXPLLL'.
+Generating RTLIL representation for module `\DTR'.
+Generating RTLIL representation for module `\OSCG'.
+Generating RTLIL representation for module `\USRMCLK'.
+Generating RTLIL representation for module `\JTAGG'.
+Generating RTLIL representation for module `\DELAYF'.
+Generating RTLIL representation for module `\DELAYG'.
+Generating RTLIL representation for module `\IDDRX1F'.
+Generating RTLIL representation for module `\IDDRX2F'.
+Generating RTLIL representation for module `\IDDR71B'.
+Generating RTLIL representation for module `\IDDRX2DQA'.
+Generating RTLIL representation for module `\ODDRX1F'.
+Generating RTLIL representation for module `\ODDRX2F'.
+Generating RTLIL representation for module `\ODDR71B'.
+Generating RTLIL representation for module `\OSHX2A'.
+Generating RTLIL representation for module `\ODDRX2DQA'.
+Generating RTLIL representation for module `\ODDRX2DQSB'.
+Generating RTLIL representation for module `\TSHX2DQA'.
+Generating RTLIL representation for module `\TSHX2DQSA'.
+Generating RTLIL representation for module `\DQSBUFM'.
+Generating RTLIL representation for module `\DDRDLLA'.
+Generating RTLIL representation for module `\DLLDELD'.
+Generating RTLIL representation for module `\CLKDIVF'.
+Generating RTLIL representation for module `\ECLKSYNCB'.
+Generating RTLIL representation for module `\ECLKBRIDGECS'.
+Generating RTLIL representation for module `\DCCA'.
+Generating RTLIL representation for module `\DCSC'.
+Generating RTLIL representation for module `\DCUA'.
+Generating RTLIL representation for module `\EXTREFB'.
+Generating RTLIL representation for module `\PCSCLKDIV'.
+Generating RTLIL representation for module `\PUR'.
+Generating RTLIL representation for module `\GSR'.
+Generating RTLIL representation for module `\SGSR'.
+Generating RTLIL representation for module `\PDPW16KD'.
+Successfully finished Verilog frontend.
+
+5.3. Executing HIERARCHY pass (managing design hierarchy).
+
+5.3.1. Analyzing design hierarchy..
+Top module:  \vgadisplay
+Used module:     \orangecrab_reset
+Used module:     \vgasync
+Used module:     \pll_108
+
+5.3.2. Analyzing design hierarchy..
+Top module:  \vgadisplay
+Used module:     \orangecrab_reset
+Used module:     \vgasync
+Used module:     \pll_108
+Removed 0 unused modules.
+
+5.4. Executing PROC pass (convert processes to netlists).
+
+5.4.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 1 empty switch in `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:213$148'.
+Cleaned up 1 empty switch.
+
+5.4.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 1 switch rules as full_case in process $proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:350$255 in module TRELLIS_FF.
+Marked 1 switch rules as full_case in process $proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:285$207 in module DPR16X4C.
+Marked 1 switch rules as full_case in process $proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:221$149 in module TRELLIS_DPR16X4.
+Marked 2 switch rules as full_case in process $proc$src/vgasync.v:45$25 in module vgasync.
+Removed a total of 0 dead cases.
+
+5.4.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 1 redundant assignment.
+Promoted 47 assignments to connections.
+
+5.4.4. Executing PROC_INIT pass (extract init attributes).
+Found init rule in `\TRELLIS_FF.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$256'.
+  Set init value: \Q = 1'0
+Found init rule in `\vgasync.$proc$src/vgasync.v:0$31'.
+  Set init value: \ycount = 11'00000000000
+Found init rule in `\vgasync.$proc$src/vgasync.v:0$30'.
+  Set init value: \xcount = 11'00000000000
+Found init rule in `\vgadisplay.$proc$src/vgadisplay.v:0$12'.
+  Set init value: \value = 5
+Found init rule in `\orangecrab_reset.$proc$src/orangecrab_reset.v:12$2'.
+  Set init value: \reset_sr = 1'1
+
+5.4.5. Executing PROC_ARST pass (detect async resets in processes).
+
+5.4.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~7 debug messages>
+
+5.4.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\TRELLIS_FF.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$256'.
+Creating decoders for process `\TRELLIS_FF.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:350$255'.
+     1/1: $0\Q[0:0]
+Creating decoders for process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+Creating decoders for process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:285$207'.
+     1/3: $1$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:287$206_EN[3:0]$213
+     2/3: $1$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:287$206_DATA[3:0]$212
+     3/3: $1$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:287$206_ADDR[3:0]$211
+Creating decoders for process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+Creating decoders for process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:221$149'.
+     1/3: $1$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:223$147_EN[3:0]$155
+     2/3: $1$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:223$147_DATA[3:0]$154
+     3/3: $1$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:223$147_ADDR[3:0]$153
+Creating decoders for process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:213$148'.
+Creating decoders for process `\vgasync.$proc$src/vgasync.v:0$31'.
+Creating decoders for process `\vgasync.$proc$src/vgasync.v:0$30'.
+Creating decoders for process `\vgasync.$proc$src/vgasync.v:45$25'.
+     1/2: $0\xcount[10:0]
+     2/2: $0\ycount[10:0]
+Creating decoders for process `\vgadisplay.$proc$src/vgadisplay.v:0$12'.
+Creating decoders for process `\vgadisplay.$proc$src/vgadisplay.v:38$4'.
+Creating decoders for process `\orangecrab_reset.$proc$src/orangecrab_reset.v:12$2'.
+Creating decoders for process `\orangecrab_reset.$proc$src/orangecrab_reset.v:14$1'.
+     1/1: $0\reset_sr[0:0]
+
+5.4.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+
+5.4.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `\TRELLIS_FF.\Q' using process `\TRELLIS_FF.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:350$255'.
+  created $dff cell `$procdff$291' with positive edge clock.
+Creating register for signal `\DPR16X4C.\i' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$191_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$192_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$193_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$194_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$195_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$196_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$197_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$198_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$199_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$200_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$201_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$202_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$203_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$204_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:281$205_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:287$206_ADDR' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:285$207'.
+  created $dff cell `$procdff$292' with positive edge clock.
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:287$206_DATA' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:285$207'.
+  created $dff cell `$procdff$293' with positive edge clock.
+Creating register for signal `\DPR16X4C.$memwr$\ram$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:287$206_EN' using process `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:285$207'.
+  created $dff cell `$procdff$294' with positive edge clock.
+Creating register for signal `\TRELLIS_DPR16X4.\i' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$131_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$132_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$133_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$134_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$135_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$136_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$137_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$138_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$139_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$140_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$141_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$142_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$143_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$144_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$145_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:207$146_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:223$147_ADDR' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:221$149'.
+  created $dff cell `$procdff$295' with positive edge clock.
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:223$147_DATA' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:221$149'.
+  created $dff cell `$procdff$296' with positive edge clock.
+Creating register for signal `\TRELLIS_DPR16X4.$memwr$\mem$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:223$147_EN' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:221$149'.
+  created $dff cell `$procdff$297' with positive edge clock.
+Creating register for signal `\TRELLIS_DPR16X4.\muxwre' using process `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:213$148'.
+  created direct connection (no actual register cell created).
+Creating register for signal `\vgasync.\xcount' using process `\vgasync.$proc$src/vgasync.v:45$25'.
+  created $dff cell `$procdff$298' with positive edge clock.
+Creating register for signal `\vgasync.\ycount' using process `\vgasync.$proc$src/vgasync.v:45$25'.
+  created $dff cell `$procdff$299' with positive edge clock.
+Creating register for signal `\vgadisplay.\value' using process `\vgadisplay.$proc$src/vgadisplay.v:38$4'.
+  created $dff cell `$procdff$300' with positive edge clock.
+Creating register for signal `\orangecrab_reset.\reset_sr' using process `\orangecrab_reset.$proc$src/orangecrab_reset.v:14$1'.
+  created $dff cell `$procdff$301' with positive edge clock.
+
+5.4.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+5.4.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Removing empty process `TRELLIS_FF.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$256'.
+Found and cleaned up 2 empty switches in `\TRELLIS_FF.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:350$255'.
+Removing empty process `TRELLIS_FF.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:350$255'.
+Removing empty process `DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$230'.
+Found and cleaned up 1 empty switch in `\DPR16X4C.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:285$207'.
+Removing empty process `TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:0$173'.
+Found and cleaned up 1 empty switch in `\TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:221$149'.
+Removing empty process `TRELLIS_DPR16X4.$proc$/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:213$148'.
+Removing empty process `vgasync.$proc$src/vgasync.v:0$31'.
+Removing empty process `vgasync.$proc$src/vgasync.v:0$30'.
+Found and cleaned up 2 empty switches in `\vgasync.$proc$src/vgasync.v:45$25'.
+Removing empty process `vgasync.$proc$src/vgasync.v:45$25'.
+Removing empty process `vgadisplay.$proc$src/vgadisplay.v:0$12'.
+Removing empty process `vgadisplay.$proc$src/vgadisplay.v:38$4'.
+Removing empty process `orangecrab_reset.$proc$src/orangecrab_reset.v:12$2'.
+Found and cleaned up 1 empty switch in `\orangecrab_reset.$proc$src/orangecrab_reset.v:14$1'.
+Removing empty process `orangecrab_reset.$proc$src/orangecrab_reset.v:14$1'.
+Cleaned up 7 empty switches.
+
+5.4.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module pll_108.
+Optimizing module vgasync.
+<suppressed ~1 debug messages>
+Optimizing module vgadisplay.
+Optimizing module orangecrab_reset.
+
+5.5. Executing FLATTEN pass (flatten design).
+Deleting now unused module pll_108.
+Deleting now unused module vgasync.
+Deleting now unused module orangecrab_reset.
+<suppressed ~3 debug messages>
+
+5.6. Executing TRIBUF pass.
+
+5.7. Executing DEMINOUT pass (demote inout ports to input or output).
+
+5.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+<suppressed ~1 debug messages>
+
+5.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+Removed 3 unused cells and 26 unused wires.
+<suppressed ~7 debug messages>
+
+5.10. Executing CHECK pass (checking for obvious problems).
+Checking module vgadisplay...
+Found and reported 0 problems.
+
+5.11. Executing OPT pass (performing simple optimizations).
+
+5.11.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+
+5.11.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+Removed a total of 0 cells.
+
+5.11.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \vgadisplay..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~3 debug messages>
+
+5.11.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \vgadisplay.
+Performed a total of 0 changes.
+
+5.11.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+Removed a total of 0 cells.
+
+5.11.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.11.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+
+5.11.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+
+5.11.9. Finished OPT passes. (There is nothing left to do.)
+
+5.12. Executing FSM pass (extract and optimize FSM).
+
+5.12.1. Executing FSM_DETECT pass (finding FSMs in design).
+
+5.12.2. Executing FSM_EXTRACT pass (extracting FSM from design).
+
+5.12.3. Executing FSM_OPT pass (simple optimizations of FSMs).
+
+5.12.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+
+5.12.5. Executing FSM_OPT pass (simple optimizations of FSMs).
+
+5.12.6. Executing FSM_RECODE pass (re-assigning FSM state encoding).
+
+5.12.7. Executing FSM_INFO pass (dumping all available information on FSM cells).
+
+5.12.8. Executing FSM_MAP pass (mapping FSMs to basic logic).
+
+5.13. Executing OPT pass (performing simple optimizations).
+
+5.13.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+
+5.13.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+Removed a total of 0 cells.
+
+5.13.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \vgadisplay..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~3 debug messages>
+
+5.13.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \vgadisplay.
+Performed a total of 0 changes.
+
+5.13.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+Removed a total of 0 cells.
+
+5.13.6. Executing OPT_DFF pass (perform DFF optimizations).
+Adding EN signal on $flatten\vga.$procdff$299 ($dff) from module vgadisplay (D = $flatten\vga.$procmux$284_Y, Q = \vga.ycount).
+Adding SRST signal on $auto$ff.cc:266:slice$305 ($dffe) from module vgadisplay (D = $flatten\vga.$add$src/vgasync.v:49$29_Y [10:0], Q = \vga.ycount, rval = 11'00000000000).
+Adding SRST signal on $flatten\vga.$procdff$298 ($dff) from module vgadisplay (D = $flatten\vga.$add$src/vgasync.v:46$27_Y [10:0], Q = \vga.xcount, rval = 11'00000000000).
+Adding EN signal on $flatten\reset_instance.$procdff$301 ($dff) from module vgadisplay (D = 1'0, Q = \reset_instance.reset_sr).
+
+5.13.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+Removed 4 unused cells and 4 unused wires.
+<suppressed ~5 debug messages>
+
+5.13.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+
+5.13.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+5.13.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \vgadisplay..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+5.13.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \vgadisplay.
+Performed a total of 0 changes.
+
+5.13.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+Removed a total of 0 cells.
+
+5.13.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.13.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+
+5.13.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+
+5.13.16. Finished OPT passes. (There is nothing left to do.)
+
+5.14. Executing WREDUCE pass (reducing word size of cells).
+Removed top 30 bits (of 32) from port B of cell vgadisplay.$mul$src/vgadisplay.v:39$5 ($mul).
+Removed top 31 bits (of 32) from port B of cell vgadisplay.$flatten\vga.$add$src/vgasync.v:49$29 ($add).
+Removed top 21 bits (of 32) from port Y of cell vgadisplay.$flatten\vga.$add$src/vgasync.v:49$29 ($add).
+Removed top 21 bits (of 32) from port B of cell vgadisplay.$flatten\vga.$lt$src/vgasync.v:49$28 ($lt).
+Removed top 31 bits (of 32) from port B of cell vgadisplay.$flatten\vga.$add$src/vgasync.v:46$27 ($add).
+Removed top 21 bits (of 32) from port Y of cell vgadisplay.$flatten\vga.$add$src/vgasync.v:46$27 ($add).
+Removed top 21 bits (of 32) from port B of cell vgadisplay.$flatten\vga.$lt$src/vgasync.v:46$26 ($lt).
+Removed top 21 bits (of 32) from port B of cell vgadisplay.$flatten\vga.$lt$src/vgasync.v:41$20 ($lt).
+Removed top 21 bits (of 32) from port B of cell vgadisplay.$flatten\vga.$lt$src/vgasync.v:41$19 ($lt).
+Removed top 21 bits (of 32) from port B of cell vgadisplay.$flatten\vga.$lt$src/vgasync.v:40$17 ($lt).
+Removed top 21 bits (of 32) from port B of cell vgadisplay.$flatten\vga.$ge$src/vgasync.v:40$16 ($ge).
+Removed top 21 bits (of 32) from port B of cell vgadisplay.$flatten\vga.$lt$src/vgasync.v:39$14 ($lt).
+Removed top 21 bits (of 32) from port B of cell vgadisplay.$flatten\vga.$ge$src/vgasync.v:39$13 ($ge).
+Removed top 21 bits (of 32) from wire vgadisplay.$flatten\vga.$add$src/vgasync.v:46$27_Y.
+Removed top 21 bits (of 32) from wire vgadisplay.$flatten\vga.$add$src/vgasync.v:49$29_Y.
+
+5.15. Executing PEEPOPT pass (run peephole optimizers).
+
+5.16. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+Removed 0 unused cells and 2 unused wires.
+<suppressed ~1 debug messages>
+
+5.17. Executing SHARE pass (SAT-based resource sharing).
+
+5.18. Executing TECHMAP pass (map to technology primitives).
+
+5.18.1. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/cmp2lut.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/cmp2lut.v' to AST representation.
+Generating RTLIL representation for module `\_90_lut_cmp_'.
+Successfully finished Verilog frontend.
+
+5.18.2. Continuing TECHMAP pass.
+No more expansions possible.
+<suppressed ~218 debug messages>
+
+5.19. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+
+5.20. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+
+5.21. Executing TECHMAP pass (map to technology primitives).
+
+5.21.1. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/mul2dsp.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/mul2dsp.v' to AST representation.
+Generating RTLIL representation for module `\_80_mul'.
+Generating RTLIL representation for module `\_90_soft_mul'.
+Successfully finished Verilog frontend.
+
+5.21.2. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/ecp5/dsp_map.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/ecp5/dsp_map.v' to AST representation.
+Generating RTLIL representation for module `\$__MUL18X18'.
+Successfully finished Verilog frontend.
+
+5.21.3. Continuing TECHMAP pass.
+Using template $paramod$97e4f493c54d0ee805f2d5ec4e83e08777ed69ce\_80_mul for cells of type $mul.
+Using template $paramod$858cc1173c591b03408150a115ebe183c2c256ca\_80_mul for cells of type $__mul.
+Using template $paramod$7afdfeb054c70656d021cb0e78586bfd38743277\_80_mul for cells of type $__mul.
+Using template $paramod$a02af45cdbf0d4a86159f7b36d01db7ee127c98b\$__MUL18X18 for cells of type $__MUL18X18.
+Using template $paramod$6891debeca6370d329cf16569f78d8f01c4ab413\$__MUL18X18 for cells of type $__MUL18X18.
+No more expansions possible.
+<suppressed ~294 debug messages>
+
+5.22. Executing ALUMACC pass (create $alu and $macc cells).
+Extracting $alu and $macc cells in module vgadisplay:
+  creating $macc model for $techmap$mul$src/vgadisplay.v:39$5.$add$/opt/oss-cad-suite/lib/../share/yosys/mul2dsp.v:173$314 ($add).
+  creating $macc model for $flatten\vga.$add$src/vgasync.v:46$27 ($add).
+  creating $macc model for $flatten\vga.$add$src/vgasync.v:49$29 ($add).
+  creating $alu model for $macc $flatten\vga.$add$src/vgasync.v:49$29.
+  creating $alu model for $macc $flatten\vga.$add$src/vgasync.v:46$27.
+  creating $alu model for $macc $techmap$mul$src/vgadisplay.v:39$5.$add$/opt/oss-cad-suite/lib/../share/yosys/mul2dsp.v:173$314.
+  creating $alu model for $flatten\vga.$ge$src/vgasync.v:39$13 ($ge): new $alu
+  creating $alu model for $flatten\vga.$ge$src/vgasync.v:40$16 ($ge): new $alu
+  creating $alu model for $flatten\vga.$lt$src/vgasync.v:39$14 ($lt): new $alu
+  creating $alu model for $flatten\vga.$lt$src/vgasync.v:40$17 ($lt): new $alu
+  creating $alu model for $flatten\vga.$lt$src/vgasync.v:41$19 ($lt): new $alu
+  creating $alu model for $flatten\vga.$lt$src/vgasync.v:41$20 ($lt): new $alu
+  creating $alu model for $flatten\vga.$lt$src/vgasync.v:46$26 ($lt): new $alu
+  creating $alu model for $flatten\vga.$lt$src/vgasync.v:49$28 ($lt): new $alu
+  creating $alu cell for $flatten\vga.$lt$src/vgasync.v:49$28: $auto$alumacc.cc:485:replace_alu$327
+  creating $alu cell for $flatten\vga.$lt$src/vgasync.v:46$26: $auto$alumacc.cc:485:replace_alu$332
+  creating $alu cell for $flatten\vga.$lt$src/vgasync.v:41$20: $auto$alumacc.cc:485:replace_alu$337
+  creating $alu cell for $flatten\vga.$lt$src/vgasync.v:41$19: $auto$alumacc.cc:485:replace_alu$342
+  creating $alu cell for $flatten\vga.$lt$src/vgasync.v:40$17: $auto$alumacc.cc:485:replace_alu$347
+  creating $alu cell for $flatten\vga.$lt$src/vgasync.v:39$14: $auto$alumacc.cc:485:replace_alu$352
+  creating $alu cell for $flatten\vga.$ge$src/vgasync.v:40$16: $auto$alumacc.cc:485:replace_alu$357
+  creating $alu cell for $flatten\vga.$ge$src/vgasync.v:39$13: $auto$alumacc.cc:485:replace_alu$370
+  creating $alu cell for $techmap$mul$src/vgadisplay.v:39$5.$add$/opt/oss-cad-suite/lib/../share/yosys/mul2dsp.v:173$314: $auto$alumacc.cc:485:replace_alu$383
+  creating $alu cell for $flatten\vga.$add$src/vgasync.v:46$27: $auto$alumacc.cc:485:replace_alu$386
+  creating $alu cell for $flatten\vga.$add$src/vgasync.v:49$29: $auto$alumacc.cc:485:replace_alu$389
+  created 11 $alu and 0 $macc cells.
+
+5.23. Executing OPT pass (performing simple optimizations).
+
+5.23.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+<suppressed ~3 debug messages>
+
+5.23.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+Removed a total of 0 cells.
+
+5.23.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \vgadisplay..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+5.23.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \vgadisplay.
+Performed a total of 0 changes.
+
+5.23.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+Removed a total of 0 cells.
+
+5.23.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.23.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+Removed 2 unused cells and 32 unused wires.
+<suppressed ~3 debug messages>
+
+5.23.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+
+5.23.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+5.23.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \vgadisplay..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+5.23.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \vgadisplay.
+Performed a total of 0 changes.
+
+5.23.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+Removed a total of 0 cells.
+
+5.23.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.23.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+
+5.23.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+
+5.23.16. Finished OPT passes. (There is nothing left to do.)
+
+5.24. Executing MEMORY pass.
+
+5.24.1. Executing OPT_MEM pass (optimize memories).
+Performed a total of 0 transformations.
+
+5.24.2. Executing OPT_MEM_PRIORITY pass (removing unnecessary memory write priority relations).
+Performed a total of 0 transformations.
+
+5.24.3. Executing OPT_MEM_FEEDBACK pass (finding memory read-to-write feedback paths).
+
+5.24.4. Executing MEMORY_BMUX2ROM pass (converting muxes to ROMs).
+
+5.24.5. Executing MEMORY_DFF pass (merging $dff cells to $memrd).
+
+5.24.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+
+5.24.7. Executing MEMORY_SHARE pass (consolidating $memrd/$memwr cells).
+
+5.24.8. Executing OPT_MEM_WIDEN pass (optimize memories where all ports are wide).
+Performed a total of 0 transformations.
+
+5.24.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+
+5.24.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+5.25. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+
+5.26. Executing MEMORY_LIBMAP pass (mapping memories to cells).
+
+5.27. Executing TECHMAP pass (map to technology primitives).
+
+5.27.1. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/ecp5/lutrams_map.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/ecp5/lutrams_map.v' to AST representation.
+Generating RTLIL representation for module `\$__TRELLIS_DPR16X4_'.
+Successfully finished Verilog frontend.
+
+5.27.2. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/ecp5/brams_map.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/ecp5/brams_map.v' to AST representation.
+Generating RTLIL representation for module `\$__ECP5_DP16KD_'.
+Generating RTLIL representation for module `\$__ECP5_PDPW16KD_'.
+Successfully finished Verilog frontend.
+
+5.27.3. Continuing TECHMAP pass.
+No more expansions possible.
+<suppressed ~5 debug messages>
+
+5.28. Executing OPT pass (performing simple optimizations).
+
+5.28.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+<suppressed ~6 debug messages>
+
+5.28.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+<suppressed ~33 debug messages>
+Removed a total of 11 cells.
+
+5.28.3. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.28.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+Removed 14 unused cells and 29 unused wires.
+<suppressed ~15 debug messages>
+
+5.28.5. Finished fast OPT passes.
+
+5.29. Executing MEMORY_MAP pass (converting memories to logic and flip-flops).
+
+5.30. Executing OPT pass (performing simple optimizations).
+
+5.30.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+
+5.30.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+Removed a total of 0 cells.
+
+5.30.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \vgadisplay..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+5.30.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \vgadisplay.
+Performed a total of 0 changes.
+
+5.30.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+Removed a total of 0 cells.
+
+5.30.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.30.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+
+5.30.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+
+5.30.9. Finished OPT passes. (There is nothing left to do.)
+
+5.31. Executing TECHMAP pass (map to technology primitives).
+
+5.31.1. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/techmap.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/techmap.v' to AST representation.
+Generating RTLIL representation for module `\_90_simplemap_bool_ops'.
+Generating RTLIL representation for module `\_90_simplemap_reduce_ops'.
+Generating RTLIL representation for module `\_90_simplemap_logic_ops'.
+Generating RTLIL representation for module `\_90_simplemap_compare_ops'.
+Generating RTLIL representation for module `\_90_simplemap_various'.
+Generating RTLIL representation for module `\_90_simplemap_registers'.
+Generating RTLIL representation for module `\_90_shift_ops_shr_shl_sshl_sshr'.
+Generating RTLIL representation for module `\_90_shift_shiftx'.
+Generating RTLIL representation for module `\_90_fa'.
+Generating RTLIL representation for module `\_90_lcu'.
+Generating RTLIL representation for module `\_90_alu'.
+Generating RTLIL representation for module `\_90_macc'.
+Generating RTLIL representation for module `\_90_alumacc'.
+Generating RTLIL representation for module `\$__div_mod_u'.
+Generating RTLIL representation for module `\$__div_mod_trunc'.
+Generating RTLIL representation for module `\_90_div'.
+Generating RTLIL representation for module `\_90_mod'.
+Generating RTLIL representation for module `\$__div_mod_floor'.
+Generating RTLIL representation for module `\_90_divfloor'.
+Generating RTLIL representation for module `\_90_modfloor'.
+Generating RTLIL representation for module `\_90_pow'.
+Generating RTLIL representation for module `\_90_pmux'.
+Generating RTLIL representation for module `\_90_demux'.
+Generating RTLIL representation for module `\_90_lut'.
+Successfully finished Verilog frontend.
+
+5.31.2. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/ecp5/arith_map.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/ecp5/arith_map.v' to AST representation.
+Generating RTLIL representation for module `\_80_ecp5_alu'.
+Successfully finished Verilog frontend.
+
+5.31.3. Continuing TECHMAP pass.
+Using extmapper simplemap for cells of type $not.
+Using extmapper simplemap for cells of type $xor.
+Using extmapper simplemap for cells of type $reduce_and.
+Using extmapper simplemap for cells of type $reduce_or.
+Using extmapper simplemap for cells of type $or.
+Using extmapper simplemap for cells of type $dff.
+Using template $paramod$2f5fb04daf2da94d981bf9455fa4454c6ec8b705\_80_ecp5_alu for cells of type $alu.
+Using template $paramod$ec32b97001540459632a2df9accd677d3703ea0f\_80_ecp5_alu for cells of type $alu.
+Using extmapper simplemap for cells of type $dffe.
+Using template $paramod$fc972a7a46956c1788f3cb5257b53c8f1df2d0cc\_90_alu for cells of type $alu.
+Using extmapper simplemap for cells of type $sdffce.
+Using extmapper simplemap for cells of type $logic_and.
+Using template $paramod$78e969f2586efcf3a5b0b0440bcca0db83d5cca2\_90_alu for cells of type $alu.
+Using template $paramod$d2fa05d38998afabc6d4f34471305d0af4b8b2df\_80_ecp5_alu for cells of type $alu.
+Using template $paramod$00298f3f8094950cb9a5ff2fda48d0d8bde8806c\_80_ecp5_alu for cells of type $alu.
+Using template $paramod$dbcdc7e8aa1a4080cea2deda6fdc8772064f4d90\_80_ecp5_alu for cells of type $alu.
+Using template $paramod$091610cd349a68bd5539cffd7126f0d76e9bca00\_80_ecp5_alu for cells of type $alu.
+Using extmapper simplemap for cells of type $sdff.
+Using extmapper simplemap for cells of type $logic_or.
+Using extmapper simplemap for cells of type $mux.
+Using extmapper simplemap for cells of type $pos.
+Using extmapper simplemap for cells of type $and.
+Using template $paramod\_90_lcu\WIDTH=32'00000000000000000000000000000001 for cells of type $lcu.
+Using template $paramod\_90_lcu\WIDTH=32'00000000000000000000000000000011 for cells of type $lcu.
+No more expansions possible.
+<suppressed ~792 debug messages>
+
+5.32. Executing OPT pass (performing simple optimizations).
+
+5.32.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+<suppressed ~447 debug messages>
+
+5.32.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+<suppressed ~129 debug messages>
+Removed a total of 43 cells.
+
+5.32.3. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.32.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+Removed 53 unused cells and 474 unused wires.
+<suppressed ~54 debug messages>
+
+5.32.5. Finished fast OPT passes.
+
+5.33. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+
+5.34. Executing DFFLEGALIZE pass (convert FFs to types supported by the target).
+
+5.35. Executing TECHMAP pass (map to technology primitives).
+
+5.35.1. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v' to AST representation.
+Generating RTLIL representation for module `\$_DFF_N_'.
+Generating RTLIL representation for module `\$_DFF_P_'.
+Generating RTLIL representation for module `\$_DFFE_NN_'.
+Generating RTLIL representation for module `\$_DFFE_PN_'.
+Generating RTLIL representation for module `\$_DFFE_NP_'.
+Generating RTLIL representation for module `\$_DFFE_PP_'.
+Generating RTLIL representation for module `\$_DFF_NP0_'.
+Generating RTLIL representation for module `\$_DFF_NP1_'.
+Generating RTLIL representation for module `\$_DFF_PP0_'.
+Generating RTLIL representation for module `\$_DFF_PP1_'.
+Generating RTLIL representation for module `\$_SDFF_NP0_'.
+Generating RTLIL representation for module `\$_SDFF_NP1_'.
+Generating RTLIL representation for module `\$_SDFF_PP0_'.
+Generating RTLIL representation for module `\$_SDFF_PP1_'.
+Generating RTLIL representation for module `\$_DFFE_NP0P_'.
+Generating RTLIL representation for module `\$_DFFE_NP1P_'.
+Generating RTLIL representation for module `\$_DFFE_PP0P_'.
+Generating RTLIL representation for module `\$_DFFE_PP1P_'.
+Generating RTLIL representation for module `\$_DFFE_NP0N_'.
+Generating RTLIL representation for module `\$_DFFE_NP1N_'.
+Generating RTLIL representation for module `\$_DFFE_PP0N_'.
+Generating RTLIL representation for module `\$_DFFE_PP1N_'.
+Generating RTLIL representation for module `\$_SDFFE_NP0P_'.
+Generating RTLIL representation for module `\$_SDFFE_NP1P_'.
+Generating RTLIL representation for module `\$_SDFFE_PP0P_'.
+Generating RTLIL representation for module `\$_SDFFE_PP1P_'.
+Generating RTLIL representation for module `\$_SDFFE_NP0N_'.
+Generating RTLIL representation for module `\$_SDFFE_NP1N_'.
+Generating RTLIL representation for module `\$_SDFFE_PP0N_'.
+Generating RTLIL representation for module `\$_SDFFE_PP1N_'.
+Generating RTLIL representation for module `\$_ALDFF_NP_'.
+Generating RTLIL representation for module `\$_ALDFF_PP_'.
+Generating RTLIL representation for module `\$_ALDFFE_NPN_'.
+Generating RTLIL representation for module `\$_ALDFFE_NPP_'.
+Generating RTLIL representation for module `\$_ALDFFE_PPN_'.
+Generating RTLIL representation for module `\$_ALDFFE_PPP_'.
+Generating RTLIL representation for module `\FD1P3AX'.
+Generating RTLIL representation for module `\FD1P3AY'.
+Generating RTLIL representation for module `\FD1P3BX'.
+Generating RTLIL representation for module `\FD1P3DX'.
+Generating RTLIL representation for module `\FD1P3IX'.
+Generating RTLIL representation for module `\FD1P3JX'.
+Generating RTLIL representation for module `\FD1S3AX'.
+Generating RTLIL representation for module `\FD1S3AY'.
+Generating RTLIL representation for module `\FD1S3BX'.
+Generating RTLIL representation for module `\FD1S3DX'.
+Generating RTLIL representation for module `\FD1S3IX'.
+Generating RTLIL representation for module `\FD1S3JX'.
+Generating RTLIL representation for module `\IFS1P3BX'.
+Generating RTLIL representation for module `\IFS1P3DX'.
+Generating RTLIL representation for module `\IFS1P3IX'.
+Generating RTLIL representation for module `\IFS1P3JX'.
+Generating RTLIL representation for module `\OFS1P3BX'.
+Generating RTLIL representation for module `\OFS1P3DX'.
+Generating RTLIL representation for module `\OFS1P3IX'.
+Generating RTLIL representation for module `\OFS1P3JX'.
+Generating RTLIL representation for module `\IB'.
+Generating RTLIL representation for module `\IBPU'.
+Generating RTLIL representation for module `\IBPD'.
+Generating RTLIL representation for module `\OB'.
+Generating RTLIL representation for module `\OBZ'.
+Generating RTLIL representation for module `\OBZPU'.
+Generating RTLIL representation for module `\OBZPD'.
+Generating RTLIL representation for module `\OBCO'.
+Generating RTLIL representation for module `\BB'.
+Generating RTLIL representation for module `\BBPU'.
+Generating RTLIL representation for module `\BBPD'.
+Generating RTLIL representation for module `\ILVDS'.
+Generating RTLIL representation for module `\OLVDS'.
+Successfully finished Verilog frontend.
+
+5.35.2. Continuing TECHMAP pass.
+Using template $paramod\$_DFF_P_\_TECHMAP_WIREINIT_Q_=1'1 for cells of type $_DFF_P_.
+Using template $paramod\$_DFFE_PN_\_TECHMAP_WIREINIT_Q_=1'1 for cells of type $_DFFE_PN_.
+Using template \$_SDFFE_PP0P_ for cells of type $_SDFFE_PP0P_.
+Using template \$_SDFF_PP0_ for cells of type $_SDFF_PP0_.
+Using template $paramod\$_DFF_P_\_TECHMAP_WIREINIT_Q_=1'0 for cells of type $_DFF_P_.
+No more expansions possible.
+<suppressed ~159 debug messages>
+
+5.36. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+
+5.37. Executing SIMPLEMAP pass (map simple cells to gate primitives).
+
+5.38. Executing LATTICE_GSR pass (implement FF init values).
+Handling GSR in vgadisplay.
+
+5.39. Executing ATTRMVCP pass (move or copy attributes).
+
+5.40. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+Removed 0 unused cells and 254 unused wires.
+<suppressed ~1 debug messages>
+
+5.41. Executing TECHMAP pass (map to technology primitives).
+
+5.41.1. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/ecp5/latches_map.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/ecp5/latches_map.v' to AST representation.
+Generating RTLIL representation for module `\$_DLATCH_N_'.
+Generating RTLIL representation for module `\$_DLATCH_P_'.
+Successfully finished Verilog frontend.
+
+5.41.2. Continuing TECHMAP pass.
+No more expansions possible.
+<suppressed ~4 debug messages>
+
+5.42. Executing ABC9 pass.
+
+5.42.1. Executing ABC9_OPS pass (helper functions for ABC9).
+
+5.42.2. Executing ABC9_OPS pass (helper functions for ABC9).
+
+5.42.3. Executing SCC pass (detecting logic loops).
+Found an SCC: $auto$ff.cc:266:slice$861 $auto$ff.cc:479:convert_ce_over_srst$1616 $auto$ff.cc:266:slice$859 $auto$ff.cc:479:convert_ce_over_srst$1612 $auto$ff.cc:266:slice$858 $auto$ff.cc:479:convert_ce_over_srst$1610 $auto$ff.cc:266:slice$857 $auto$ff.cc:479:convert_ce_over_srst$1608 $auto$ff.cc:266:slice$856 $auto$ff.cc:479:convert_ce_over_srst$1606 $auto$ff.cc:266:slice$862 $auto$ff.cc:479:convert_ce_over_srst$1618 $auto$ff.cc:266:slice$855 $auto$ff.cc:479:convert_ce_over_srst$1604 $auto$ff.cc:266:slice$854 $auto$ff.cc:479:convert_ce_over_srst$1602 $auto$ff.cc:266:slice$853 $auto$ff.cc:479:convert_ce_over_srst$1600 $auto$alumacc.cc:485:replace_alu$327.slice[6].ccu2c_i $auto$alumacc.cc:485:replace_alu$327.slice[4].ccu2c_i $auto$alumacc.cc:485:replace_alu$327.slice[2].ccu2c_i $auto$alumacc.cc:485:replace_alu$327.slice[0].ccu2c_i $auto$ff.cc:266:slice$852 $auto$ff.cc:479:convert_ce_over_srst$1598 $auto$simplemap.cc:225:simplemap_logbin$1053 $auto$alumacc.cc:485:replace_alu$327.slice[8].ccu2c_i $auto$ff.cc:266:slice$860 $auto$ff.cc:479:convert_ce_over_srst$1614
+Found an SCC: $auto$ff.cc:266:slice$991 $auto$ff.cc:266:slice$990 $auto$ff.cc:266:slice$981 $auto$ff.cc:266:slice$989 $auto$alumacc.cc:485:replace_alu$332.slice[0].ccu2c_i $auto$ff.cc:266:slice$982 $auto$ff.cc:266:slice$983 $auto$alumacc.cc:485:replace_alu$332.slice[2].ccu2c_i $auto$ff.cc:266:slice$984 $auto$ff.cc:266:slice$985 $auto$alumacc.cc:485:replace_alu$332.slice[4].ccu2c_i $auto$ff.cc:266:slice$986 $auto$ff.cc:266:slice$987 $auto$alumacc.cc:485:replace_alu$332.slice[8].ccu2c_i $auto$alumacc.cc:485:replace_alu$332.slice[6].ccu2c_i $auto$ff.cc:266:slice$988 $auto$simplemap.cc:225:simplemap_logbin$1113
+Found 2 SCCs in module vgadisplay.
+Found 2 SCCs.
+
+5.42.4. Executing ABC9_OPS pass (helper functions for ABC9).
+
+5.42.5. Executing PROC pass (convert processes to netlists).
+
+5.42.5.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+5.42.5.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Removed a total of 0 dead cases.
+
+5.42.5.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 0 redundant assignments.
+Promoted 0 assignments to connections.
+
+5.42.5.4. Executing PROC_INIT pass (extract init attributes).
+
+5.42.5.5. Executing PROC_ARST pass (detect async resets in processes).
+
+5.42.5.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+
+5.42.5.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+
+5.42.5.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+
+5.42.5.9. Executing PROC_DFF pass (convert process syncs to FFs).
+
+5.42.5.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+5.42.5.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+5.42.5.12. Executing OPT_EXPR pass (perform const folding).
+
+5.42.6. Executing TECHMAP pass (map to technology primitives).
+
+5.42.6.1. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/techmap.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/techmap.v' to AST representation.
+Generating RTLIL representation for module `\_90_simplemap_bool_ops'.
+Generating RTLIL representation for module `\_90_simplemap_reduce_ops'.
+Generating RTLIL representation for module `\_90_simplemap_logic_ops'.
+Generating RTLIL representation for module `\_90_simplemap_compare_ops'.
+Generating RTLIL representation for module `\_90_simplemap_various'.
+Generating RTLIL representation for module `\_90_simplemap_registers'.
+Generating RTLIL representation for module `\_90_shift_ops_shr_shl_sshl_sshr'.
+Generating RTLIL representation for module `\_90_shift_shiftx'.
+Generating RTLIL representation for module `\_90_fa'.
+Generating RTLIL representation for module `\_90_lcu'.
+Generating RTLIL representation for module `\_90_alu'.
+Generating RTLIL representation for module `\_90_macc'.
+Generating RTLIL representation for module `\_90_alumacc'.
+Generating RTLIL representation for module `\$__div_mod_u'.
+Generating RTLIL representation for module `\$__div_mod_trunc'.
+Generating RTLIL representation for module `\_90_div'.
+Generating RTLIL representation for module `\_90_mod'.
+Generating RTLIL representation for module `\$__div_mod_floor'.
+Generating RTLIL representation for module `\_90_divfloor'.
+Generating RTLIL representation for module `\_90_modfloor'.
+Generating RTLIL representation for module `\_90_pow'.
+Generating RTLIL representation for module `\_90_pmux'.
+Generating RTLIL representation for module `\_90_demux'.
+Generating RTLIL representation for module `\_90_lut'.
+Successfully finished Verilog frontend.
+
+5.42.6.2. Continuing TECHMAP pass.
+No more expansions possible.
+<suppressed ~160 debug messages>
+
+5.42.7. Executing OPT pass (performing simple optimizations).
+
+5.42.7.1. Executing OPT_EXPR pass (perform const folding).
+
+5.42.7.2. Executing OPT_MERGE pass (detect identical cells).
+Removed a total of 0 cells.
+
+5.42.7.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Removed 0 multiplexer ports.
+
+5.42.7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+Performed a total of 0 changes.
+
+5.42.7.5. Executing OPT_MERGE pass (detect identical cells).
+Removed a total of 0 cells.
+
+5.42.7.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.42.7.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+
+5.42.7.8. Executing OPT_EXPR pass (perform const folding).
+
+5.42.7.9. Finished OPT passes. (There is nothing left to do.)
+
+5.42.8. Executing TECHMAP pass (map to technology primitives).
+
+5.42.8.1. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/abc9_map.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/abc9_map.v' to AST representation.
+Successfully finished Verilog frontend.
+
+5.42.8.2. Continuing TECHMAP pass.
+No more expansions possible.
+<suppressed ~2 debug messages>
+
+5.42.9. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/abc9_model.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/abc9_model.v' to AST representation.
+Generating RTLIL representation for module `$__ABC9_DELAY'.
+Generating RTLIL representation for module `$__ABC9_SCC_BREAKER'.
+Generating RTLIL representation for module `$__DFF_N__$abc9_flop'.
+Generating RTLIL representation for module `$__DFF_P__$abc9_flop'.
+Successfully finished Verilog frontend.
+
+5.42.10. Executing ABC9_OPS pass (helper functions for ABC9).
+<suppressed ~2 debug messages>
+
+5.42.11. Executing ABC9_OPS pass (helper functions for ABC9).
+
+5.42.12. Executing ABC9_OPS pass (helper functions for ABC9).
+<suppressed ~2 debug messages>
+
+5.42.13. Executing TECHMAP pass (map to technology primitives).
+
+5.42.13.1. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/techmap.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/techmap.v' to AST representation.
+Generating RTLIL representation for module `\_90_simplemap_bool_ops'.
+Generating RTLIL representation for module `\_90_simplemap_reduce_ops'.
+Generating RTLIL representation for module `\_90_simplemap_logic_ops'.
+Generating RTLIL representation for module `\_90_simplemap_compare_ops'.
+Generating RTLIL representation for module `\_90_simplemap_various'.
+Generating RTLIL representation for module `\_90_simplemap_registers'.
+Generating RTLIL representation for module `\_90_shift_ops_shr_shl_sshl_sshr'.
+Generating RTLIL representation for module `\_90_shift_shiftx'.
+Generating RTLIL representation for module `\_90_fa'.
+Generating RTLIL representation for module `\_90_lcu'.
+Generating RTLIL representation for module `\_90_alu'.
+Generating RTLIL representation for module `\_90_macc'.
+Generating RTLIL representation for module `\_90_alumacc'.
+Generating RTLIL representation for module `\$__div_mod_u'.
+Generating RTLIL representation for module `\$__div_mod_trunc'.
+Generating RTLIL representation for module `\_90_div'.
+Generating RTLIL representation for module `\_90_mod'.
+Generating RTLIL representation for module `\$__div_mod_floor'.
+Generating RTLIL representation for module `\_90_divfloor'.
+Generating RTLIL representation for module `\_90_modfloor'.
+Generating RTLIL representation for module `\_90_pow'.
+Generating RTLIL representation for module `\_90_pmux'.
+Generating RTLIL representation for module `\_90_demux'.
+Generating RTLIL representation for module `\_90_lut'.
+Successfully finished Verilog frontend.
+
+5.42.13.2. Continuing TECHMAP pass.
+Using template $paramod$838872d5a4bab89607f53482b205c0fd50d8b82e\CCU2C for cells of type $paramod$838872d5a4bab89607f53482b205c0fd50d8b82e\CCU2C.
+Using template $paramod\LUT4\INIT=16'1001011010101010 for cells of type LUT4.
+Using template $paramod\LUT2\INIT=4'1010 for cells of type LUT2.
+Using extmapper simplemap for cells of type $xor.
+Using extmapper simplemap for cells of type $not.
+Using extmapper simplemap for cells of type $and.
+Using extmapper simplemap for cells of type $or.
+Using extmapper simplemap for cells of type $mux.
+No more expansions possible.
+<suppressed ~199 debug messages>
+
+5.42.14. Executing OPT pass (performing simple optimizations).
+
+5.42.14.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+<suppressed ~18 debug messages>
+
+5.42.14.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+<suppressed ~6 debug messages>
+Removed a total of 2 cells.
+
+5.42.14.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \vgadisplay..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+5.42.14.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \vgadisplay.
+Performed a total of 0 changes.
+
+5.42.14.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+Removed a total of 0 cells.
+
+5.42.14.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.42.14.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+Removed 0 unused cells and 55 unused wires.
+<suppressed ~1 debug messages>
+
+5.42.14.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+
+5.42.14.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+5.42.14.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \vgadisplay..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+5.42.14.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \vgadisplay.
+Performed a total of 0 changes.
+
+5.42.14.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\vgadisplay'.
+Removed a total of 0 cells.
+
+5.42.14.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+5.42.14.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \vgadisplay..
+
+5.42.14.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module vgadisplay.
+
+5.42.14.16. Finished OPT passes. (There is nothing left to do.)
+
+5.42.15. Executing AIGMAP pass (map logic to AIG).
+Module vgadisplay: replaced 18 cells with 120 new cells, skipped 39 cells.
+  replaced 3 cell types:
+       2 $_OR_
+       2 $_XOR_
+      14 $_MUX_
+  not replaced 3 cell types:
+      31 $specify2
+       4 $_NOT_
+       4 $_AND_
+
+5.42.16. Executing AIGMAP pass (map logic to AIG).
+Module vgadisplay: replaced 36 cells with 237 new cells, skipped 170 cells.
+  replaced 2 cell types:
+       5 $_OR_
+      31 $_XOR_
+  not replaced 8 cell types:
+       3 $scopeinfo
+      24 $_NOT_
+      40 $_AND_
+       1 EHXPLLL
+      55 TRELLIS_FF
+       2 MULT18X18D
+      44 $paramod$838872d5a4bab89607f53482b205c0fd50d8b82e\CCU2C
+       1 $__ABC9_SCC_BREAKER
+
+5.42.16.1. Executing ABC9_OPS pass (helper functions for ABC9).
+
+5.42.16.2. Executing ABC9_OPS pass (helper functions for ABC9).
+
+5.42.16.3. Executing XAIGER backend.
+<suppressed ~11 debug messages>
+Extracted 138 AND gates and 535 wires from module `vgadisplay' to a netlist network with 95 inputs and 108 outputs.
+
+5.42.16.4. Executing ABC9_EXE pass (technology mapping using ABC9).
+
+5.42.16.5. Executing ABC9.
+Running ABC command: "<yosys-exe-dir>/yosys-abc" -s -f <abc-temp-dir>/abc.script 2>&1
+ABC: ABC command line: "source <abc-temp-dir>/abc.script".
+ABC: 
+ABC: + read_lut <abc-temp-dir>/input.lut 
+ABC: + read_box <abc-temp-dir>/input.box 
+ABC: + &read <abc-temp-dir>/input.xaig 
+ABC: + &ps 
+ABC: <abc-temp-dir>/input : i/o =     95/    108  and =     128  lev =   12 (0.09)  mem = 0.01 MB  box = 44  bb = 0
+ABC: + &scorr 
+ABC: Warning: The network is combinational.
+ABC: + &sweep 
+ABC: + &dc2 
+ABC: + &dch -f 
+ABC: + &ps 
+ABC: <abc-temp-dir>/input : i/o =     95/    108  and =     197  lev =   10 (0.06)  mem = 0.01 MB  ch =   30  box = 44  bb = 0
+ABC: + &if -W 300 -v 
+ABC: K = 7. Memory (bytes): Truth =    0. Cut =   60. Obj =  140. Set =  636. CutMin = no
+ABC: Node =     197.  Ch =    29.  Total mem =    0.14 MB. Peak cut mem =    0.01 MB.
+ABC: P:  Del = 1955.00.  Ar =      35.0.  Edge =       56.  Cut =     3060.  T =     0.00 sec
+ABC: P:  Del = 1955.00.  Ar =      35.0.  Edge =       56.  Cut =     3060.  T =     0.00 sec
+ABC: P:  Del = 1955.00.  Ar =      29.0.  Edge =       57.  Cut =     4234.  T =     0.00 sec
+ABC: F:  Del = 1799.00.  Ar =      17.0.  Edge =       57.  Cut =     3271.  T =     0.00 sec
+ABC: A:  Del = 1799.00.  Ar =      17.0.  Edge =       57.  Cut =     3130.  T =     0.00 sec
+ABC: A:  Del = 1799.00.  Ar =      17.0.  Edge =       57.  Cut =     3080.  T =     0.00 sec
+ABC: Total time =     0.00 sec
+ABC: + &write -n <abc-temp-dir>/output.aig 
+ABC: + &mfs 
+ABC: The network is not changed by "&mfs".
+ABC: + &ps -l 
+ABC: <abc-temp-dir>/input : i/o =     95/    108  and =     103  lev =   10 (0.06)  mem = 0.01 MB  box = 44  bb = 0
+ABC: Mapping (K=5)  :  lut =     16  edge =      57  lev =    3 (0.04)  levB =    7  mem = 0.00 MB
+ABC: LUT = 16 : 2=3 18.8 %  3=2 12.5 %  4=10 62.5 %  5=1 6.2 %  Ave = 3.56
+ABC: + &write -n <abc-temp-dir>/output.aig 
+ABC: + time 
+ABC: elapse: 0.02 seconds, total: 0.02 seconds
+
+5.42.16.6. Executing AIGER frontend.
+<suppressed ~418 debug messages>
+Removed 218 unused cells and 1011 unused wires.
+
+5.42.16.7. Executing ABC9_OPS pass (helper functions for ABC9).
+ABC RESULTS:              $lut cells:       18
+ABC RESULTS:   $paramod$838872d5a4bab89607f53482b205c0fd50d8b82e\CCU2C cells:       44
+ABC RESULTS:           input signals:        8
+ABC RESULTS:          output signals:       27
+Removing temp directory.
+
+5.42.17. Executing TECHMAP pass (map to technology primitives).
+
+5.42.17.1. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/abc9_unmap.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/abc9_unmap.v' to AST representation.
+Generating RTLIL representation for module `\$__DFF_x__$abc9_flop'.
+Generating RTLIL representation for module `\$__ABC9_SCC_BREAKER'.
+Successfully finished Verilog frontend.
+
+5.42.17.2. Continuing TECHMAP pass.
+Using template $paramod$838872d5a4bab89607f53482b205c0fd50d8b82e\CCU2C for cells of type $paramod$838872d5a4bab89607f53482b205c0fd50d8b82e\CCU2C.
+Using template $paramod\$__ABC9_SCC_BREAKER\WIDTH=32'00000000000000000000000000000010 for cells of type $__ABC9_SCC_BREAKER.
+No more expansions possible.
+<suppressed ~62 debug messages>
+Removed 1 unused cells and 922 unused wires.
+
+5.43. Executing TECHMAP pass (map to technology primitives).
+
+5.43.1. Executing Verilog-2005 frontend: /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v
+Parsing Verilog input from `/opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v' to AST representation.
+Generating RTLIL representation for module `\$_DFF_N_'.
+Generating RTLIL representation for module `\$_DFF_P_'.
+Generating RTLIL representation for module `\$_DFFE_NN_'.
+Generating RTLIL representation for module `\$_DFFE_PN_'.
+Generating RTLIL representation for module `\$_DFFE_NP_'.
+Generating RTLIL representation for module `\$_DFFE_PP_'.
+Generating RTLIL representation for module `\$_DFF_NP0_'.
+Generating RTLIL representation for module `\$_DFF_NP1_'.
+Generating RTLIL representation for module `\$_DFF_PP0_'.
+Generating RTLIL representation for module `\$_DFF_PP1_'.
+Generating RTLIL representation for module `\$_SDFF_NP0_'.
+Generating RTLIL representation for module `\$_SDFF_NP1_'.
+Generating RTLIL representation for module `\$_SDFF_PP0_'.
+Generating RTLIL representation for module `\$_SDFF_PP1_'.
+Generating RTLIL representation for module `\$_DFFE_NP0P_'.
+Generating RTLIL representation for module `\$_DFFE_NP1P_'.
+Generating RTLIL representation for module `\$_DFFE_PP0P_'.
+Generating RTLIL representation for module `\$_DFFE_PP1P_'.
+Generating RTLIL representation for module `\$_DFFE_NP0N_'.
+Generating RTLIL representation for module `\$_DFFE_NP1N_'.
+Generating RTLIL representation for module `\$_DFFE_PP0N_'.
+Generating RTLIL representation for module `\$_DFFE_PP1N_'.
+Generating RTLIL representation for module `\$_SDFFE_NP0P_'.
+Generating RTLIL representation for module `\$_SDFFE_NP1P_'.
+Generating RTLIL representation for module `\$_SDFFE_PP0P_'.
+Generating RTLIL representation for module `\$_SDFFE_PP1P_'.
+Generating RTLIL representation for module `\$_SDFFE_NP0N_'.
+Generating RTLIL representation for module `\$_SDFFE_NP1N_'.
+Generating RTLIL representation for module `\$_SDFFE_PP0N_'.
+Generating RTLIL representation for module `\$_SDFFE_PP1N_'.
+Generating RTLIL representation for module `\$_ALDFF_NP_'.
+Generating RTLIL representation for module `\$_ALDFF_PP_'.
+Generating RTLIL representation for module `\$_ALDFFE_NPN_'.
+Generating RTLIL representation for module `\$_ALDFFE_NPP_'.
+Generating RTLIL representation for module `\$_ALDFFE_PPN_'.
+Generating RTLIL representation for module `\$_ALDFFE_PPP_'.
+Generating RTLIL representation for module `\FD1P3AX'.
+Generating RTLIL representation for module `\FD1P3AY'.
+Generating RTLIL representation for module `\FD1P3BX'.
+Generating RTLIL representation for module `\FD1P3DX'.
+Generating RTLIL representation for module `\FD1P3IX'.
+Generating RTLIL representation for module `\FD1P3JX'.
+Generating RTLIL representation for module `\FD1S3AX'.
+Generating RTLIL representation for module `\FD1S3AY'.
+Generating RTLIL representation for module `\FD1S3BX'.
+Generating RTLIL representation for module `\FD1S3DX'.
+Generating RTLIL representation for module `\FD1S3IX'.
+Generating RTLIL representation for module `\FD1S3JX'.
+Generating RTLIL representation for module `\IFS1P3BX'.
+Generating RTLIL representation for module `\IFS1P3DX'.
+Generating RTLIL representation for module `\IFS1P3IX'.
+Generating RTLIL representation for module `\IFS1P3JX'.
+Generating RTLIL representation for module `\OFS1P3BX'.
+Generating RTLIL representation for module `\OFS1P3DX'.
+Generating RTLIL representation for module `\OFS1P3IX'.
+Generating RTLIL representation for module `\OFS1P3JX'.
+Generating RTLIL representation for module `\IB'.
+Generating RTLIL representation for module `\IBPU'.
+Generating RTLIL representation for module `\IBPD'.
+Generating RTLIL representation for module `\OB'.
+Generating RTLIL representation for module `\OBZ'.
+Generating RTLIL representation for module `\OBZPU'.
+Generating RTLIL representation for module `\OBZPD'.
+Generating RTLIL representation for module `\OBCO'.
+Generating RTLIL representation for module `\BB'.
+Generating RTLIL representation for module `\BBPU'.
+Generating RTLIL representation for module `\BBPD'.
+Generating RTLIL representation for module `\ILVDS'.
+Generating RTLIL representation for module `\OLVDS'.
+Generating RTLIL representation for module `\$lut'.
+Successfully finished Verilog frontend.
+
+5.43.2. Continuing TECHMAP pass.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000001\LUT=2'01 for cells of type $lut.
+Using template $paramod$4282def8dbd6df3d1248ad282c629bee684502c2\$lut for cells of type $lut.
+Using template $paramod$fd904e9e35cfd343a9df248824bd3f1408724879\$lut for cells of type $lut.
+Using template $paramod$21a9cf1c7cffed4ea7970972274e8bcced7c7005\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00100000 for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'1000 for cells of type $lut.
+Using template $paramod$47d363ae7b1a0e81207e02fe31af85b6bf36a2ac\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00001000 for cells of type $lut.
+No more expansions possible.
+<suppressed ~194 debug messages>
+
+5.44. Executing OPT_LUT_INS pass (discard unused LUT inputs).
+Optimizing LUTs in vgadisplay.
+Removed 0 unused cells and 42 unused wires.
+
+5.45. Executing AUTONAME pass.
+Renamed 1893 objects in module vgadisplay (50 iterations).
+<suppressed ~236 debug messages>
+
+5.46. Executing HIERARCHY pass (managing design hierarchy).
+
+5.46.1. Analyzing design hierarchy..
+Top module:  \vgadisplay
+
+5.46.2. Analyzing design hierarchy..
+Top module:  \vgadisplay
+Removed 0 unused modules.
+
+5.47. Printing statistics.
+
+=== vgadisplay ===
+
+   Number of wires:                139
+   Number of wire bits:            397
+   Number of public wires:         139
+   Number of public wire bits:     397
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                125
+     $scopeinfo                      3
+     CCU2C                          44
+     EHXPLLL                         1
+     LUT4                           19
+     MULT18X18D                      2
+     PFUMX                           1
+     TRELLIS_FF                     55
+
+5.48. Executing CHECK pass (checking for obvious problems).
+Checking module vgadisplay...
+Found and reported 0 problems.
+
+6. Executing JSON backend.
+
+End of script. Logfile hash: 948e8565d4, CPU: user 0.38s system 0.01s, MEM: 27.75 MB peak
+Yosys 0.38+54 (git sha1 f8d4d7128, clang 14.0.0-1ubuntu1.1 -fPIC -Os)
+Time spent: 42% 27x read_verilog (0 sec), 11% 11x techmap (0 sec), ...
+nextpnr-ecp5 --json build/vgadisplay.json --textcfg build/vgadisplay_out.config --25k --package CSFBGA285 --lpf orangecrab_r0.2.1.pcf
+ecppack --compress --freq 38.8 --input build/vgadisplay_out.config --bit build/vgadisplay.bit
+cp build/vgadisplay.bit out/vgadisplay.dfu
+dfu-suffix -v 1209 -p 5af0 -a out/vgadisplay.dfu
+dfu-suffix (dfu-util) 0.11-dev
+
+Copyright 2011-2012 Stefan Schmidt, 2013-2020 Tormod Volden
+This program is Free Software and has ABSOLUTELY NO WARRANTY
+Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
+
+Suffix successfully added to file
