@@ -1,0 +1,3 @@
+[submodule "external/litedram"]
+	path = external/litedram
+	url = git@github.com:enjoy-digital/litedram.git
