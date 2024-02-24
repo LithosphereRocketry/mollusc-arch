@@ -30,6 +30,8 @@ dfu: $(OUTDIR)/$(TOPLEVEL).dfu
 
 ${GENERATEDIR}/pll_108.v: | $(GENERATEDIR)
 	ecppll -n pll_108 -i 48 -o 108 -f $@
+${GENERATEDIR}/lite_ddr3l.v | $(GENERATEDIR)
+	
 
 .SECONDARY:
 

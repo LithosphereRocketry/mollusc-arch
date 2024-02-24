@@ -13,3 +13,9 @@ updates will be forthcoming at some point not particularly soon.
 hardware.
 * Build a small Unix kernel with enough capability to run simple user programs.
 * Hopefully not go insane by the end of the project.
+
+## Dependencies
+* GNU Make
+* Lattice ECP5 Yosys toolchain (I used the toolchain as specified here:
+https://orangecrab-fpga.github.io/orangecrab-hardware/r0.2/docs/getting-started/)
+* `litedram` Python package
