@@ -40,7 +40,7 @@ module vgasync #(
     assign vsync = ycount >= H + VFP && ycount < H + VFP + VSP;
     assign inframe = xcount < W && ycount < H;
     assign scanx = inframe ? xcount[X_WIDTH-1:0] : {X_WIDTH{1'bx}};
-    assign scany = inframe ? xcount[X_WIDTH-1:0] : {Y_WIDTH{1'bx}};
+    assign scany = inframe ? ycount[Y_WIDTH-1:0] : {Y_WIDTH{1'bx}};
 
     always @(posedge pxclk) begin
         if(xcount < TW-1) xcount <= xcount + 1;
