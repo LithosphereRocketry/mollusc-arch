@@ -1,0 +1,3 @@
+[submodule "external/tinyfpga_bx_usbserial"]
+	path = external/tinyfpga_bx_usbserial
+	url = https://github.com/davidthings/tinyfpga_bx_usbserial.git

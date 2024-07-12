@@ -1,9 +1,9 @@
 # Based on makefiles from OrangeCrab Examples repository
 # https://github.com/orangecrab-fpga/orangecrab-examples
 
-TOPLEVEL = vgadisplay
+TOPLEVEL = orangecrab_core
 
-PCF = orangecrab_r0.2.1.pcf
+PCF = orangecrab-hbb.pcf
 DENSITY = 25F
 
 ifneq (,$(findstring 85,$(DENSITY)))
@@ -11,6 +11,23 @@ ifneq (,$(findstring 85,$(DENSITY)))
 else
 	NEXTPNR_DENSITY:=--25k
 endif
+
+# TODO: this is copy-pasted from the TinyFPGA source, it should be better
+TFPGA_SRCS = \
+	edge_detect.v \
+	serial.v \
+	usb_fs_in_arb.v \
+	usb_fs_in_pe.v \
+	usb_fs_out_arb.v \
+	usb_fs_out_pe.v \
+	usb_fs_pe.v \
+	usb_fs_rx.v \
+	usb_fs_tx_mux.v \
+	usb_fs_tx.v \
+	usb_reset_det.v \
+	usb_serial_ctrl_ep.v \
+	usb_uart_bridge_ep.v \
+	usb_uart_core.v
 
 ASSETDIR = assets
 SRCDIR = src
@@ -21,7 +38,12 @@ TOOLSDIR = tools
 
 DIRS = $(GENERATEDIR) $(OUTDIR) $(BUILDDIR)
 
-SOURCES = $(wildcard $(SRCDIR)/*.v) $(GENERATEDIR)/pll_108.v #$(GENERATEDIR)/lite_ddr3l.v
+USBGEN = $(foreach f,$(TFPGA_SRCS),$(GENERATEDIR)/$(f)) 
+
+GENERATED = $(GENERATEDIR)/pll_108.v $(GENERATEDIR)/lite_ddr3l.v $(USBGEN)
+SOURCES = $(wildcard $(SRCDIR)/*.v) $(GENERATED)
+
+$(info $(SOURCES))
 
 .PHONY: clean all dfu
 
@@ -32,8 +54,10 @@ dfu: $(OUTDIR)/$(TOPLEVEL).dfu
 
 ${GENERATEDIR}/pll_108.v: | $(GENERATEDIR)
 	ecppll -n pll_108 -i 48 -o 108 -f $@
-${GENERATEDIR}/lite_ddr3l.v: | $(GENERATEDIR)
-	python -m litedram.gen --name lite_ddr3l orangecrab-dram.yml
+${GENERATEDIR}/lite_ddr3l.v: orangecrab-dram.yml | $(GENERATEDIR)
+	python -m litedram.gen orangecrab-dram.yml --name lite_ddr3l --no-compile --gateware-dir generated/
+${USBGEN}: ${GENERATEDIR}/%: external/tinyfpga_bx_usbserial/usb/% | $(GENERATEDIR)
+	cp $< $@
 
 $(OUTDIR)/png2hex: $(TOOLSDIR)/png2hex.c | $(OUTDIR)
 	gcc -o $@ $^ -lpng
@@ -64,7 +88,7 @@ $(OUTDIR)/%.dfu : $(BUILDDIR)/%.bit | $(OUTDIR)
 	dfu-suffix -v 1209 -p 5af0 -a $@
 
 $(DIRS): %:
-	mkdir $@
+	mkdir -p $@
 
 clean:
 	rm -rf $(DIRS)
