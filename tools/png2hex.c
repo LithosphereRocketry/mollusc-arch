@@ -27,7 +27,7 @@
 #include <png.h>
 
 bool ispng(FILE* f) {
-    char hdrbuf[8];
+    unsigned char hdrbuf[8];
     fread(hdrbuf, 1, 8, f);
     fseek(f, -8, SEEK_CUR);
     return !png_sig_cmp(hdrbuf, 0, 8);

@@ -6,6 +6,8 @@ Default timing specs based on VESA 1280 x 1024 timings:
 tinyvga.com/vga-timing/1280x1024@60Hz
 */
 module vgasync #(
+        parameter LOOKAHEAD = 0,
+
         parameter W = 1280,
         parameter HFP = 48,
         parameter HSP = 112,
@@ -14,14 +16,7 @@ module vgasync #(
         parameter H = 1024,
         parameter VFP = 1,
         parameter VSP = 3,
-        parameter VBP = 38,
-
-        localparam TW = W + HFP + HSP + HBP,
-        localparam TH = H + VFP + VSP + VBP,
-        localparam X_WIDTH = $clog2(W),
-        localparam Y_WIDTH = $clog2(H),
-        localparam X_WIDTH_INT = $clog2(TW),
-        localparam Y_WIDTH_INT = $clog2(TH)
+        parameter VBP = 38
     ) (
         input pxclk,
         output inframe,
@@ -31,14 +26,21 @@ module vgasync #(
         output vsync
     );
 
+    localparam TW = W + HFP + HSP + HBP;
+    localparam TH = H + VFP + VSP + VBP;
+    localparam X_WIDTH = $clog2(W);
+    localparam Y_WIDTH = $clog2(H);
+    localparam X_WIDTH_INT = $clog2(TW);
+    localparam Y_WIDTH_INT = $clog2(TH);
+
     reg [X_WIDTH_INT-1:0] xcount;
     initial xcount = 0;
     reg [Y_WIDTH_INT-1:0] ycount;
     initial ycount = 0;
 
-    assign hsync = xcount >= W + HFP && xcount < W + HFP + HSP;
+    assign hsync = xcount >= W + HFP + LOOKAHEAD && xcount < W + HFP + HSP + LOOKAHEAD;
     assign vsync = ycount >= H + VFP && ycount < H + VFP + VSP;
-    assign inframe = xcount < W && ycount < H;
+    assign inframe = xcount < W + LOOKAHEAD && ycount < H;
     assign scanx = inframe ? xcount[X_WIDTH-1:0] : {X_WIDTH{1'bx}};
     assign scany = inframe ? ycount[Y_WIDTH-1:0] : {Y_WIDTH{1'bx}};
 
