@@ -1,7 +1,7 @@
 # Based on makefiles from OrangeCrab Examples repository
 # https://github.com/orangecrab-fpga/orangecrab-examples
 
-TOPLEVEL = orangecrab_core
+TOPLEVEL = fpga_root
 
 PCF = orangecrab-hbb.pcf
 DENSITY = 25F
@@ -45,12 +45,9 @@ USB_SRCS = $(RTL_USB_DIR)/edge_detect.v \
 	$(RTL_USB_DIR)/usb_uart_bridge_ep.v \
 	$(RTL_USB_DIR)/usb_uart_core.v
 
-
-# USB_SRCS = $(wildcard external/usb_cdc/usb_cdc/*.v)
-# USB_SRCS = $(wildcard external/tinyfpga_bx_usbserial/usb/*.v)
-
 ASSETDIR = assets
 SRCDIR = src
+FPGASRCDIR = src-hardware
 GENERATEDIR = generated
 OUTDIR = out
 BUILDDIR = build
@@ -59,7 +56,7 @@ TOOLSDIR = tools
 DIRS = $(GENERATEDIR) $(OUTDIR) $(BUILDDIR)
 
 GENERATED = $(GENERATEDIR)/pll_108.v $(GENERATEDIR)/lite_ddr3l.v
-SOURCES = $(wildcard $(SRCDIR)/*.v)  $(USB_SRCS) $(GENERATED)
+FPGA_SOURCE = $(wildcard $(SRCDIR)/*.v) $(wildcard $(FPGASRCDIR)/*.v) $(USB_SRCS) $(GENERATED)
 
 .PHONY: clean all dfu nextpnrgui
 
@@ -87,9 +84,9 @@ src/%.v: ;
 
 .SECONDARY:
 
-$(BUILDDIR)/%.ys: $(SOURCES) $(BUILDDIR)/charset.hex $(BUILDDIR)/myst.hex | $(BUILDDIR)
+$(BUILDDIR)/%.ys: $(FPGA_SOURCE) $(BUILDDIR)/charset.hex $(BUILDDIR)/myst.hex | $(BUILDDIR)
 	$(file >$@)
-	$(foreach V,$(SOURCES),$(file >>$@,read_verilog $V))
+	$(foreach V,$(FPGA_SOURCE),$(file >>$@,read_verilog $V))
 	$(file >>$@,synth_ecp5 -top $(TOPLEVEL)) \
 	$(file >>$@,write_json "$(basename $@).json") \
 
