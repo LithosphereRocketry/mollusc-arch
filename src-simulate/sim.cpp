@@ -4,10 +4,12 @@
 #error "Direct simulation requires POSIX libraries"
 #endif
 
+#include <deque>
 #include <poll.h>
 #include <cstdio>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "scancodesets.h"
 
 const unsigned long clockspeed = 48'000'000UL; // Clock speed
 const unsigned long timeincs = 1'000'000'000'000UL; // `timescale 1ps/1ps
@@ -24,7 +26,10 @@ VerilatedContext context;
 Vcore core(&context);
 
 const unsigned long clocks_per_frame = clockspeed / 60;
+// Assume the keyboard sends scan codes at about 1k/second: https://www.os2museum.com/wp/how-fast-is-a-ps-2-keyboard/
+const unsigned long clocks_per_key = clockspeed / 1000;
 unsigned long clocks_since_refresh = 0;
+unsigned long clocks_since_key = 0;
 void step() {
     core.eval();
     context.timeInc(timeincs / clockspeed / 2);
@@ -34,9 +39,11 @@ void step() {
     core.clk48 = false;
     core.eval();
     clocks_since_refresh ++;
+    clocks_since_key ++;
 }
 
 char vga_mem[256*64];
+std::deque<uint8_t> key_out;
 
 int main(int, char**) {
     // This has slightly different input behavior to an actual TTY because of
@@ -73,6 +80,16 @@ int main(int, char**) {
         // Check if we should write to the screen
         if(core.vga_wr_en) { vga_mem[core.vga_waddr] = core.vga_wdata; }
 
+        // Check if we should read from the keyboard
+        if(clocks_since_key >= clocks_per_key && !key_out.empty() && core.kb_ready) {
+            clocks_since_key -= clocks_per_key;
+            core.kb_data = key_out.front();
+            key_out.pop_front();
+            core.kb_valid = true;
+        } else {
+            core.kb_valid = false;
+        }
+
         // Check if we should render a new frame
         if(clocks_since_refresh >= clocks_per_frame) {
             clocks_since_refresh -= clocks_per_frame;
@@ -91,6 +108,12 @@ int main(int, char**) {
                 switch(e.type) {
                     case SDL_QUIT:
                         quit = true;
+                        break;
+                    case SDL_KEYUP:
+                        key_out.push_back(0xE0); // PS/2 break code
+                        [[fallthrough]]
+                    case SDL_KEYDOWN:
+                        key_out.push_back(hid2ps2_2[e.key.keysym.scancode]);
                         break;
                 }
             }

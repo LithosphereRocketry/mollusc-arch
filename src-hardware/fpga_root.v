@@ -36,16 +36,6 @@ module fpga_root(
     wire kb_valid;
     wire kb_ready;
 
-
-    wire kbdebug;
-
-    reg [23:0] counter = 23'd0;
-    always @(posedge clk48) begin
-        if(kbdebug) counter <= (1 << 24) - 1;
-        else if(counter > 0) counter <= counter - 1;
-    end
-    assign rgb_led0_b = (counter == 0);
-
     wire [13:0] vga_waddr;
     wire [7:0] vga_wdata;
     wire vga_wr_en;
@@ -91,7 +81,6 @@ module fpga_root(
         .sym_data(kb_data),
         .sym_valid(kb_valid),
         .sym_ready(kb_ready),
-        .debug(kbdebug),
 
         .device_clk(ps2_kbclk),
         .device_dat(ps2_kbdat)

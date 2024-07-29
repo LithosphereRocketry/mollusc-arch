@@ -19,8 +19,8 @@ build: $(OUT_DIR)/$(TOPLEVEL)
 $(LIBCORE): $(GATEWARE) | $(SIM_GEN_DIR)
 	verilator -O3 --cc --Mdir $(SIM_GEN_DIR) --build $(GATEWARE) -I./src --top-module core -Wno-fatal
 
-$(OUT_DIR)/$(TOPLEVEL): $(SRCDIR)/$(TOPLEVEL).cpp $(LIBCORE)
-	$(CXX) $< $(CXXFLAGS) -o $@
+$(OUT_DIR)/$(TOPLEVEL): $(SRCDIR)/$(TOPLEVEL).cpp $(SRCDIR)/scancodesets.c $(SRCDIR)/scancodesets.h $(LIBCORE)
+	$(CXX) $< $(SRCDIR)/scancodesets.c $(CXXFLAGS) -o $@
 
 run: build
 	$(OUT_DIR)/$(TOPLEVEL)
