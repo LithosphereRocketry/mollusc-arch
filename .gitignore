@@ -2,4 +2,6 @@ log.txt
 out/
 generated/
 build/
+verilator/
 *.drawio.dtmp
+.vscode

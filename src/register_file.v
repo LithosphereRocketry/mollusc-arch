@@ -1,9 +1,5 @@
 `timescale 1ns/1ps
 
-module needs_privilege( input [3:0] addr, output priv );
-    assign priv = (addr >= 4'd12);
-endmodule
-
 module register_file(
         input clk,
 
@@ -24,10 +20,7 @@ module register_file(
 
         // Predicate value
         input [3:0] p_addr,
-        output [31:0] p_data,
-
-        // HIGH if register read needs kernel-mode access
-        output privileged_read
+        output [31:0] p_data
     );
 
     wire [31:0] reg_outputs [15:0];
@@ -43,10 +36,5 @@ module register_file(
     assign m_data = reg_outputs[m_addr];
     assign p_data = reg_outputs[p_addr];
 
-    wire [3:0] priv_read;
-    needs_privilege privilege [3:0] (
-        .addr({a_addr, b_addr, m_addr, p_addr}),
-        .priv(priv_read)
-    );
-    assign privileged_read = (priv_read != 4'b0);
+    always @(posedge clk) if(write_addr != 4'b0) real_regs[write_addr] <= write_data;
 endmodule
