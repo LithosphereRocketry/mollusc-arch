@@ -25,7 +25,7 @@ module core(
 
     assign uart_tx_data = kb_data;
     assign uart_tx_valid = kb_valid;
-    assign uart_rx_ready = kb_ready;
+    assign kb_ready = uart_tx_ready;
     // assign uart_tx_data = uart_rx_data;
     // assign uart_tx_valid = uart_rx_valid;
     // assign uart_rx_ready = uart_tx_ready;

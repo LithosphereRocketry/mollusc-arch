@@ -2,11 +2,11 @@
 # Mostly exists to call other makefiles
 
 .DEFAULT_GOAL = build
-.PHONY: build clean sim sim-build synth synth-gui dfu
+include Common.mk
+
+.PHONY: build lint sim sim-build synth synth-gui dfu
 
 build: synth sim-build
-clean:
-	$(MAKE) -f Common.mk clean
 
 # Simulation-related targets
 sim:
@@ -21,3 +21,5 @@ synth-gui:
 	$(MAKE) -f Synthesis.mk nextpnrgui
 dfu:
 	$(MAKE) -f Synthesis.mk dfu
+lint:
+	$(MAKE) -f Synthesis.mk lint

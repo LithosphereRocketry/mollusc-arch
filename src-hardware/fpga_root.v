@@ -36,16 +36,13 @@ module fpga_root(
     wire kb_valid;
     wire kb_ready;
 
+
     wire kbdebug;
 
     reg [23:0] counter = 23'd0;
-    wire [23:0] nextcounter = kbdebug ? (1 << 24) - 1 :
-                              counter > 0 ? counter - 1 : 23'd0;
     always @(posedge clk48) begin
-        counter <= nextcounter;
-
-        // if(kbdebug) counter <= (1 << 24) - 1;
-        // else if(counter > 0) counter <= counter - 1;
+        if(kbdebug) counter <= (1 << 24) - 1;
+        else if(counter > 0) counter <= counter - 1;
     end
     assign rgb_led0_b = (counter == 0);
 
@@ -81,7 +78,7 @@ module fpga_root(
         .tx_valid(uart_tx_valid),
         .tx_ready(uart_tx_ready),
         .rx_data(uart_rx_data),
-        .rx_valid(uart_tx_valid),
+        .rx_valid(uart_rx_valid),
         .rx_ready(uart_rx_ready),
 
         .usb_d_n(usb_d_n),

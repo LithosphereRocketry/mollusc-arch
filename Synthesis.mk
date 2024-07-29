@@ -4,6 +4,8 @@
 .DEFAULT_GOAL = all
 include Common.mk
 
+YOSYS_GATEWARE_LOC = /opt/oss-cad-suite/share/yosys
+
 # Top-level module. Inputs and outputs for this will be matched against PCF file.
 TOPLEVEL = fpga_root
 
@@ -76,3 +78,6 @@ $(BUILD_DIR)/%.bit: $(BUILD_DIR)/%_out.config | $(BUILD_DIR)
 $(OUT_DIR)/%.dfu : $(BUILD_DIR)/%.bit | $(OUT_DIR)
 	cp $< $@
 	dfu-suffix -v 1209 -p 5af0 -a $@
+
+lint:
+	verilator --lint-only $(FPGA_GATEWARE) $(YOSYS_GATEWARE_LOC)/lattice/cells_sim_ecp5.v -I./src -I$(YOSYS_GATEWARE_LOC)/lattice

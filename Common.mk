@@ -20,7 +20,7 @@ DIRS = $(GENERATE_DIR) $(OUT_DIR) $(BUILD_DIR) $(SIM_GEN_DIR)
 GATEWARE = $(wildcard $(GATEWARE_DIR)/*.v)
 
 # Rules common to all builds
-.PHONY: clean
+.PHONY: clean lint
 
 $(DIRS): %:
 	mkdir -p $@

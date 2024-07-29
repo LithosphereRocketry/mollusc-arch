@@ -24,7 +24,7 @@ module decode(
     assign ra_b = instr[9:6];
 
     wire rp_d, rp_m, rp_a, rp_b;
-    privileged priv [3:0] (
+    privileged prv [3:0] (
         .reg_addr({rp_d, rp_m, rp_a, rp_b}),
         .priv({rp_d, rp_m, rp_a, rp_b})
     );
