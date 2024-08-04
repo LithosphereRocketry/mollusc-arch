@@ -1,7 +1,9 @@
-log.txt
 out/
 generated/
 build/
 verilator/
+logs/
+failed_logs/
+waveforms/
 *.drawio.dtmp
 .vscode

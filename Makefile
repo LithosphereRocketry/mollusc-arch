@@ -4,7 +4,7 @@
 .DEFAULT_GOAL = build
 include Common.mk
 
-.PHONY: build lint sim sim-build synth synth-gui dfu
+.PHONY: build lint sim sim-build synth synth-gui dfu test
 
 build: synth sim-build
 
@@ -13,6 +13,8 @@ sim:
 	$(MAKE) -f Simulate.mk run
 sim-build:
 	$(MAKE) -f Simulate.mk build
+test:
+	$(MAKE) -f Simulate.mk test
 
 # Synthesis-related targets
 synth:

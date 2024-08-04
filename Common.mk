@@ -4,6 +4,8 @@
 ASSET_DIR = assets
 # Human-written, non-hardware-specific Verilog.
 GATEWARE_DIR = src
+# C++ test scripts, of form tb_<module>.cpp
+TEST_DIR = test
 # Machine-generated (e.g. LiteX) verilog.
 GENERATE_DIR = generated
 # Final outputs (DFU, executables, etc)
@@ -14,8 +16,15 @@ BUILD_DIR = build
 SIM_GEN_DIR = verilator
 # Miscellaneous scripts to help along the way
 TOOLSDIR = tools
+# Temporary folder for test logs that failed
+FAIL_DIR = failed_logs
+# Test logs
+LOG_DIR = logs
+# Test waveforms
+WAVE_DIR = waveforms
+
 # Directories we might have to create on a fresh build
-DIRS = $(GENERATE_DIR) $(OUT_DIR) $(BUILD_DIR) $(SIM_GEN_DIR)
+DIRS = $(GENERATE_DIR) $(OUT_DIR) $(BUILD_DIR) $(SIM_GEN_DIR) $(LOG_DIR) $(FAIL_DIR) $(WAVE_DIR)
 
 GATEWARE = $(wildcard $(GATEWARE_DIR)/*.v)
 
