@@ -17,11 +17,11 @@ namespace vtu {
                 Verilated::traceEverOn(true);
                 dut->trace(&vcd, 99);
                 vcd.open(filepath.c_str());
-                vcd.dump(0);
             }
 
             void advance() {
-                vcd.dump(++currentTime);
+                currentTime ++;
+                vcd.dump(currentTime);
             }
 
             ~trace() {

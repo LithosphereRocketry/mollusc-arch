@@ -15,6 +15,7 @@ hardware.
 * Hopefully not go insane by the end of the project.
 
 ## Dependencies
+* Verilator
 * GNU Make
 * Lattice ECP5 Yosys toolchain (I used the toolchain as specified here:
 https://orangecrab-fpga.github.io/orangecrab-hardware/r0.2/docs/getting-started/)

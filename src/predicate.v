@@ -17,9 +17,10 @@ module predicate(
 
     assign reg_addr = instr[31:28];
 
-    wire pred = (reg_value == 32'h00000000) ^ instr[27];
+    wire pred = (reg_value == 32'h00000000) ^ instr[23];
     wire [31:0] nop = `NOP;
-    assign instr_out = pred ? instr[26:0] : nop[26:0];
+    wire [31:0] computed_instr = pred ? instr : nop;
+    assign instr_out = {computed_instr[27:24], computed_instr[22:0]};
 
     privileged priv(
         .reg_addr(reg_addr),

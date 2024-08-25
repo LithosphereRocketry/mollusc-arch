@@ -9,6 +9,7 @@ VERFLAGS = -O3 --trace --cc --Mdir $(SIM_GEN_DIR) --build -I./src -Wno-fatal
 LIBCORE = $(SIM_GEN_DIR)/libVcore.a
 
 SRCDIR = src-simulate
+TESTROMDIR = $(TEST_DIR)/rom
 
 TOPLEVEL = sim
 SRCS = $(wildcard $(SRCDIR)*.cpp)
@@ -20,14 +21,15 @@ build: $(OUT_DIR)/$(TOPLEVEL)
 
 # Static library generated from Verilog source
 .PRECIOUS: $(SIM_GEN_DIR)/libV%.a
-$(SIM_GEN_DIR)/libV%.a: $(GATEWARE) | $(SIM_GEN_DIR)
-	verilator $(VERFLAGS) $(GATEWARE) --top-module $*
+$(SIM_GEN_DIR)/libV%.a: $(GATEWARE) $(TESTROMDIR)/tb_%.hex | $(SIM_GEN_DIR)
+	verilator $(VERFLAGS) -DROMPATH=\"$(TESTROMDIR)/tb_$*.hex\" $(GATEWARE) --top-module $*
 
 $(OUT_DIR)/$(TOPLEVEL): $(SRCDIR)/$(TOPLEVEL).cpp $(SRCDIR)/scancodesets.c $(SRCDIR)/scancodesets.h $(LIBCORE) | $(OUT_DIR)
 	$(CXX) $< -lVcore $(SRCDIR)/scancodesets.c $(CXXFLAGS) -o $@
 
+# TODO: why does this need to depend on the hex file?
 .PRECIOUS: $(OUT_DIR)/tb_%
-$(OUT_DIR)/tb_%: $(TEST_DIR)/tb_%.cpp $(SIM_GEN_DIR)/libV%.a $(TEST_DIR)/test_tools.h $(TEST_DIR)/verilator_test_util.h | $(OUT_DIR)
+$(OUT_DIR)/tb_%: $(TEST_DIR)/tb_%.cpp $(SIM_GEN_DIR)/libV%.a $(TEST_DIR)/test_tools.h $(TEST_DIR)/verilator_test_util.h $(TESTROMDIR)/tb_%.hex | $(OUT_DIR)
 	$(CXX) $< -lV$* $(CXXFLAGS) -DVCD_PATH=\"$(WAVE_DIR)/tb_$*.vcd\" -o $@
 
 run: build
