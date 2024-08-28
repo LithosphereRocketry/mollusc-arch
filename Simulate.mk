@@ -19,17 +19,31 @@ TESTTGTS = $(patsubst $(TEST_DIR)/tb_%.cpp,$(LOG_DIR)/tb_%.txt,$(TESTSRCS))
 .PHONY: run build test
 build: $(OUT_DIR)/$(TOPLEVEL)
 
+SIM_GATEWARE = $(GATEWARE) $(SIM_GEN_DIR)/lite_ddr3l.v
+
+# LiteDRAM simulation model
+$(SIM_GEN_DIR)/lite_ddr3l.v: orangecrab-dram.yml | $(GENERATE_DIR)
+	python -m litedram.gen orangecrab-dram.yml --name lite_ddr3l --no-compile --gateware-dir ${SIM_GEN_DIR}/ --doc --sim
+
 # Static library generated from Verilog source
 .PRECIOUS: $(SIM_GEN_DIR)/libV%.a
-$(SIM_GEN_DIR)/libV%.a: $(GATEWARE) $(TESTROMDIR)/tb_%.hex | $(SIM_GEN_DIR)
-	verilator $(VERFLAGS) -DROMPATH=\"$(TESTROMDIR)/tb_$*.hex\" $(GATEWARE) --top-module $*
+$(SIM_GEN_DIR)/libV%.a: $(SIM_GATEWARE) $(TESTROMDIR)/tb_%.hex | $(SIM_GEN_DIR)
+	verilator $(VERFLAGS) -DROMPATH=\"$(TESTROMDIR)/tb_$*.hex\" $(SIM_GATEWARE) --top-module $*
+
+.PRECIOUS: $(SIM_GEN_DIR)/libV%.a
+$(SIM_GEN_DIR)/libV%.a: $(SIM_GATEWARE) | $(SIM_GEN_DIR)
+	verilator $(VERFLAGS) $(SIM_GATEWARE) --top-module $*
 
 $(OUT_DIR)/$(TOPLEVEL): $(SRCDIR)/$(TOPLEVEL).cpp $(SRCDIR)/scancodesets.c $(SRCDIR)/scancodesets.h $(LIBCORE) | $(OUT_DIR)
 	$(CXX) $< -lVcore $(SRCDIR)/scancodesets.c $(CXXFLAGS) -o $@
 
-# TODO: why does this need to depend on the hex file?
+
 .PRECIOUS: $(OUT_DIR)/tb_%
 $(OUT_DIR)/tb_%: $(TEST_DIR)/tb_%.cpp $(SIM_GEN_DIR)/libV%.a $(TEST_DIR)/test_tools.h $(TEST_DIR)/verilator_test_util.h $(TESTROMDIR)/tb_%.hex | $(OUT_DIR)
+	$(CXX) $< -lV$* $(CXXFLAGS) -DVCD_PATH=\"$(WAVE_DIR)/tb_$*.vcd\" -o $@
+
+.PRECIOUS: $(OUT_DIR)/tb_%
+$(OUT_DIR)/tb_%: $(TEST_DIR)/tb_%.cpp $(SIM_GEN_DIR)/libV%.a $(TEST_DIR)/test_tools.h $(TEST_DIR)/verilator_test_util.h | $(OUT_DIR)
 	$(CXX) $< -lV$* $(CXXFLAGS) -DVCD_PATH=\"$(WAVE_DIR)/tb_$*.vcd\" -o $@
 
 run: build

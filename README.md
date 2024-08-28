@@ -20,3 +20,6 @@ hardware.
 * Lattice ECP5 Yosys toolchain (I used the toolchain as specified here:
 https://orangecrab-fpga.github.io/orangecrab-hardware/r0.2/docs/getting-started/)
 * `litedram` Python package
+* `liteeth` Python package (not used, but required for simulation)
+* `litescope` Python package (not used, but required for simulation)
+* Litex tapcfg (`pip3 install git+https://github.com/litex-hub/pythondata-misc-tapcfg.git`)

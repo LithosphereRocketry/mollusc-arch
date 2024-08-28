@@ -16,28 +16,22 @@ module memcontrol (
     // 2K x 32 (8KB) RAM
     // Later this will be turned into a cache hierarchy of some flavor using the
     // external DRAM, but the interface should be mostly the same
-    reg [31:0] memory [2047:0];
 
-    wire [31:0] test = memory[32'h00000015];
-
-    `ifdef ROMPATH
-        initial $readmemh(`ROMPATH, memory);
+    `ifndef ROMPATH
+        `define ROMPATH ""
     `endif
 
-    always @(posedge clk) begin
-        if(wr_a) begin
-            memory[addr_a[10:0]] <= datain_a;
-            dataout_a <= 32'hxxxxxxxx;
-        end else begin
-            dataout_a <= memory[addr_a[10:0]];
-        end
+    dp_ram #(32, 11, `ROMPATH) mem(
+        .clk(clk),
+        
+        .addr_a(addr_a[10:0]),
+        .wdata_a(datain_a),
+        .wr_a(wr_a),
+        .rdata_a(dataout_a),
 
-        if(wr_b) begin
-            memory[addr_b[10:0]] <= datain_b;
-            dataout_b <= 32'hxxxxxxxx;
-        end else begin
-            dataout_b <= memory[addr_b[10:0]];
-        end
-    end
-
+        .addr_b(addr_b[10:0]),
+        .wdata_b(datain_b),
+        .wr_b(wr_b),
+        .rdata_b(dataout_b)
+    );
 endmodule

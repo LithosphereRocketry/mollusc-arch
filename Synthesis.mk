@@ -54,7 +54,7 @@ dfu: $(OUT_DIR)/$(TOPLEVEL).dfu
 ${GENERATE_DIR}/pll_108.v: | $(GENERATE_DIR)
 	ecppll -n pll_108 -i 48 -o 108 -f $@
 ${GENERATE_DIR}/lite_ddr3l.v: orangecrab-dram.yml | $(GENERATE_DIR)
-	python -m litedram.gen orangecrab-dram.yml --name lite_ddr3l --no-compile --gateware-dir generated/
+	python -m litedram.gen orangecrab-dram.yml --name lite_ddr3l --no-compile --gateware-dir ${GENERATE_DIR}/ --doc
 
 .SECONDARY:
 $(BUILD_DIR)/%.ys: $(FPGA_GATEWARE) $(BUILD_DIR)/charset.hex $(BUILD_DIR)/myst.hex | $(BUILD_DIR)

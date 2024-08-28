@@ -13,13 +13,25 @@ namespace test {
         public:
             testcase(std::string name): name(name) {}
             
-            template <class T>
-            inline void assertEqual(T value, T target, std::string msg = "") {
+            template <class T, class U>
+            inline void assertEqual(T value, U target, std::string msg = "") {
                 if(value == target) {
                     return;
                 }
                 std::cerr << name << ": assertion failed: got " << value
                                   << ", expected " << target;
+                if(!msg.empty()) { std::cerr << ": " << msg; }
+                std::cerr << std::endl;
+                fail(msg);
+            }
+
+            template <class T, class U>
+            inline void assertLess(T value, U target, std::string msg = "") {
+                if(value < target) {
+                    return;
+                }
+                std::cerr << name << ": assertion failed: got " << value
+                                  << ", expected less than " << target;
                 if(!msg.empty()) { std::cerr << ": " << msg; }
                 std::cerr << std::endl;
                 fail(msg);
