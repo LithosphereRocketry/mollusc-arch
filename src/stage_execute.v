@@ -2,6 +2,9 @@ module stage_execute(
         input clk,
         input [31:0] pc,
 
+        input stall_in,
+        output stall,
+
         input [3:0] dest,
         input [3:0] aluop,
 
@@ -9,6 +12,7 @@ module stage_execute(
         input [31:0] reg_b,
         input [31:0] reg_m,
 
+        output fwd_valid,
         output [3:0] fwd_addr,
         output [31:0] fwd_val,
 
@@ -28,6 +32,8 @@ module stage_execute(
         output [31:0] mem_val,
         output mem_write
     );
+
+    assign stall = stall_in;
 
     // Memory operations share an adder with relative jumps rather than
     // arithmetic in this design, which is a little unusual but shouldn't change
@@ -49,7 +55,8 @@ module stage_execute(
     assign alumux[4'h6] = alu_a >> alu_b;
     assign alumux[4'h7] = alu_a >>> alu_b;
 
-    assign fwd_addr = is_mem_in ? 4'h0 : dest;
+    assign fwd_valid = ~is_mem_in;
+    assign fwd_addr = dest;
     assign fwd_val = alumux[op];
 
     assign mem_val = reg_m;
@@ -60,9 +67,15 @@ module stage_execute(
     assign jump_addr = memop_addr;
 
     always @(posedge clk) begin
-        out_addr <= dest;
-        out_val <= fwd_val;
-        is_mem <= is_mem_in;
+        if(~stall) begin
+            out_addr <= dest;
+            out_val <= fwd_val;
+            is_mem <= is_mem_in;
+        end else begin
+            out_addr <= 4'h0;
+            out_val <= 32'hxxxxxxxx;
+            is_mem <= 1'b0;
+        end
     end
 
 endmodule

@@ -1,3 +1,6 @@
 [submodule "external/tinyfpga_bx_usbserial"]
 	path = external/tinyfpga_bx_usbserial
 	url = https://github.com/davidthings/tinyfpga_bx_usbserial.git
+[submodule "external/verilog-wishbone"]
+	path = external/verilog-wishbone
+	url = git@github.com:alexforencich/verilog-wishbone.git

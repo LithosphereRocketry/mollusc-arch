@@ -26,7 +26,11 @@ WAVE_DIR = waveforms
 # Directories we might have to create on a fresh build
 DIRS = $(GENERATE_DIR) $(OUT_DIR) $(BUILD_DIR) $(SIM_GEN_DIR) $(LOG_DIR) $(FAIL_DIR) $(WAVE_DIR)
 
-GATEWARE = $(wildcard $(GATEWARE_DIR)/*.v)
+N_MUX_PORTS = 2
+
+COMMONGENS = wb_mux_$(N_MUX_PORTS).v
+
+GATEWARE = $(wildcard $(GATEWARE_DIR)/*.v) $(wildcard external/verilog-wishbone/rtl/*.v)
 
 # Rules common to all builds
 .PHONY: clean lint
@@ -48,3 +52,7 @@ $(BUILD_DIR)/charset.hex: $(OUT_DIR)/png2hex $(ASSET_DIR)/charset.png | $(BUILD_
 
 $(BUILD_DIR)/myst.hex: $(TOOLSDIR)/maketext.py
 	$^
+
+# Non-hardware-or-sim-specific generated files
+$(GENERATE_DIR)/wb_mux_$(N_MUX_PORTS).v: external/verilog-wishbone/rtl/wb_mux.py | $(GENERATE_DIR)
+	$< -p $(N_MUX_PORTS) -o $@

@@ -2,15 +2,19 @@ module memcontrol (
         input clk,
         // Addressed by 32-bit word, not by byte
         // Misaligned reads must be handled in software
+        input active_a,
         input [29:0] addr_a,
         input [31:0] datain_a,
         input wr_a,
         output reg [31:0] dataout_a,
+        output reg valid_a,
         
+        input active_b,
         input [29:0] addr_b,
         input [31:0] datain_b,
         input wr_b,
-        output reg [31:0] dataout_b
+        output reg [31:0] dataout_b,
+        output reg valid_b
     );
 
     // 2K x 32 (8KB) RAM
@@ -34,4 +38,9 @@ module memcontrol (
         .wr_b(wr_b),
         .rdata_b(dataout_b)
     );
+
+    always @(posedge clk) begin
+        valid_a <= active_a;
+        valid_b <= active_b;
+    end
 endmodule

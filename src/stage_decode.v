@@ -2,12 +2,16 @@ module stage_decode(
         input clk,
         input [31:0] pc_in,
         input [31:0] instr,
+        input instr_valid,
+        output stall,
 
         input [3:0] write_addr,
         input [31:0] write_data,
+        input forward_valid,
         input [3:0] forward_addr,
         input [31:0] forward_data,
 
+        input stall_in,
         output reg [31:0] pc,
 
         output reg [31:0] reg_a,
@@ -30,6 +34,7 @@ module stage_decode(
     wire [31:0] rv_b;
     wire [3:0] ra_mem;
     wire [31:0] rv_mem;
+    wire fwd_used;
     register_file regfile(
         .clk(clk),
 
@@ -49,8 +54,12 @@ module stage_decode(
         .b_data(rv_b),
         
         .m_addr(ra_mem),
-        .m_data(rv_mem)
+        .m_data(rv_mem),
+
+        .fwd_used(fwd_used)
     );
+
+    assign stall = stall_in | ~instr_valid | (fwd_used & ~forward_valid);
 
     wire [26:0] instr_pred;
     wire pred_priv;
@@ -103,15 +112,28 @@ module stage_decode(
     wire [31:0] operand_b = use_imm ? imm : rv_b;
 
     always @(posedge clk) begin
-        pc <= pc_in;
-        reg_a <= operand_a;
-        reg_b <= operand_b;
-        reg_m <= rv_mem;
-        dest <= ra_dest;
-        aluop <= dec_aluop;
-        mem <= is_mem;
-        mem_write <= is_mem_write;
-        jump <= is_jump;
+        if(~stall) begin
+            pc <= pc_in;
+            reg_a <= operand_a;
+            reg_b <= operand_b;
+            reg_m <= rv_mem;
+            dest <= ra_dest;
+            aluop <= dec_aluop;
+            mem <= is_mem;
+            mem_write <= is_mem_write;
+            jump <= is_jump;
+        end else begin
+            // If stalled, emit a noop/bubble
+            pc <= 32'hxxxxxxxx;
+            reg_a <= 32'hxxxxxxxx;
+            reg_b <= 32'hxxxxxxxx;
+            reg_m <= 32'hxxxxxxxx;
+            dest <= 4'h0;
+            aluop <= 4'hx;
+            mem <= 1'b0;
+            mem_write <= 1'b0;
+            jump <= 1'b0;
+        end
     end
     
 endmodule

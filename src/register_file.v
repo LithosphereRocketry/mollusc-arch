@@ -10,11 +10,13 @@ module reg_forwarder(
         input [31:0] exe_fwd_data,
         input [3:0] exe_fwd_addr,
 
-        output [31:0] value
+        output [31:0] value,
+        output forward_used
     );
 
-    assign value = (exe_fwd_addr != 4'b0) & (exe_fwd_addr == read_addr)
-                        ? exe_fwd_data
+    assign forward_used = (exe_fwd_addr != 4'b0) & (exe_fwd_addr == read_addr);
+
+    assign value = forward_used ? exe_fwd_data
                  : (mem_fwd_addr != 4'b0) & (mem_fwd_addr == read_addr)
                         ? mem_fwd_data
                         : non_forward; 
@@ -45,7 +47,9 @@ module register_file(
 
         // Predicate value
         input [3:0] p_addr,
-        output [31:0] p_data
+        output [31:0] p_data,
+
+        output fwd_used
     );
 
     wire [31:0] reg_outputs [15:0];
@@ -55,6 +59,8 @@ module register_file(
     for(i = 1; i < 16; i = i + 1) assign reg_outputs[i] = real_regs[i];
 
     assign reg_outputs[0] = 32'h00000000;
+
+    wire [3:0] fwd_used_arr;
 
     reg_forwarder fwd [3:0] (
         .non_forward({
@@ -71,8 +77,11 @@ module register_file(
         .exe_fwd_addr(fwd_addr),
         .exe_fwd_data(fwd_data),
 
-        .value({a_data, b_data, m_data, p_data})
+        .value({a_data, b_data, m_data, p_data}),
+        .forward_used(fwd_used_arr)
     );
+
+    assign fwd_used = |fwd_used_arr;
 
     always @(posedge clk) if(write_addr != 4'b0) real_regs[write_addr] <= write_data;
 endmodule
