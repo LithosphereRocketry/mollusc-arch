@@ -2,6 +2,7 @@
 
 module cachetest (
         input clk,
+        input rst,
         
         input valid_a,
         input [15:0] addr_a,
@@ -32,6 +33,7 @@ module cachetest (
 
     memcontrol #(128, 4, 16, 32) cache(
         .clk(clk),
+        .rst(rst),
 
         .valid_a(valid_a),
         .addr_a(addr_a),
