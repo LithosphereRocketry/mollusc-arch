@@ -28,6 +28,7 @@ void reset(vtu::trace<Vcachetest>* trace) {
 #endif
 
 int main(int argc, char** argv) {
+    std::cerr << std::hex;
     vtu::trace trace(VCD_PATH, &dut);
     dut.eval();
     stepclk(&trace);
@@ -218,6 +219,119 @@ int main(int argc, char** argv) {
                 tc.assertLess(count, 10, "Took too long to read");
             }
             tc.assertEqual(dut.dataout_a, 0x6789, "Incorrect data on A");
+        }
+
+        {
+            // TODO: This test triggers a bit of extra latency, but it's not a
+            // common use case so I'm OK with that
+            // The issue is that the instant a read operation goes in, if the
+            // requested address isn't cached, the controller commits to making
+            // a read request on the bus. However, if that read request gets
+            // queued behind another, and that other one pulls the data into
+            // cache, we don't re-check and realize we don't have to make a bus
+            // request anymore. Fixing this would be a pain, so I'm just going
+            // to leave it.
+            test::testcase tc("Simultaneous shared-line read requests");
+            reset(&trace);
+
+            dut.valid_b = 1;
+            dut.addr_b = 0x0034;
+            dut.wr_b = 1;
+            dut.datain_b = 0x5678;
+            stepclk(&trace);
+            dut.valid_b = 0;
+            // Wait for memory to report ready
+            for(size_t count = 0; !dut.ready_b; count++) {
+                stepclk(&trace);
+                tc.assertLess(count, 10, "Took too long to write");
+            }
+
+            dut.valid_b = 1;
+            dut.addr_b = 0x0038;
+            dut.wr_b = 1;
+            dut.datain_b = 0x6789;
+            stepclk(&trace);
+            dut.valid_b = 0;
+            dut.wr_b = 0;
+            // Wait for memory to report ready
+            for(size_t count = 0; !dut.ready_b; count++) {
+                stepclk(&trace);
+                tc.assertLess(count, 10, "Took too long to write");
+            }
+
+            dut.valid_a = 1;
+            dut.addr_a = 0x0038;
+            dut.valid_b = 1;
+            dut.addr_b = 0x0034;
+            stepclk(&trace);
+            dut.valid_a = 0;
+            dut.valid_b = 0;
+            for(size_t count = 0; !dut.ready_b; count++) {
+                stepclk(&trace);
+                tc.assertLess(count, 10, "Took too long to read");
+            }
+            tc.assertEqual(dut.dataout_b, 0x5678, "Incorrect data on B");
+            tc.assertEqual(dut.ready_a, 0, "B port should be fetched first");
+
+            for(size_t count = 0; !dut.ready_a; count++) {
+                stepclk(&trace);
+                tc.assertLess(count, 10, "Took too long to read");
+            }
+            tc.assertEqual(dut.dataout_a, 0x6789, "Incorrect data on A");
+        }
+
+        {
+            test::testcase tc("Simultaneous prefetched shared-line read requests");
+            reset(&trace);
+
+            dut.valid_b = 1;
+            dut.addr_b = 0x0044;
+            dut.wr_b = 1;
+            dut.datain_b = 0x5678;
+            stepclk(&trace);
+            dut.valid_b = 0;
+            // Wait for memory to report ready
+            for(size_t count = 0; !dut.ready_b; count++) {
+                stepclk(&trace);
+                tc.assertLess(count, 10, "Took too long to write");
+            }
+
+            dut.valid_b = 1;
+            dut.addr_b = 0x0048;
+            dut.wr_b = 1;
+            dut.datain_b = 0x6789;
+            stepclk(&trace);
+            dut.valid_b = 0;
+            dut.wr_b = 0;
+            // Wait for memory to report ready
+            for(size_t count = 0; !dut.ready_b; count++) {
+                stepclk(&trace);
+                tc.assertLess(count, 10, "Took too long to write");
+            }
+
+            // Prefetch
+            dut.valid_b = 1;
+            dut.addr_b = 0x0048;
+            stepclk(&trace);
+            dut.valid_b = 0;
+            // Wait for memory to report ready
+            for(size_t count = 0; !dut.ready_b; count++) {
+                stepclk(&trace);
+                tc.assertLess(count, 10, "Took too long to prefetch");
+            }
+
+            dut.valid_a = 1;
+            dut.addr_a = 0x0048;
+            dut.valid_b = 1;
+            dut.addr_b = 0x0044;
+            stepclk(&trace);
+            dut.valid_a = 0;
+            dut.valid_b = 0;
+
+            tc.assertEqual(dut.ready_a, 1, "A not available immediately");
+            tc.assertEqual(dut.dataout_a, 0x6789, "Incorrect data on A");
+            tc.assertEqual(dut.ready_b, 1, "B not available immediately");
+            tc.assertEqual(dut.dataout_b, 0x5678, "Incorrect data on B");
         }
 
         // Make the graph a little more readable

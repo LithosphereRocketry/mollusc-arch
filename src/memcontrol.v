@@ -190,7 +190,7 @@ module memcontrol #(
                 wba_stb <= 1'b0;
                 wba_adr <= {ADDR_WIDTH{1'bx}};
 
-                fetched_a <= wba_dat_r[wbb_word_pos*WORD_WIDTH +: WORD_WIDTH];
+                fetched_a <= wba_dat_r[wba_word_pos*WORD_WIDTH +: WORD_WIDTH];
                 fetched_valid_a <= 1;
             end
 
