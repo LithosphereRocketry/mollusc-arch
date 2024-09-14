@@ -21,7 +21,6 @@ module memcontrol #(
         input [ADDR_WIDTH-1:0] addr_b,
         input [WORD_WIDTH-1:0] datain_b,
         input wr_b,
-        output wr_ready_b,
         output [WORD_WIDTH-1:0] dataout_b,
         output ready_b,
 

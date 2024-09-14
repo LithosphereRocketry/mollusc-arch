@@ -13,7 +13,6 @@ module cachetest (
         input [15:0] addr_b,
         input [31:0] datain_b,
         input wr_b,
-        output wr_ready_b,
         output [31:0] dataout_b,
         output ready_b
     );
@@ -44,7 +43,6 @@ module cachetest (
         .addr_b(addr_b),
         .datain_b(datain_b),
         .wr_b(wr_b),
-        .wr_ready_b(wr_ready_b),
         .dataout_b(dataout_b),
         .ready_b(ready_b),
 
