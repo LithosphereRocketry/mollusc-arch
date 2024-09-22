@@ -1,6 +1,6 @@
 module cpu #(
         parameter CACHE_WIDTH = 128,
-        parameter CACHE_DEPTH = 9,
+        parameter CACHE_DEPTH = 10,
 
         localparam SEL_WIDTH = CACHE_WIDTH/8
     ) (

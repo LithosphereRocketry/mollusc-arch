@@ -1,4 +1,4 @@
-#include "Vcpu.h"
+#include "Vcputest.h"
 #include "test_tools.h"
 #include "verilator_test_util.h"
 
@@ -7,7 +7,7 @@
     #define VCD_PATH "out.vcd"
 #endif
 
-Vcpu dut;
+Vcputest dut;
 
 void stepclk() {
     static size_t elapsed = 0;
