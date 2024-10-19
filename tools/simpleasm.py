@@ -2,18 +2,22 @@
 
 import sys
 import itertools
-from typing import Callable
+from typing import Callable, Optional
 
 labels: dict[str, int] = {}
 
-def parse_instr(line: int, text: str) -> tuple[str, str, list[str]]:
+
+def parse_instr(line: int, text: str) -> Optional[tuple[str, str, list[str]]]:
     if ":" in text:
         lbl, untrimmed_instr = text.split(":", 1)
         instr_cond = untrimmed_instr.strip()
 
-        labels[lbl] = line
+        labels[lbl] = line*4
     else:
         instr_cond = text
+
+    if len(instr_cond) == 0:
+        return None
 
     if instr_cond[0] == "?" or instr_cond[0] == "!":
         cond, instr = instr_cond.split(maxsplit=1)
@@ -30,18 +34,18 @@ def parse_instr(line: int, text: str) -> tuple[str, str, list[str]]:
     return (cond, split_instr[0].strip(), args)
 
 regnames: dict[str, int] = {
-    "x0": 0,
-    "x1": 1,
-    "x2": 2,
-    "x3": 3,
-    "x4": 4,
-    "x5": 5,
-    "x6": 6,
-    "x7": 7,
-    "x8": 8,
-    "x9": 9,
-    "x10": 10,
-    "x11": 11,
+    "x0": 0, "zero": 0,
+    "x1": 1, "s0": 1, "ra": 1,
+    "x2": 2, "s1": 2, "sp": 2,
+    "x3": 3, "s2": 3,
+    "x4": 4, "s3": 4,
+    "x5": 5, "a0": 5,
+    "x6": 6, "a1": 6,
+    "x7": 7, "a2": 7,
+    "x8": 8, "a3": 8,
+    "x9": 9, "a4": 9,
+    "x10": 10, "a5": 10,
+    "x11": 11, "a6": 11,
     "x12": 12,
     "x13": 13,
     "x14": 14,
@@ -50,7 +54,7 @@ regnames: dict[str, int] = {
 
 def resolve(arg: str) -> int:
     if arg in labels:
-        return labels[arg] * 4
+        return labels[arg]
     else:
         return int(arg)
 
@@ -80,10 +84,14 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
 }
 
 with open(sys.argv[1], "r") as asmfile:
-    asmlines = [cleanline for cleanline in
-                (line.split("#", 1)[0].strip() for line in asmfile)
-                if cleanline != ""]
-    text_instrs = [parse_instr(i, s) for i, s in enumerate(asmlines)]
+    asmlines = [line.split("#", 1)[0].strip() for line in asmfile]
+    text_instrs = []
+    linenum = 0
+    for l in asmlines:
+        instr = parse_instr(linenum, l)
+        if instr is not None:
+            text_instrs.append(instr)        
+            linenum += 1
     bytecode = [instr_table[instr[1]](ind, instr) for ind, instr in enumerate(text_instrs)]
     if len(bytecode) % 4 != 0:
         bytecode += [0] * (4 - len(bytecode) % 4)

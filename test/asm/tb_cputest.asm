@@ -1,7 +1,13 @@
-        addi x5, x0, 10
-        add x3, x0, x0
+        addi a0, zero, 10
+        jxi ra, zero, triangle
+stop:   jxi zero, zero, stop
 
-        # This is the loop
-loop:   add x3, x3, x5
-    ?x5 jxi x6, x0, 8     # Conditional jump
-        subi x5, x5, 1
+triangle:
+        add a1, zero, zero
+triangle_loop:
+        add a1, a1, a0
+        subi a0, a0, 1
+    ?a0 jxi zero, zero, triangle_loop     # Conditional jump
+        add a0, a1, zero
+        jxi zero, ra, 0
+

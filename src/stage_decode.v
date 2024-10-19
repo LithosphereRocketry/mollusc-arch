@@ -59,8 +59,6 @@ module stage_decode(
         .fwd_used(fwd_used)
     );
 
-    assign stall = stall_in | ~instr_valid | (fwd_used & ~forward_valid);
-
     wire [26:0] instr_pred;
     wire pred_priv;
     predicate pred(
@@ -100,6 +98,8 @@ module stage_decode(
         .aluop(dec_aluop)
     );
 
+    assign stall = stall_in | ~instr_valid | (fwd_used & ~forward_valid);
+
     wire [31:0] longimm_base = aui_mode ? pc_in : 32'd0;
     wire [31:0] operand_a = use_upper_imm ? longimm_base : rv_a;
 
@@ -111,8 +111,10 @@ module stage_decode(
     wire [31:0] imm = use_upper_imm ? upper_ext : lower_ext;
     wire [31:0] operand_b = use_imm ? imm : rv_b;
 
+    reg jump_blank;
     always @(posedge clk) begin
-        if(~stall) begin
+        // jump_blank <= (~stall & is_jump);
+        if(~stall & ~jump) begin
             pc <= pc_in;
             reg_a <= operand_a;
             reg_b <= operand_b;

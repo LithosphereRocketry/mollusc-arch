@@ -41,8 +41,8 @@ module stage_execute(
     wire [31:0] memop_addr = reg_a + reg_b;
 
     wire [31:0] alu_a = is_jump ? pc : reg_a;
-    wire [31:0] alu_b = is_jump ? 32'd8 : reg_b;
-     // Because of branch delay, we are always returning to 8 bytes after
+    wire [31:0] alu_b = is_jump ? 32'd4 : reg_b;
+    // Return address is always 4 bytes after PC
     wire [3:0] op = is_jump ? 4'h0 : aluop; // return address = addition
 
     wire [31:0] alumux [15:0];
