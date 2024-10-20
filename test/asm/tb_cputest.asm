@@ -1,3 +1,4 @@
+        lui a0, 0x00004000
         addi a0, zero, 10
         j ra, triangle
         add s1, a0, zero

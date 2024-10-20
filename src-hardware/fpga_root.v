@@ -24,24 +24,28 @@ module fpga_root(
     );
 
     
-    wire [7:0] uart_tx_data;
-    wire uart_tx_valid;
-    wire uart_tx_ready;
+    // wire [7:0] uart_tx_data;
+    // wire uart_tx_valid;
+    // wire uart_tx_ready;
     
-    wire [7:0] uart_rx_data;
-    wire uart_rx_valid;
-    wire uart_rx_ready;
+    // wire [7:0] uart_rx_data;
+    // wire uart_rx_valid;
+    // wire uart_rx_ready;
     
-    wire [7:0] kb_data;
-    wire kb_valid;
-    wire kb_ready;
+    // wire [7:0] kb_data;
+    // wire kb_valid;
+    // wire kb_ready;
 
-    wire [13:0] vga_waddr;
-    wire [7:0] vga_wdata;
-    wire vga_wr_en;
+    // wire [13:0] vga_waddr;
+    // wire [7:0] vga_wdata;
+    // wire vga_wr_en;
 
+    wire led_r, led_g, led_b;
     core root(
         .clk48(clk48),
+        .led_r(led_r),
+        .led_g(led_g),
+        .led_b(led_b),
         .uart_tx_data(uart_tx_data),
         .uart_tx_valid(uart_tx_valid),
         .uart_tx_ready(uart_tx_ready),
@@ -55,6 +59,9 @@ module fpga_root(
         .vga_wdata(vga_wdata),
         .vga_wr_en(vga_wr_en)
     );
+    assign rgb_led0_r = ~led_r;
+    assign rgb_led0_g = ~led_g;
+    assign rgb_led0_b = ~led_b;
 
     orangecrab_reset reset_instance(
 		.clk(clk48),
@@ -62,41 +69,41 @@ module fpga_root(
 		.nreset_out(rst_n)
 	);
 
-    usbcdc usb(
-        .clk48(clk48),
-        .tx_data(uart_tx_data),
-        .tx_valid(uart_tx_valid),
-        .tx_ready(uart_tx_ready),
-        .rx_data(uart_rx_data),
-        .rx_valid(uart_rx_valid),
-        .rx_ready(uart_rx_ready),
+    // usbcdc usb(
+    //     .clk48(clk48),
+    //     .tx_data(uart_tx_data),
+    //     .tx_valid(uart_tx_valid),
+    //     .tx_ready(uart_tx_ready),
+    //     .rx_data(uart_rx_data),
+    //     .rx_valid(uart_rx_valid),
+    //     .rx_ready(uart_rx_ready),
 
-        .usb_d_n(usb_d_n),
-        .usb_d_p(usb_d_p),
-        .usb_pullup(usb_pullup)
-    );
+    //     .usb_d_n(usb_d_n),
+    //     .usb_d_p(usb_d_p),
+    //     .usb_pullup(usb_pullup)
+    // );
 
-    ps2phy kb(
-        .clkin(clk48),
-        .sym_data(kb_data),
-        .sym_valid(kb_valid),
-        .sym_ready(kb_ready),
+    // ps2phy kb(
+    //     .clkin(clk48),
+    //     .sym_data(kb_data),
+    //     .sym_valid(kb_valid),
+    //     .sym_ready(kb_ready),
 
-        .device_clk(ps2_kbclk),
-        .device_dat(ps2_kbdat)
-    );
+    //     .device_clk(ps2_kbclk),
+    //     .device_dat(ps2_kbdat)
+    // );
 
-    vgadisplay vga(
-        .clk48(clk48),
-        .busclk(clk48),
-        .waddr(vga_waddr),
-        .wdata(vga_wdata),
-        .wr_en(vga_wr_en),
+    // vgadisplay vga(
+    //     .clk48(clk48),
+    //     .busclk(clk48),
+    //     .waddr(vga_waddr),
+    //     .wdata(vga_wdata),
+    //     .wr_en(vga_wr_en),
 
-        .vsync(vga_vsync),
-        .hsync(vga_hsync),
-        .red(vga_red),
-        .green(vga_green),
-        .blue(vga_blue)
-    );
+    //     .vsync(vga_vsync),
+    //     .hsync(vga_hsync),
+    //     .red(vga_red),
+    //     .green(vga_green),
+    //     .blue(vga_blue)
+    // );
 endmodule

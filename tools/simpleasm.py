@@ -56,7 +56,7 @@ def resolve(arg: str) -> int:
     if arg in labels:
         return labels[arg]
     else:
-        return int(arg)
+        return int(arg, 0)
 
 def cond_arg_mask(cond: str) -> int:
     return regnames[cond[1:]] << 28 | (1 << 23 if cond[0] == "?" else 0)
@@ -107,6 +107,9 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
                             0x00200000 | 
                             long_arg_mask(instr[2][0],
                                           (resolve(instr[2][1]) - pc) >> 2)),
+    "lui": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x00400000 | 
+                             long_arg_mask(instr[2][0], resolve(instr[2][1]) >> 11)),
     "const": lambda _, instr: resolve(instr[2][0]),
 }
 

@@ -57,14 +57,14 @@ ${GENERATE_DIR}/lite_ddr3l.v: orangecrab-dram.yml | $(GENERATE_DIR)
 	python -m litedram.gen orangecrab-dram.yml --name lite_ddr3l --no-compile --gateware-dir ${GENERATE_DIR}/ --doc
 
 .SECONDARY:
-$(BUILD_DIR)/%.ys: $(FPGA_GATEWARE) $(BUILD_DIR)/charset.hex $(BUILD_DIR)/myst.hex | $(BUILD_DIR)
+$(BUILD_DIR)/%.ys: $(FPGA_GATEWARE) $(BUILD_DIR)/boot.hex $(BUILD_DIR)/charset.hex $(BUILD_DIR)/myst.hex | $(BUILD_DIR)
 	$(file >$@)
-	$(foreach V,$(FPGA_GATEWARE),$(file >>$@,read_verilog $V))
+	$(foreach V,$(FPGA_GATEWARE),$(file >>$@,read_verilog -DROMPATH="$(BUILD_DIR)/boot.hex" $V))
 	$(file >>$@,synth_ecp5 -top $(TOPLEVEL)) \
 	$(file >>$@,write_json "$(basename $@).json") \
 
 $(BUILD_DIR)/%.json: $(BUILD_DIR)/%.ys | $(BUILD_DIR)
-	yosys -s "$<"
+	yosys -s "$<" > yosys-log.txt
 
 $(BUILD_DIR)/%_out.config $(BUILD_DIR)/%.pnr.json: $(BUILD_DIR)/%.json $(PCF) | $(BUILD_DIR)
 	nextpnr-ecp5 --json $< --textcfg $(BUILD_DIR)/$*_out.config $(NEXTPNR_DENSITY) --package CSFBGA285 --lpf $(PCF) --write $(BUILD_DIR)/$*.pnr.json

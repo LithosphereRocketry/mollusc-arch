@@ -56,3 +56,7 @@ $(BUILD_DIR)/myst.hex: $(TOOLSDIR)/maketext.py
 # Non-hardware-or-sim-specific generated files
 $(GENERATE_DIR)/wb_mux_$(N_MUX_PORTS).v: external/verilog-wishbone/rtl/wb_mux.py | $(GENERATE_DIR)
 	$< -p $(N_MUX_PORTS) -o $@
+
+# Common boot binary
+$(BUILD_DIR)/boot.hex: $(GATEWARE_DIR)/boot.asm $(TOOLSDIR)/simpleasm.py
+	$(TOOLSDIR)/simpleasm.py $< $@

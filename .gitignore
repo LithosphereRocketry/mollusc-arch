@@ -7,3 +7,4 @@ failed_logs/
 waveforms/
 *.drawio.dtmp
 .vscode
+yosys-log.txt
