@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
     try {
         vtu::trace trace(VCD_PATH, &dut);
         dut.eval();
-        for(size_t i = 0; i < 200; i++) {
+        for(size_t i = 0; i < 500; i++) {
             trace.advance();
             stepclk();
         }

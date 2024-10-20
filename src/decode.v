@@ -40,7 +40,7 @@ module decode(
     wire [3:0] funccode = m_format ? instr[26:23] : instr[19:16];
 
     assign use_imm = use_upper_imm | funccode[3];
-    assign is_mem = !use_upper_imm & subcode[1] & funccode[2] & funccode[1:0] != 2'b11;
+    assign is_mem = !use_upper_imm & subcode[1] & funccode[2] & (funccode[1:0] != 2'b11);
     assign mem_write = is_mem & m_format;
     assign is_jump = (basecode == 2'b01) // long relative jump
                    | (basecode == 2'b00 & subcode == 2'b10 & funccode[2:0] == 3'b111); // register jump

@@ -28,9 +28,9 @@ module stage_execute(
         output reg [31:0] out_val,
 
         output reg is_mem,
-        output [31:0] mem_addr,
-        output [31:0] mem_val,
-        output mem_write
+        output reg [31:0] mem_addr,
+        output reg [31:0] mem_val,
+        output reg mem_write
     );
 
     assign stall = stall_in;
@@ -71,7 +71,8 @@ module stage_execute(
             out_addr <= dest;
             out_val <= fwd_val;
             is_mem <= is_mem_in;
-        end else begin
+        end else if(~stall_in) begin
+            // If we created the stall, emit a bubble
             out_addr <= 4'h0;
             out_val <= 32'hxxxxxxxx;
             is_mem <= 1'b0;

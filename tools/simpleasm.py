@@ -67,6 +67,16 @@ def reg_arg_mask(args: list[str]) -> int:
 def imm_arg_mask(args: list[str]) -> int:
     return regnames[args[0]] << 24 | regnames[args[1]] << 12 | (resolve(args[2]) & 0x7FF)
 
+def long_arg_mask(reg: str, imm: int) -> int:
+    return regnames[reg] << 24 | (imm & 0x1FFFFF)
+
+# store operations have 3 inputs rather than 2 inputs and 1 output
+def reg_store_arg_mask(args: list[str]) -> int:
+    return regnames[args[0]] << 16 | regnames[args[1]] << 12 | regnames[args[2]]
+
+def imm_store_arg_mask(args: list[str]) -> int:
+    return regnames[args[0]] << 16 | regnames[args[1]] << 12 | (resolve(args[2]) & 0x7FF)
+
 
 instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
     "add": lambda _, instr: (cond_arg_mask(instr[0]) |
@@ -78,24 +88,40 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
     "subi": lambda _, instr: (cond_arg_mask(instr[0]) |
                               0x00090000 |
                               imm_arg_mask(instr[2])),
+    "ldp": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x00140000 |
+                             reg_arg_mask(instr[2])),
+    "ldpi": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x001C0000 |
+                             imm_arg_mask(instr[2])),
+    "jx": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x00170000 |
+                             reg_arg_mask(instr[2])),
     "jxi": lambda _, instr: (cond_arg_mask(instr[0]) |
-                              0x001F0000 |
-                              imm_arg_mask(instr[2]))
+                             0x001F0000 |
+                             imm_arg_mask(instr[2])),
+    "stpi": lambda _, instr: (cond_arg_mask(instr[0]) |
+                              0x0C100800 | 
+                              imm_store_arg_mask(instr[2])),
+    "j": lambda pc, instr: (cond_arg_mask(instr[0]) |
+                            0x00200000 | 
+                            long_arg_mask(instr[2][0],
+                                          (resolve(instr[2][1]) - pc) >> 2)),
+    "const": lambda _, instr: resolve(instr[2][0]),
 }
 
 with open(sys.argv[1], "r") as asmfile:
-    asmlines = [line.split("#", 1)[0].strip() for line in asmfile]
+    asmlines = [line.split(";", 1)[0].strip() for line in asmfile]
     text_instrs = []
-    linenum = 0
     for l in asmlines:
-        instr = parse_instr(linenum, l)
+        instr = parse_instr(len(text_instrs), l)
         if instr is not None:
             text_instrs.append(instr)        
-            linenum += 1
-    bytecode = [instr_table[instr[1]](ind, instr) for ind, instr in enumerate(text_instrs)]
+    bytecode = [instr_table[instr[1]](ind*4, instr) for ind, instr in enumerate(text_instrs)]
     if len(bytecode) % 4 != 0:
         bytecode += [0] * (4 - len(bytecode) % 4)
     # my python version doesn't have itertools.batched
+    print({n : hex(v) for n, v in labels.items()})
     with open(sys.argv[2], "w") as hexfile:
         for i in range(0, len(bytecode), 4):
             hexfile.write("{0:08x}{1:08x}{2:08x}{3:08x}\n"

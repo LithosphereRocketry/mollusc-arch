@@ -47,6 +47,7 @@ module cpu #(
     // Forward declarations for fetch port
     wire [31:0] fetch_instr;
     wire fetch_ready;
+    wire fetch_discard;
     
     wire decode_stall;
     wire [31:0] decode_pc;
@@ -66,6 +67,7 @@ module cpu #(
 
         .stall_in(decode_stall),
         .stall(fetch_stall),
+        .discard(fetch_discard),
 
         .write_addr(writeback_dest),
         .write_data(writeback_value),
@@ -148,12 +150,12 @@ module cpu #(
         .clk(clk),
         .rst(rst),
 
-        .valid_a(1'b1),
+        .valid_a(~fetch_discard),
         .addr_a(fetch_fetchpc),
         .dataout_a(fetch_instr),
         .ready_a(fetch_ready),
 
-        .valid_b(1'b1),
+        .valid_b(decode_is_mem),
         .addr_b(mem_addr),
         .datain_b(mem_write_value),
         .wr_b(mem_write),

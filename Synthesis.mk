@@ -64,13 +64,13 @@ $(BUILD_DIR)/%.ys: $(FPGA_GATEWARE) $(BUILD_DIR)/charset.hex $(BUILD_DIR)/myst.h
 	$(file >>$@,write_json "$(basename $@).json") \
 
 $(BUILD_DIR)/%.json: $(BUILD_DIR)/%.ys | $(BUILD_DIR)
-	yosys -s "$<" -q
+	yosys -s "$<"
 
 $(BUILD_DIR)/%_out.config $(BUILD_DIR)/%.pnr.json: $(BUILD_DIR)/%.json $(PCF) | $(BUILD_DIR)
 	nextpnr-ecp5 --json $< --textcfg $(BUILD_DIR)/$*_out.config $(NEXTPNR_DENSITY) --package CSFBGA285 --lpf $(PCF) --write $(BUILD_DIR)/$*.pnr.json
 
 nextpnrgui: $(BUILD_DIR)/$(TOPLEVEL).pnr.json
-	nextpnr-ecp5 -q --json $< $(NEXTPNR_DENSITY) --package CSFBGA285 --lpf $(PCF) --gui &
+	nextpnr-ecp5 --json $< $(NEXTPNR_DENSITY) --package CSFBGA285 --lpf $(PCF) --gui &
 
 $(BUILD_DIR)/%.bit: $(BUILD_DIR)/%_out.config | $(BUILD_DIR)
 	ecppack --compress --freq 38.8 --input $< --bit $@

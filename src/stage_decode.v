@@ -4,6 +4,7 @@ module stage_decode(
         input [31:0] instr,
         input instr_valid,
         output stall,
+        output discard,
 
         input [3:0] write_addr,
         input [31:0] write_data,
@@ -111,9 +112,8 @@ module stage_decode(
     wire [31:0] imm = use_upper_imm ? upper_ext : lower_ext;
     wire [31:0] operand_b = use_imm ? imm : rv_b;
 
-    reg jump_blank;
+    assign discard = is_jump;
     always @(posedge clk) begin
-        // jump_blank <= (~stall & is_jump);
         if(~stall & ~jump) begin
             pc <= pc_in;
             reg_a <= operand_a;
@@ -124,8 +124,8 @@ module stage_decode(
             mem <= is_mem;
             mem_write <= is_mem_write;
             jump <= is_jump;
-        end else begin
-            // If stalled, emit a noop/bubble
+        end else if(~stall_in) begin
+            // If we stalled, emit a noop/bubble
             pc <= 32'hxxxxxxxx;
             reg_a <= 32'hxxxxxxxx;
             reg_b <= 32'hxxxxxxxx;

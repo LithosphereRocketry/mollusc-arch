@@ -9,7 +9,7 @@ VERFLAGS = -O3 --trace --cc --Mdir $(SIM_GEN_DIR) --build -I./src -Wno-fatal
 LIBCORE = $(SIM_GEN_DIR)/libVcore.a
 
 SRCDIR = src-simulate
-TESTROMDIR = $(TEST_DIR)/rom
+TESTROMDIR = $(TEST_DIR)/asm
 
 TOPLEVEL = sim
 SRCS = $(wildcard $(SRCDIR)*.cpp)
@@ -27,7 +27,8 @@ $(SIM_GEN_DIR)/lite_ddr3l.v: orangecrab-dram.yml | $(GENERATE_DIR)
 
 # Static library generated from Verilog source
 .PRECIOUS: $(SIM_GEN_DIR)/libV%.a
-$(SIM_GEN_DIR)/libV%.a: $(SIM_GATEWARE) $(TESTROMDIR)/tb_%.hex | $(SIM_GEN_DIR)
+$(SIM_GEN_DIR)/libV%.a: $(SIM_GATEWARE) $(TESTROMDIR)/tb_%.asm tools/simpleasm.py | $(SIM_GEN_DIR)
+	tools/simpleasm.py $(TESTROMDIR)/tb_$*.asm $(TESTROMDIR)/tb_$*.hex	
 	verilator $(VERFLAGS) -DROMPATH=\"$(TESTROMDIR)/tb_$*.hex\" $(SIM_GATEWARE) --top-module $*
 
 .PRECIOUS: $(SIM_GEN_DIR)/libV%.a

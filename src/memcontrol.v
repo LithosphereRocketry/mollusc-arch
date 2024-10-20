@@ -63,6 +63,8 @@ module memcontrol #(
             sync_addr_a[CACHE_LINE_DEPTH-1:WORD_DEPTH] * WORD_WIDTH +: WORD_WIDTH];
     wire [WORD_WIDTH-1:0] cached_word_b = rdata_b[
             sync_addr_b[CACHE_LINE_DEPTH-1:WORD_DEPTH] * WORD_WIDTH +: WORD_WIDTH];
+    
+    wire [1:0] line_index_b = sync_addr_b[CACHE_LINE_DEPTH-1:WORD_DEPTH];
 
     // Address that the fetched line came from
     reg [ADDR_WIDTH-1:0] sync_addr_a;
@@ -222,6 +224,7 @@ module memcontrol #(
             if(b_is_write & rdata_correct_b) begin
                 cache[sync_caddr_b][WORD_WIDTH * sync_addr_b[CACHE_LINE_DEPTH-1:WORD_DEPTH]
                         +: WORD_WIDTH] <= sync_wdata_b;
+                b_is_write <= 0;
             end else if(busfetch_done_b) begin
                 cache[wbb_adr[CACHE_LINE_DEPTH +: CACHE_DEPTH]]
                         <= {wbb_adr[ADDR_WIDTH-1:CACHE_DEPTH+CACHE_LINE_DEPTH], wbb_dat_r};
