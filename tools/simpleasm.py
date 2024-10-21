@@ -96,6 +96,9 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
     "subi": lambda _, instr: (cond_arg_mask(instr[0]) |
                               0x00090000 |
                               imm_arg_mask(instr[2])),
+    "xori": lambda _, instr: (cond_arg_mask(instr[0]) |
+                              0x000C0000 |
+                              imm_arg_mask(instr[2])),
     "ldp": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x00140000 |
                              reg_arg_mask(instr[2])),
