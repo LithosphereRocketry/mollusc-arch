@@ -59,4 +59,4 @@ $(GENERATE_DIR)/wb_mux_$(N_MUX_PORTS).v: external/verilog-wishbone/rtl/wb_mux.py
 
 # Common boot binary
 $(BUILD_DIR)/boot.hex: $(GATEWARE_DIR)/boot.asm $(TOOLSDIR)/simpleasm.py
-	$(TOOLSDIR)/simpleasm.py $< $@
+	$(TOOLSDIR)/simpleasm.py $< $@ --pack 16384

@@ -9,7 +9,11 @@ module cputest(
     wire [15:0] wb_sel;
     wire wb_stb, wb_ack, wb_cyc;
 
-    cpu cpucore(
+    cpu #(
+        .CACHE_WIDTH(128),
+        .CACHE_DEPTH(10),
+        .BUS_GRANULARITY(8)
+    ) cpucore(
         .clk(clk),
         .rst(rst),
         
@@ -31,7 +35,7 @@ module cputest(
         .INIT_PATH(`ROMPATH)
     ) ram(
         .clk(clk),
-        .adr_i(wb_adr),
+        .adr_i(wb_adr[15:0]),
         .dat_i(wb_dat_w),
         .dat_o(wb_dat_r),
         .we_i(wb_we),

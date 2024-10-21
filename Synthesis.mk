@@ -56,18 +56,19 @@ ${GENERATE_DIR}/pll_108.v: | $(GENERATE_DIR)
 ${GENERATE_DIR}/lite_ddr3l.v: orangecrab-dram.yml | $(GENERATE_DIR)
 	python -m litedram.gen orangecrab-dram.yml --name lite_ddr3l --no-compile --gateware-dir ${GENERATE_DIR}/ --doc
 
+# Note here, Yosys doesn't like synthesizing dualport RAM unless no-rw-check is given
 .SECONDARY:
 $(BUILD_DIR)/%.ys: $(FPGA_GATEWARE) $(BUILD_DIR)/boot.hex $(BUILD_DIR)/charset.hex $(BUILD_DIR)/myst.hex | $(BUILD_DIR)
 	$(file >$@)
 	$(foreach V,$(FPGA_GATEWARE),$(file >>$@,read_verilog -DROMPATH="$(BUILD_DIR)/boot.hex" $V))
-	$(file >>$@,synth_ecp5 -top $(TOPLEVEL)) \
+	$(file >>$@,synth_ecp5 -no-rw-check -top $(TOPLEVEL)) \
 	$(file >>$@,write_json "$(basename $@).json") \
 
 $(BUILD_DIR)/%.json: $(BUILD_DIR)/%.ys | $(BUILD_DIR)
 	yosys -s "$<" > yosys-log.txt
 
 $(BUILD_DIR)/%_out.config $(BUILD_DIR)/%.pnr.json: $(BUILD_DIR)/%.json $(PCF) | $(BUILD_DIR)
-	nextpnr-ecp5 --json $< --textcfg $(BUILD_DIR)/$*_out.config $(NEXTPNR_DENSITY) --package CSFBGA285 --lpf $(PCF) --write $(BUILD_DIR)/$*.pnr.json
+	nextpnr-ecp5 --json $< --textcfg $(BUILD_DIR)/$*_out.config $(NEXTPNR_DENSITY) --package CSFBGA285 --lpf $(PCF) --write $(BUILD_DIR)/$*.pnr.json 2> nextpnr-log.txt
 
 nextpnrgui: $(BUILD_DIR)/$(TOPLEVEL).pnr.json
 	nextpnr-ecp5 --json $< $(NEXTPNR_DENSITY) --package CSFBGA285 --lpf $(PCF) --gui &

@@ -10,6 +10,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "scancodesets.h"
+#include "../test/verilator_test_util.h" // TODO: sketchy
 
 const unsigned long clockspeed = 48'000'000UL; // Clock speed
 const unsigned long timeincs = 1'000'000'000'000UL; // `timescale 1ps/1ps
@@ -46,6 +47,8 @@ char vga_mem[256*64];
 std::deque<uint8_t> key_out;
 
 int main(int, char**) {
+    vtu::trace trace("waveforms/sim.vcd", &core);
+
     // This has slightly different input behavior to an actual TTY because of
     // some quirks in buffering behavior, but it's close enough
     // Reduce the amount of stdin buffering
@@ -121,6 +124,7 @@ int main(int, char**) {
         }
 
         // Advance clock
+        trace.advance();
         step();
     }
     SDL_DestroyTexture(char_texture);

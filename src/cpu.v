@@ -1,8 +1,9 @@
 module cpu #(
         parameter CACHE_WIDTH = 128,
         parameter CACHE_DEPTH = 10,
+        parameter BUS_GRANULARITY = 32,
 
-        localparam SEL_WIDTH = CACHE_WIDTH/8
+        localparam SEL_WIDTH = CACHE_WIDTH/BUS_GRANULARITY
     ) (
         input clk,
         input rst,
@@ -16,7 +17,8 @@ module cpu #(
         input wb_ack_i,
         input wb_err_i,
         input wb_rty_i,
-        output wb_cyc_o
+        output wb_cyc_o,
+        output dbg
     );
 
 
@@ -146,7 +148,12 @@ module cpu #(
         .writeback_value(writeback_value)
     );
 
-    memcontrol memctrl(
+    memcontrol #(
+        .CACHE_WIDTH(CACHE_WIDTH),
+        .CACHE_DEPTH(CACHE_DEPTH),
+        .ADDR_WIDTH(32),
+        .ADDR_GRANULARITY(BUS_GRANULARITY)
+    ) memctrl(
         .clk(clk),
         .rst(rst),
 
@@ -173,5 +180,7 @@ module cpu #(
         .wb_rty_i(wb_rty_i),
         .wb_cyc_o(wb_cyc_o)
     );
+
+    assign dbg = flow_is_jump;
 endmodule
 

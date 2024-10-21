@@ -32,8 +32,8 @@ $(SIM_GEN_DIR)/libV%.a: $(SIM_GATEWARE) $(TESTROMDIR)/tb_%.asm tools/simpleasm.p
 	verilator $(VERFLAGS) -DROMPATH=\"$(TESTROMDIR)/tb_$*.hex\" $(SIM_GATEWARE) --top-module $*
 
 .PRECIOUS: $(SIM_GEN_DIR)/libV%.a
-$(SIM_GEN_DIR)/libV%.a: $(SIM_GATEWARE) | $(SIM_GEN_DIR)
-	verilator $(VERFLAGS) $(SIM_GATEWARE) --top-module $*
+$(SIM_GEN_DIR)/libV%.a: $(SIM_GATEWARE) $(BUILD_DIR)/boot.hex | $(SIM_GEN_DIR)
+	verilator $(VERFLAGS) -DROMPATH=\"$(BUILD_DIR)/boot.hex\" $(SIM_GATEWARE) --top-module $*
 
 $(OUT_DIR)/$(TOPLEVEL): $(SRCDIR)/$(TOPLEVEL).cpp $(SRCDIR)/scancodesets.c $(SRCDIR)/scancodesets.h $(LIBCORE) | $(OUT_DIR)
 	$(CXX) $< -lVcore $(SRCDIR)/scancodesets.c $(CXXFLAGS) -o $@

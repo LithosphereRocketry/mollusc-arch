@@ -1,11 +1,19 @@
 #!/usr/bin/python3
 
-import sys
+import argparse
 import itertools
 from typing import Callable, Optional
 
-labels: dict[str, int] = {}
+argparser = argparse.ArgumentParser()
+argparser.add_argument("asmfile", type=str,
+        help="The source file to assemble")
+argparser.add_argument("hexfile", type=str,
+        help="The ASCII hex file to output")
+argparser.add_argument("-p", "--pack", type=int,
+        help="Amount of memory to size for")
+args = argparser.parse_args()
 
+labels: dict[str, int] = {}
 
 def parse_instr(line: int, text: str) -> Optional[tuple[str, str, list[str]]]:
     if ":" in text:
@@ -113,7 +121,7 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
     "const": lambda _, instr: resolve(instr[2][0]),
 }
 
-with open(sys.argv[1], "r") as asmfile:
+with open(args.asmfile, "r") as asmfile:
     asmlines = [line.split(";", 1)[0].strip() for line in asmfile]
     text_instrs = []
     for l in asmlines:
@@ -123,10 +131,14 @@ with open(sys.argv[1], "r") as asmfile:
     bytecode = [instr_table[instr[1]](ind*4, instr) for ind, instr in enumerate(text_instrs)]
     if len(bytecode) % 4 != 0:
         bytecode += [0] * (4 - len(bytecode) % 4)
+    if args.pack != None and len(bytecode) > args.pack:
+        print(f"Assembled binary too large for ROM:"
+              f"needs {len(bytecode)} bytes, {args.pack} available")
     # my python version doesn't have itertools.batched
     print({n : hex(v) for n, v in labels.items()})
-    with open(sys.argv[2], "w") as hexfile:
+    with open(args.hexfile, "w") as hexfile:
         for i in range(0, len(bytecode), 4):
             hexfile.write("{0:08x}{1:08x}{2:08x}{3:08x}\n"
                           .format(bytecode[i+3], bytecode[i+2], bytecode[i+1], bytecode[i]))
+        hexfile.write(("0"*32 + "\n") * ((args.pack - len(bytecode)*4) // 16))
 

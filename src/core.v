@@ -1,6 +1,13 @@
 `timescale 1ns/1ps
 
-module core(
+module core #(
+        parameter CACHE_WIDTH = 128,
+        parameter CACHE_DEPTH = 10,
+        parameter BUS_GRANULARITY = 8,
+
+        localparam SEL_WIDTH = CACHE_WIDTH/BUS_GRANULARITY,
+        localparam NARROW_SEL_WIDTH = 32/BUS_GRANULARITY
+    ) (
         input  clk48,
 
         output led_r,
@@ -23,25 +30,39 @@ module core(
 
         output [13:0] vga_waddr,
         output [7:0] vga_wdata,
-        output vga_wr_en
+        output vga_wr_en,
 
+        output [31:0] dbg
+
+    );
+
+    wire clk;
+    clkdiv #(48, 24) corediv(
+        .clkin(clk48),
+        .clkout(clk)
     );
 
     // Main wishbone bus that is fed by the CPU
     // 128-bit width, byte addressable
     wire [31:0] wb_host_adr_o;
-    wire [127:0] wb_host_dat_i;
-    wire [127:0] wb_host_dat_o;
+    wire [CACHE_WIDTH-1:0] wb_host_dat_i;
+    wire [CACHE_WIDTH-1:0] wb_host_dat_o;
     wire wb_host_we_o;
-    wire [15:0] wb_host_sel_o;
+    wire [SEL_WIDTH-1:0] wb_host_sel_o;
     wire wb_host_stb_o;
     wire wb_host_ack_i;
     wire wb_host_err_i;
     wire wb_host_rty_i;
     wire wb_host_cyc_o;
 
-    cpu cpucore(
-        .clk(clk48),
+    assign dbg = {wb_host_dat_i[31:4], wb_host_we_o, |`ROMPATH, wb_host_ack_i, clk};
+
+    cpu #(
+        .CACHE_WIDTH(CACHE_WIDTH),
+        .CACHE_DEPTH(CACHE_DEPTH),
+        .BUS_GRANULARITY(BUS_GRANULARITY)
+    ) cpucore(
+        .clk(clk),
         .rst(1'b0),
         
         .wb_adr_o(wb_host_adr_o),
@@ -59,10 +80,10 @@ module core(
     // Connection to common memory
     // 128-bit width, byte addressable
     wire [31:0] wb_mem_adr_o;
-    wire [127:0] wb_mem_dat_i;
-    wire [127:0] wb_mem_dat_o;
+    wire [CACHE_WIDTH-1:0] wb_mem_dat_i;
+    wire [CACHE_WIDTH-1:0] wb_mem_dat_o;
     wire wb_mem_we_o;
-    wire [15:0] wb_mem_sel_o;
+    wire [SEL_WIDTH-1:0] wb_mem_sel_o;
     wire wb_mem_stb_o;
     wire wb_mem_ack_i;
     // wire wb_mem_err_i;
@@ -72,18 +93,18 @@ module core(
     // Connection to narrowing adapter for I/O registers
     // 128-bit width, byte addressable
     wire [31:0] wb_narrow_adr_o;
-    wire [127:0] wb_narrow_dat_i;
-    wire [127:0] wb_narrow_dat_o;
+    wire [CACHE_WIDTH-1:0] wb_narrow_dat_i;
+    wire [CACHE_WIDTH-1:0] wb_narrow_dat_o;
     wire wb_narrow_we_o;
-    wire [15:0] wb_narrow_sel_o;
+    wire [SEL_WIDTH-1:0] wb_narrow_sel_o;
     wire wb_narrow_stb_o;
     wire wb_narrow_ack_i;
     wire wb_narrow_err_i;
     wire wb_narrow_rty_i;
     wire wb_narrow_cyc_o;
 
-    wb_mux_2 #(128, 32, 16) mainbus(
-        .clk(clk48),
+    wb_mux_2 #(CACHE_WIDTH, 32, SEL_WIDTH) mainbus(
+        .clk(clk),
         .rst(1'b0),
 
         .wbm_adr_i(wb_host_adr_o),
@@ -109,7 +130,7 @@ module core(
         .wbs0_cyc_o(wb_mem_cyc_o),
 
         .wbs0_addr(32'h00000000),
-        .wbs0_addr_msk(32'hFFFFC000), // 16KB main memory
+        .wbs0_addr_msk(~32'h3FFF), // 512B main memory
 
         .wbs1_adr_o(wb_narrow_adr_o),
         .wbs1_dat_o(wb_narrow_dat_o),
@@ -123,16 +144,16 @@ module core(
         .wbs1_cyc_o(wb_narrow_cyc_o),
 
         .wbs1_addr(32'h00004000),
-        .wbs1_addr_msk(32'hFFFFC000) // 16KB I/O space (not all use)
+        .wbs1_addr_msk(~32'h3FFF) // 512B I/O space (not all used)
     );
 
     wb_ram #(
         .ADDR_WIDTH(14),
-        .DATA_WIDTH(128),
-        .SELECT_WIDTH(16),
+        .DATA_WIDTH(CACHE_WIDTH),
+        .SELECT_WIDTH(SEL_WIDTH),
         .INIT_PATH(`ROMPATH)
     ) ram(
-        .clk(clk48),
+        .clk(clk),
         .adr_i(wb_mem_adr_o[13:0]),
         .dat_i(wb_mem_dat_o),
         .dat_o(wb_mem_dat_i),
@@ -147,7 +168,7 @@ module core(
     wire [31:0] wb_nb_dat_i;
     wire [31:0] wb_nb_dat_o;
     wire wb_nb_we_o;
-    wire [3:0] wb_nb_sel_o;
+    wire [NARROW_SEL_WIDTH-1:0] wb_nb_sel_o;
     wire wb_nb_stb_o;
     wire wb_nb_ack_i;
     wire wb_nb_err_i;
@@ -157,12 +178,12 @@ module core(
 
     wb_adapter #(
         .ADDR_WIDTH(32),
-        .WBM_DATA_WIDTH(128),
-        .WBM_SELECT_WIDTH(16),
+        .WBM_DATA_WIDTH(CACHE_WIDTH),
+        .WBM_SELECT_WIDTH(SEL_WIDTH),
         .WBS_DATA_WIDTH(32),
-        .WBS_SELECT_WIDTH(4)
+        .WBS_SELECT_WIDTH(NARROW_SEL_WIDTH)
     ) adapter(
-        .clk(clk48),
+        .clk(clk),
         .rst(1'b0),
         
         .wbm_adr_i(wb_narrow_adr_o),
@@ -192,8 +213,8 @@ module core(
     assign wb_nb_rty_i = 0;
 
     wire [31:0] led_value;
-    wb_port #(32, 4) led_port (
-        .clk(clk48),
+    wb_port #(32, NARROW_SEL_WIDTH) led_port (
+        .clk(clk),
 
         .dat_o(wb_nb_dat_i),
         .dat_i(wb_nb_dat_o),
@@ -207,21 +228,24 @@ module core(
     );
 
     wire pwmclk;
-    clkdiv #(2400) pwm_div(
-        .clkin(clk48),
+    clkdiv #(1200) pwm_div(
+        .clkin(clk),
         .clkout(pwmclk)
     );
 
-    pwm #(8) ledpwm [2:0] (
+    pwm #(8) ledpwm (
         .clk(pwmclk),
-        .value(led_value[23:0]),
-        .signal({led_b, led_g, led_r})
+        .value(led_value[7:0]),
+        .signal({led_r})
     );
 
-    // wire [13:0] wb_vga_adr_i;
-    // wire [127:0] wb_vga_dat_i;
+    assign led_g = wb_host_stb_o & ~wb_host_adr_o[15];
+    assign led_b = wb_host_stb_o & wb_host_adr_o[15];
+
+    // wire [1SEL_WIDTH-1:0] wb_vga_adr_i;
+    // wire [CACHE_WIDTH-1:0] wb_vga_dat_i;
     // wire wb_vga_we_i;
-    // wire [15:0] wb_vga_sel_i;
+    // wire [SEL_WIDTH-1:0] wb_vga_sel_i;
     // wire wb_vga_stb_i;
     // wire wb_vga_ack_o;
     // wire wb_vga_cyc_i;
