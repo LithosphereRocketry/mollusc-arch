@@ -140,5 +140,6 @@ with open(args.asmfile, "r") as asmfile:
         for i in range(0, len(bytecode), 4):
             hexfile.write("{0:08x}{1:08x}{2:08x}{3:08x}\n"
                           .format(bytecode[i+3], bytecode[i+2], bytecode[i+1], bytecode[i]))
-        hexfile.write(("0"*32 + "\n") * ((args.pack - len(bytecode)*4) // 16))
+        if args.pack != None:
+            hexfile.write(("0"*32 + "\n") * ((args.pack - len(bytecode)*4) // 16))
 

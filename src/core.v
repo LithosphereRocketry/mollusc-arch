@@ -30,17 +30,14 @@ module core #(
 
         output [13:0] vga_waddr,
         output [7:0] vga_wdata,
-        output vga_wr_en,
-
-        output [31:0] dbg
-
+        output vga_wr_en
     );
 
-    wire clk = clk48;
-    // clkdiv #(48, 24) corediv(
-    //     .clkin(clk48),
-    //     .clkout(clk)
-    // );
+    // wire clk = clk48;
+    clkdiv #(2, 1) corediv(
+        .clkin(clk48),
+        .clkout(clk)
+    );
 
     // Main wishbone bus that is fed by the CPU
     // 128-bit width, byte addressable
@@ -54,8 +51,6 @@ module core #(
     wire wb_host_err_i;
     wire wb_host_rty_i;
     wire wb_host_cyc_o;
-
-    assign dbg = {wb_host_dat_i[31:4], wb_host_we_o, |`ROMPATH, wb_host_ack_i, clk};
 
     cpu #(
         .CACHE_WIDTH(CACHE_WIDTH),
@@ -233,14 +228,11 @@ module core #(
         .clkout(pwmclk)
     );
 
-    pwm #(8) ledpwm (
+    pwm #(8) ledpwm [2:0] (
         .clk(pwmclk),
-        .value(led_value[7:0]),
-        .signal({led_r})
+        .value(led_value[23:0]),
+        .signal({led_b, led_g, led_r})
     );
-
-    assign led_g = wb_host_stb_o & ~wb_host_adr_o[15];
-    assign led_b = wb_host_stb_o & wb_host_adr_o[15];
 
     // wire [1SEL_WIDTH-1:0] wb_vga_adr_i;
     // wire [CACHE_WIDTH-1:0] wb_vga_dat_i;

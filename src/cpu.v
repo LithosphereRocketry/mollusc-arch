@@ -17,8 +17,7 @@ module cpu #(
         input wb_ack_i,
         input wb_err_i,
         input wb_rty_i,
-        output wb_cyc_o,
-        output dbg
+        output wb_cyc_o
     );
 
 
@@ -180,7 +179,5 @@ module cpu #(
         .wb_rty_i(wb_rty_i),
         .wb_cyc_o(wb_cyc_o)
     );
-
-    assign dbg = flow_is_jump;
 endmodule
 

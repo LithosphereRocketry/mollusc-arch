@@ -27,7 +27,7 @@ module stage_decode(
         output reg jump
     );
 
-    wire [3:0] ra_pred;
+    wire [3:0] ra_pred = instr[31:28];
     wire [31:0] rv_pred;
     wire [3:0] ra_a;
     wire [31:0] rv_a;
@@ -60,15 +60,13 @@ module stage_decode(
         .fwd_used(fwd_used)
     );
 
-    wire [26:0] instr_pred;
     wire pred_priv;
-    predicate pred(
-        .instr(instr),
+    privileged p_priv(
         .reg_addr(ra_pred),
-        .reg_value(rv_pred),
-        .instr_out(instr_pred),
-        .privileged(pred_priv)
+        .priv(pred_priv)
     );
+    wire pred = (rv_pred == 32'h00000000) ^ instr[23];
+    wire [26:0] instr_pred = {instr[27:24], instr[22:0]};
 
     wire [3:0] ra_dest;
     wire [20:0] upper_imm;
@@ -112,13 +110,13 @@ module stage_decode(
     wire [31:0] imm = use_upper_imm ? upper_ext : lower_ext;
     wire [31:0] operand_b = use_imm ? imm : rv_b;
 
-
-    wire next_jump = ~stall & ~jump ? is_jump
-                    : ~stall_in ? 1'b0
-                    : jump;
+    wire do_emit = ~stall & ~jump & pred;
+    wire next_jump = do_emit ? is_jump
+                   : ~stall_in ? 1'b0
+                   : jump;
     assign discard = next_jump;
     always @(posedge clk) begin
-        if(~stall & ~jump) begin
+        if(do_emit) begin
             pc <= pc_in;
             reg_a <= operand_a;
             reg_b <= operand_b;
