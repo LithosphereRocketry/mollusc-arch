@@ -36,11 +36,11 @@ module core #(
 
     );
 
-    wire clk;
-    clkdiv #(48, 24) corediv(
-        .clkin(clk48),
-        .clkout(clk)
-    );
+    wire clk = clk48;
+    // clkdiv #(48, 24) corediv(
+    //     .clkin(clk48),
+    //     .clkout(clk)
+    // );
 
     // Main wishbone bus that is fed by the CPU
     // 128-bit width, byte addressable
