@@ -40,7 +40,7 @@ USB_SRCS = $(RTL_USB_DIR)/edge_detect.v \
 GATEWARE_DIR_FPGA = src-hardware
 
 # Collect all required Verilog to synthesize
-GENERATED = $(GENERATE_DIR)/pll_108.v $(GENERATE_DIR)/lite_ddr3l.v
+GENERATED = $(GENERATE_DIR)/pll_cpu.v $(GENERATE_DIR)/pll_108.v $(GENERATE_DIR)/lite_ddr3l.v
 FPGA_GATEWARE = $(GATEWARE) $(wildcard $(GATEWARE_DIR_FPGA)/*.v) $(USB_SRCS) $(GENERATED)
 
 # Rules specific to synthesis
@@ -53,6 +53,9 @@ dfu: $(OUT_DIR)/$(TOPLEVEL).dfu
 
 ${GENERATE_DIR}/pll_108.v: | $(GENERATE_DIR)
 	ecppll -n pll_108 -i 48 -o 108 -f $@
+CPU_SPEED = $(shell tools/getcfg.py mollusc.cfg CPU speed)
+${GENERATE_DIR}/pll_cpu.v: mollusc.cfg tools/getcfg.py | $(GENERATE_DIR)
+	ecppll -n pll_cpu -i 48 -o $(CPU_SPEED) -f $@
 ${GENERATE_DIR}/lite_ddr3l.v: orangecrab-dram.yml | $(GENERATE_DIR)
 	python -m litedram.gen orangecrab-dram.yml --name lite_ddr3l --no-compile --gateware-dir ${GENERATE_DIR}/ --doc
 

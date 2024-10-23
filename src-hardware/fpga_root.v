@@ -40,10 +40,15 @@ module fpga_root(
     // wire [7:0] vga_wdata;
     // wire vga_wr_en;
 
+    wire cpuclk;
+    pll_cpu pll(
+        .clkin(clk48),
+        .clkout0(cpuclk)
+    );
+
     wire led_r, led_g, led_b;
-    wire [31:0] dbg;
     core root(
-        .clk48(clk48),
+        .clk(cpuclk),
         .led_r(led_r),
         .led_g(led_g),
         .led_b(led_b),

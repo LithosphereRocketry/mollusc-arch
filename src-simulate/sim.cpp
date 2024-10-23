@@ -34,10 +34,10 @@ unsigned long clocks_since_key = 0;
 void step() {
     core.eval();
     context.timeInc(timeincs / clockspeed / 2);
-    core.clk48 = true;
+    core.clk = true;
     core.eval();
     context.timeInc(timeincs / clockspeed / 2);
-    core.clk48 = false;
+    core.clk = false;
     core.eval();
     clocks_since_refresh ++;
     clocks_since_key ++;

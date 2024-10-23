@@ -1,9 +1,7 @@
-        ; for some reason the first cache fetch is garbage on real hardware
-        ; need to fix
-        add zero, zero, zero
-        add zero, zero, zero
-        add zero, zero, zero
-        add zero, zero, zero
+        add zero, x15, x15
+        add zero, x15, x15
+        add zero, x15, x15
+        add zero, x15, x15
         lui s2, 0x00004000 ; address of LED controller
         add s3, zero, zero
 loop:   

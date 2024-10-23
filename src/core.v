@@ -8,7 +8,7 @@ module core #(
         localparam SEL_WIDTH = CACHE_WIDTH/BUS_GRANULARITY,
         localparam NARROW_SEL_WIDTH = 32/BUS_GRANULARITY
     ) (
-        input  clk48,
+        input  clk,
 
         output led_r,
         output led_g,
@@ -31,12 +31,6 @@ module core #(
         output [13:0] vga_waddr,
         output [7:0] vga_wdata,
         output vga_wr_en
-    );
-
-    // wire clk = clk48;
-    clkdiv #(2, 1) corediv(
-        .clkin(clk48),
-        .clkout(clk)
     );
 
     // Main wishbone bus that is fed by the CPU
