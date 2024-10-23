@@ -1,5 +1,6 @@
 module stage_fetch(
         input clk,
+        input rst,
         input is_jump,
         input [31:0] jump_addr,
 
@@ -14,6 +15,7 @@ module stage_fetch(
 
     assign fetchpc = stall_in ? presentpc
                               : is_jump ? jump_addr : presentpc + 32'h4;
-    always @(posedge clk) if(~stall_in) presentpc <= fetchpc;
+    always @(posedge clk) if(rst) presentpc <=  32'h00000000 - 32'h4;
+            else if(~stall_in) presentpc <= fetchpc;
 
 endmodule

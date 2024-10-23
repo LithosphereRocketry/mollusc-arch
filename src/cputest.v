@@ -11,7 +11,7 @@ module cputest(
 
     cpu #(
         .CACHE_WIDTH(128),
-        .CACHE_DEPTH(10),
+        .CACHE_DEPTH(4),
         .BUS_GRANULARITY(8)
     ) cpucore(
         .clk(clk),

@@ -37,6 +37,7 @@ module cpu #(
     wire [31:0] fetch_presentpc;
     stage_fetch fetch(
         .clk(clk),
+        .rst(rst),
         .stall_in(fetch_stall),
         .is_jump(flow_is_jump),
         .jump_addr(flow_jump_addr),
@@ -62,6 +63,7 @@ module cpu #(
     wire decode_is_jump;
     stage_decode decode(
         .clk(clk),
+        .rst(rst),
         .pc_in(fetch_presentpc),
         .instr(fetch_instr),
         .instr_valid(fetch_ready),
@@ -97,6 +99,7 @@ module cpu #(
     wire execute_is_mem;
     stage_execute execute(
         .clk(clk),
+        .rst(rst),
         .pc(decode_pc),
 
         .stall(decode_stall),

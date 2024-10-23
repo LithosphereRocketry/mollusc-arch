@@ -1,5 +1,6 @@
 module stage_execute(
         input clk,
+        input rst,
         input [31:0] pc,
 
         input stall_in,
@@ -28,9 +29,9 @@ module stage_execute(
         output reg [31:0] out_val,
 
         output reg is_mem,
-        output reg [31:0] mem_addr,
-        output reg [31:0] mem_val,
-        output reg mem_write
+        output [31:0] mem_addr,
+        output [31:0] mem_val,
+        output mem_write
     );
 
     assign stall = stall_in;
@@ -66,16 +67,30 @@ module stage_execute(
     assign jump = is_jump;
     assign jump_addr = memop_addr;
 
-    always @(posedge clk) begin
-        if(~stall) begin
-            out_addr <= dest;
-            out_val <= fwd_val;
-            is_mem <= is_mem_in;
-        end else if(~stall_in) begin
-            // If we created the stall, emit a bubble
+    task reset();
+        begin
+            /* verilator lint_off INITIALDLY */
             out_addr <= 4'h0;
             out_val <= 32'hxxxxxxxx;
             is_mem <= 1'b0;
+            /* lint_on */
+        end
+    endtask
+    initial reset();
+
+    always @(posedge clk) begin
+        if(rst) reset();
+        else begin
+            if(~stall) begin
+                out_addr <= dest;
+                out_val <= fwd_val;
+                is_mem <= is_mem_in;
+            end else if(~stall_in) begin
+                // If we created the stall, emit a bubble
+                out_addr <= 4'h0;
+                out_val <= 32'hxxxxxxxx;
+                is_mem <= 1'b0;
+            end
         end
     end
 

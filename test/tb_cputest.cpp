@@ -20,7 +20,11 @@ void stepclk() {
 int main(int argc, char** argv) {
     try {
         vtu::trace trace(VCD_PATH, &dut);
+        dut.rst = 1;
         dut.eval();
+        trace.advance();
+        stepclk();
+        dut.rst = 0;
         for(size_t i = 0; i < 500; i++) {
             trace.advance();
             stepclk();

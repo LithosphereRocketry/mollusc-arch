@@ -41,9 +41,9 @@ module memcontrol #(
     assign wb_cyc_o = wb_arb_cyc;
     // TODO: In the future this will be used for bus exclusivity
 
-    // Cache valid is a separate register so other accesses can force us to 
-    // re-fetch
-    reg [(1 << CACHE_DEPTH)-1:0] cache_valid;
+    // // Cache valid is a separate register so other accesses can force us to 
+    // // re-fetch
+    // reg [(1 << CACHE_DEPTH)-1:0] cache_valid;
 
     // Cache lines corresponding to incoming address request
     wire [CACHE_DEPTH-1:0] caddr_a = addr_a[CACHE_LINE_DEPTH +: CACHE_DEPTH];
@@ -56,8 +56,8 @@ module memcontrol #(
     reg [CACHE_WIDTH-1:0] rdata_a;
     reg [CACHE_WIDTH-1:0] rdata_b;
     // Fetched valid bits from cache
-    reg cvalid_a;
-    reg cvalid_b;
+    wire cvalid_a;
+    wire cvalid_b;
     wire [WORD_WIDTH-1:0] cached_word_a = rdata_a[
             sync_addr_a[CACHE_LINE_DEPTH-1:WORD_DEPTH] * WORD_WIDTH +: WORD_WIDTH];
     wire [1:0] line_index_b = sync_addr_b[CACHE_LINE_DEPTH-1:WORD_DEPTH];
@@ -144,64 +144,83 @@ module memcontrol #(
     wire a_wants_busfetch = a_is_read & ~rdata_correct_a;
     wire b_wants_busfetch = b_is_read & ~rdata_correct_b;
 
-    assign ready_a = ~wba_stb & ~a_wants_busfetch;
-    assign ready_b = wr_b ? ~wbb_stb | buswrite_done_b
-                          : ~wbb_stb & ~b_wants_busfetch;
 
+    // Initial cache scrubbing
+    // Since valid bits live in BRAM, we have to manually clear one row at a
+    // time
+    reg [CACHE_DEPTH-1:0] scrub_addr;
+    reg scrub_ready;
 
     // Writeback logic
     // Originally this was inside the always block, but yosys isn't quite smart
     // enough to infer the needed muxes to implement it there, so I'm doing it
     // explicitly instead
 
-    wire [CACHE_DEPTH-1:0] a_write_addr = wba_adr[CACHE_LINE_DEPTH +: CACHE_DEPTH];
-    wire [CACHE_TAG_WIDTH+CACHE_WIDTH-1:0] a_write_data =
-            {wba_adr[ADDR_WIDTH-1:CACHE_DEPTH+CACHE_LINE_DEPTH], wba_dat_r};
-    wire [CACHE_DEPTH-1:0] a_cache_addr = busfetch_done_a ? a_write_addr : caddr_a;
+    // A handles instruction fetch and scrubbing
+    wire [CACHE_TAG_WIDTH+CACHE_WIDTH:0] a_scrub_data = {1'b0, {CACHE_TAG_WIDTH+CACHE_WIDTH{1'bx}}};
+    wire [CACHE_TAG_WIDTH+CACHE_WIDTH:0] a_fetch_data =
+            {1'b1, wba_adr[ADDR_WIDTH-1:CACHE_DEPTH+CACHE_LINE_DEPTH], wba_dat_r};
+    wire [CACHE_TAG_WIDTH+CACHE_WIDTH:0] a_write_data =
+            ~scrub_ready ? a_scrub_data : a_fetch_data;
 
+    wire [CACHE_DEPTH-1:0] a_write_addr = wba_adr[CACHE_LINE_DEPTH +: CACHE_DEPTH];
+    wire [CACHE_DEPTH-1:0] a_cache_addr = ~scrub_ready ? scrub_addr
+            : busfetch_done_a ? a_write_addr : caddr_a;
+    wire a_writes_cache = busfetch_done_a | ~scrub_ready;
+
+    // B handles data read and write
     wire b_uses_writethrough = b_is_write & rdata_correct_b;
+    wire [CACHE_WIDTH-1:0] b_writethrough_line = (
+        // Mask out the word we want to change
+        rdata_b & 
+        ~({{CACHE_WIDTH-WORD_WIDTH{1'b0}}, {WORD_WIDTH{1'b1}}} << WORD_WIDTH*line_index_b)
+    ) | (
+        // Insert the word
+        {{CACHE_WIDTH-WORD_WIDTH{1'b0}}, sync_wdata_b} << WORD_WIDTH*line_index_b
+    );
+    wire [CACHE_TAG_WIDTH+CACHE_WIDTH:0] b_writethrough_data =
+            { cvalid_b, tag_b, b_writethrough_line };
+    wire [CACHE_TAG_WIDTH+CACHE_WIDTH:0] b_fetch_data = 
+            { 1'b1, wbb_adr[ADDR_WIDTH-1:CACHE_DEPTH+CACHE_LINE_DEPTH], wbb_dat_r };
+    wire [CACHE_TAG_WIDTH+CACHE_WIDTH:0] b_write_data = 
+            b_uses_writethrough ? b_writethrough_data : b_fetch_data;
+
     wire [CACHE_DEPTH-1:0] b_write_addr = b_uses_writethrough ? sync_caddr_b
                                      : wbb_adr[CACHE_LINE_DEPTH +: CACHE_DEPTH];
-    wire [CACHE_TAG_WIDTH+CACHE_WIDTH-1:0] b_write_data = 
-            b_uses_writethrough ? {tag_b, (
-                (rdata_b & 
-                    ({CACHE_WIDTH{1'b1}}
-                        & ~({{CACHE_WIDTH-WORD_WIDTH{1'b0}}, {WORD_WIDTH{1'b1}}}
-                                << WORD_WIDTH*line_index_b))
-                ) | ({{CACHE_WIDTH-WORD_WIDTH{1'b0}}, sync_wdata_b}
-                        << WORD_WIDTH*line_index_b)
-            )} : {
-                wbb_adr[ADDR_WIDTH-1:CACHE_DEPTH+CACHE_LINE_DEPTH],
-                wbb_dat_r
-            };
-    wire b_writes_cache = b_uses_writethrough | busfetch_done_b;
     wire [CACHE_DEPTH-1:0] b_cache_addr = b_writes_cache ? b_write_addr : caddr_b;
+    wire b_writes_cache = b_uses_writethrough | busfetch_done_b;
+
+    assign ready_a = scrub_ready & ~wba_stb & ~a_wants_busfetch;
+    assign ready_b = scrub_ready & (wr_b ? ~wbb_stb | buswrite_done_b
+                                         : ~wbb_stb & ~b_wants_busfetch);
 
     dp_ram #(
-        .D_WIDTH(CACHE_TAG_WIDTH+CACHE_WIDTH),
+        .D_WIDTH(CACHE_TAG_WIDTH+CACHE_WIDTH+1),
         .A_WIDTH(CACHE_DEPTH)
     ) cache(
         .clk(clk),
         
         .addr_a(a_cache_addr),
         .wdata_a(a_write_data),
-        .wr_a(busfetch_done_a),
-        .rdata_a({tag_a, rdata_a}),
+        .wr_a(a_writes_cache),
+        .rdata_a({cvalid_a, tag_a, rdata_a}),
 
         .addr_b(b_cache_addr),
         .wdata_b(b_write_data),
         .wr_b(b_writes_cache),
-        .rdata_b({tag_b, rdata_b})
+        .rdata_b({cvalid_b, tag_b, rdata_b})
     );
 
     task reset;
         begin
             /* verilator lint_off INITIALDLY */
-            cache_valid <= {(1 << CACHE_DEPTH){1'b0}};
+            a_is_read <= 0;
+            b_is_read <= 0;
+            b_is_write <= 0;
             fetched_valid_a <= 0;
             fetched_valid_b <= 0;
-            cvalid_a <= 0;
-            cvalid_b <= 0;
+            scrub_addr <= 0;
+            scrub_ready <= 0;
             /* lint_on */
         end
     endtask
@@ -209,7 +228,11 @@ module memcontrol #(
     initial reset();
 
     always @(posedge clk) begin
-        if(rst) reset(); else begin
+        if(rst) reset();
+        else if(~scrub_ready) begin
+            scrub_ready <= (scrub_addr == {CACHE_DEPTH{1'b1}});
+            scrub_addr <= scrub_addr + 1;
+        end else begin
 
             if(a_wants_busfetch) begin
                 wba_stb <= 1'b1;
@@ -253,19 +276,14 @@ module memcontrol #(
                 wbb_adr <= {ADDR_WIDTH{1'bx}};
             end
                 
-            if(busfetch_done_a) begin
-                cache_valid[wba_adr[CACHE_LINE_DEPTH +: CACHE_DEPTH]] <= 1'b1;
-            end else begin
+            if(~busfetch_done_a) begin
                 sync_addr_a <= addr_a;
-                cvalid_a <= cache_valid[caddr_a];
                 a_is_read <= ready_a & valid_a;
             end
 
             if(b_uses_writethrough) b_is_write <= 0;
-            if(busfetch_done_b) cache_valid[wbb_adr[CACHE_LINE_DEPTH +: CACHE_DEPTH]] <= 1'b1;
             if(~b_writes_cache) begin
                 sync_addr_b <= addr_b;
-                cvalid_b <= cache_valid[caddr_b];
                 b_is_read <= ready_b & valid_b & ~wr_b;
                 b_is_write <= ready_b & valid_b & wr_b;
                 sync_wdata_b <= datain_b;

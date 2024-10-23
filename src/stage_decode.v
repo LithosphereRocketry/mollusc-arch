@@ -1,5 +1,6 @@
 module stage_decode(
         input clk,
+        input rst,
         input [31:0] pc_in,
         input [31:0] instr,
         input instr_valid,
@@ -115,28 +116,50 @@ module stage_decode(
                    : ~stall_in ? 1'b0
                    : jump;
     assign discard = next_jump;
-    always @(posedge clk) begin
-        if(do_emit) begin
-            pc <= pc_in;
-            reg_a <= operand_a;
-            reg_b <= operand_b;
-            reg_m <= rv_mem;
-            dest <= ra_dest;
-            aluop <= dec_aluop;
-            mem <= is_mem;
-            mem_write <= is_mem_write;
-        end else if(~stall_in) begin
-            // If we stalled, emit a noop/bubble
+
+    task reset();
+        begin
+            /* verilator lint_off INITIALDLY */
             pc <= 32'hxxxxxxxx;
-            reg_a <= 32'hxxxxxxxx;
-            reg_b <= 32'hxxxxxxxx;
-            reg_m <= 32'hxxxxxxxx;
+            reg_a <= 4'hx;
+            reg_b <= 4'hx;
+            reg_m <= 4'hx;
+
             dest <= 4'h0;
             aluop <= 4'hx;
             mem <= 1'b0;
             mem_write <= 1'b0;
+            jump <= 1'b0;
+            /* lint_on */
         end
-        jump <= next_jump;
+    endtask
+    initial reset();
+
+    always @(posedge clk) begin
+        if(rst) reset();
+        else begin
+            if(do_emit) begin
+                pc <= pc_in;
+                reg_a <= operand_a;
+                reg_b <= operand_b;
+                reg_m <= rv_mem;
+                dest <= ra_dest;
+                aluop <= dec_aluop;
+                mem <= is_mem;
+                mem_write <= is_mem_write;
+            end else if(~stall_in) begin
+                // If we stalled, emit a noop/bubble
+                pc <= 32'hxxxxxxxx;
+                reg_a <= 32'hxxxxxxxx;
+                reg_b <= 32'hxxxxxxxx;
+                reg_m <= 32'hxxxxxxxx;
+                dest <= 4'h0;
+                aluop <= 4'hx;
+                mem <= 1'b0;
+                mem_write <= 1'b0;
+            end
+            jump <= next_jump;
+        end
     end
     
 endmodule
