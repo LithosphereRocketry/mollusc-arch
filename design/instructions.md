@@ -1,5 +1,19 @@
 # MOLLUSC Instruction Listing
 
+## Arithmetic
+
+`add <dest>, <reg1>, <reg2>`
+
+Adds the values of reg1 and reg2 and places the result in dest.
+
+`sub <dest>, <reg1>, <reg2>`
+
+Subtracts the value of reg2 from that of reg1 and places the result in dest.
+
+`xor <dest>, <reg1>, <reg2>`
+
+Computes the bitwise-xor of the values of reg1 and reg2 and places it in dest.
+
 ## Jumps
 
 `j <dest>, <target>`
@@ -11,12 +25,12 @@ forward.
 `jx <dest>, <reg1>, <reg2>`
 
 Jumps execution to the address formed by the sum of reg1 and reg2. Stores the
-following instruction in the destination register.
+address of the following instruction in the destination register.
 
 `jxi <dest>, <reg>, <offs>`
 
 Jumps execution to the address formed by the sum of reg and offs. Stores the
-following instruction in the destination register.
+address of the following instruction in the destination register.
 
 ## Register value loads
 
