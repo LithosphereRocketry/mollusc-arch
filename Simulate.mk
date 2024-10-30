@@ -29,11 +29,11 @@ $(SIM_GEN_DIR)/lite_ddr3l.v: orangecrab-dram.yml | $(GENERATE_DIR)
 .PRECIOUS: $(SIM_GEN_DIR)/libV%.a
 $(SIM_GEN_DIR)/libV%.a: $(SIM_GATEWARE) $(TESTROMDIR)/tb_%.asm tools/simpleasm.py | $(SIM_GEN_DIR)
 	tools/simpleasm.py $(TESTROMDIR)/tb_$*.asm $(TESTROMDIR)/tb_$*.hex	
-	verilator $(VERFLAGS) -DROMPATH=\"$(TESTROMDIR)/tb_$*.hex\" $(SIM_GATEWARE) --top-module $*
+	verilator $(VERFLAGS) -DROMPATH=\"$(TESTROMDIR)/tb_$*.hex\" -DRESET_VECTOR=$(RESET_VECTOR) $(SIM_GATEWARE) --top-module $*
 
 .PRECIOUS: $(SIM_GEN_DIR)/libV%.a
 $(SIM_GEN_DIR)/libV%.a: $(SIM_GATEWARE) $(BUILD_DIR)/boot.hex | $(SIM_GEN_DIR)
-	verilator $(VERFLAGS) -DROMPATH=\"$(BUILD_DIR)/boot.hex\" $(SIM_GATEWARE) --top-module $*
+	verilator $(VERFLAGS) -DROMPATH=\"$(BUILD_DIR)/boot.hex\" -DRESET_VECTOR=$(RESET_VECTOR) $(SIM_GATEWARE) --top-module $*
 
 $(OUT_DIR)/$(TOPLEVEL): $(SRCDIR)/$(TOPLEVEL).cpp $(SRCDIR)/scancodesets.c $(SRCDIR)/scancodesets.h $(LIBCORE) | $(OUT_DIR)
 	$(CXX) $< -lVcore $(SRCDIR)/scancodesets.c $(CXXFLAGS) -o $@

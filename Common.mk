@@ -26,6 +26,11 @@ WAVE_DIR = waveforms
 # Directories we might have to create on a fresh build
 DIRS = $(GENERATE_DIR) $(OUT_DIR) $(BUILD_DIR) $(SIM_GEN_DIR) $(LOG_DIR) $(FAIL_DIR) $(WAVE_DIR)
 
+# Configuration data
+CFG = mollusc.cfg $(TOOLSDIR)/getcfg.py
+CPU_SPEED = $(shell tools/getcfg.py mollusc.cfg CPU speed)
+RESET_VECTOR = $(shell tools/getcfg.py mollusc.cfg Layout reset)
+
 N_MUX_PORTS = 2
 
 COMMONGENS = wb_mux_$(N_MUX_PORTS).v
