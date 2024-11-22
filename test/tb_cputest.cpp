@@ -25,10 +25,20 @@ int main(int argc, char** argv) {
         trace.advance();
         stepclk();
         dut.rst = 0;
-        for(size_t i = 0; i < 500; i++) {
+        for(size_t i = 0; i < 256; i++) {
             trace.advance();
             stepclk();
         }
+        dut.rst = 1;
+        dut.eval();
+        trace.advance();
+        stepclk();
+        dut.rst = 0;
+        for(size_t i = 0; i < 256; i++) {
+            trace.advance();
+            stepclk();
+        }
+        
     } catch(test::test_failed e) {
         std::cout << e.what() << "\n";
         exit(-1);

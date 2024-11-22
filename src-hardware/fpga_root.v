@@ -41,14 +41,18 @@ module fpga_root(
     // wire vga_wr_en;
 
     wire cpuclk;
+    wire pll_lock;
     pll_cpu pll(
         .clkin(clk48),
-        .clkout0(cpuclk)
+        .clkout0(cpuclk),
+        .locked(pll_lock)
     );
 
+    wire [7:0] debug;
     wire led_r, led_g, led_b;
     core root(
         .clk(cpuclk),
+        .rst(~hbb_sw | ~pll_lock),
         .led_r(led_r),
         .led_g(led_g),
         .led_b(led_b),
@@ -63,10 +67,11 @@ module fpga_root(
         .kb_ready(kb_ready),
         .vga_waddr(vga_waddr),
         .vga_wdata(vga_wdata),
-        .vga_wr_en(vga_wr_en)
+        .vga_wr_en(vga_wr_en),
+        .debug(debug)
     );
     assign rgb_led0_r = ~led_r;
-    assign rgb_led0_g = ~led_g;
+    assign rgb_led0_g = ~led_g & hbb_sw;
     assign rgb_led0_b = ~led_b;
 
     orangecrab_reset reset_instance(
@@ -74,6 +79,11 @@ module fpga_root(
 		.do_reset(~usr_btn),
 		.nreset_out(rst_n)
 	);
+
+    assign vga_red = debug[2:0];
+    assign vga_blue = debug[4:3];
+    assign vga_hsync = debug[5];
+    assign vga_green[1:0] = debug[7:6];
 
     // usbcdc usb(
     //     .clk48(clk48),

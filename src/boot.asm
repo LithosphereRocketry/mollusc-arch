@@ -1,7 +1,3 @@
-        add zero, x15, x15
-        add zero, x15, x15
-        add zero, x15, x15
-        add zero, x15, x15
         lui s2, 0x00004000 ; address of LED controller
         add s3, zero, zero
 loop:   
@@ -20,7 +16,9 @@ l_down:
         j zero, loop
 
 busywait:
-        lui a5, 0xA000 ; approx. 1ms when cached
+        ; each iteration is about 3 clocks = 75 ns at 40 MHz
+        ; 0x6800 iters ~= 2 ms
+        lui a5, 0x6800 ; 
 busyloop:
         subi a5, a5, 1
     ?a5 j zero, busyloop

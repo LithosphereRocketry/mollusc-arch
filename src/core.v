@@ -8,7 +8,8 @@ module core #(
         localparam SEL_WIDTH = CACHE_WIDTH/BUS_GRANULARITY,
         localparam NARROW_SEL_WIDTH = 32/BUS_GRANULARITY
     ) (
-        input  clk,
+        input clk,
+        input rst,
 
         output led_r,
         output led_g,
@@ -30,7 +31,9 @@ module core #(
 
         output [13:0] vga_waddr,
         output [7:0] vga_wdata,
-        output vga_wr_en
+        output vga_wr_en,
+
+        output [7:0] debug
     );
 
     // Main wishbone bus that is fed by the CPU
@@ -46,13 +49,15 @@ module core #(
     wire wb_host_rty_i;
     wire wb_host_cyc_o;
 
+    wire [3:0] cpudbg;
+
     cpu #(
         .CACHE_WIDTH(CACHE_WIDTH),
         .CACHE_DEPTH(CACHE_DEPTH),
         .BUS_GRANULARITY(BUS_GRANULARITY)
     ) cpucore(
         .clk(clk),
-        .rst(1'b0),
+        .rst(rst),
         
         .wb_adr_o(wb_host_adr_o),
         .wb_dat_o(wb_host_dat_o),
@@ -63,7 +68,8 @@ module core #(
         .wb_ack_i(wb_host_ack_i),
         .wb_err_i(wb_host_err_i),
         .wb_rty_i(wb_host_rty_i),
-        .wb_cyc_o(wb_host_cyc_o)
+        .wb_cyc_o(wb_host_cyc_o),
+        .dbg(cpudbg)
     );
 
     // Connection to common memory
@@ -94,7 +100,7 @@ module core #(
 
     wb_mux_2 #(CACHE_WIDTH, 32, SEL_WIDTH) mainbus(
         .clk(clk),
-        .rst(1'b0),
+        .rst(rst),
 
         .wbm_adr_i(wb_host_adr_o),
         .wbm_dat_i(wb_host_dat_o),
@@ -173,7 +179,7 @@ module core #(
         .WBS_SELECT_WIDTH(NARROW_SEL_WIDTH)
     ) adapter(
         .clk(clk),
-        .rst(1'b0),
+        .rst(rst),
         
         .wbm_adr_i(wb_narrow_adr_o),
         .wbm_dat_i(wb_narrow_dat_o),
@@ -227,6 +233,13 @@ module core #(
         .value(led_value[23:0]),
         .signal({led_b, led_g, led_r})
     );
+
+    assign debug[7] = wb_host_ack_i;
+    assign debug[6] = wb_host_stb_o;
+    assign debug[5] = clk;
+    assign debug[4] = rst;
+    assign debug[3:0] = cpudbg;
+    // assign debug[3:0] = wb_host_adr_o[8:5];
 
     // wire [1SEL_WIDTH-1:0] wb_vga_adr_i;
     // wire [CACHE_WIDTH-1:0] wb_vga_dat_i;

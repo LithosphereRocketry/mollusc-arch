@@ -112,7 +112,7 @@ module memcontrol #(
         .wbm0_ack_o(wbb_ack),
         .wbm0_err_o(wbb_err),
         .wbm0_rty_o(wbb_rty),
-        .wbm0_cyc_i(wbb_stb),
+        .wbm0_cyc_i(wbb_stb), // individual ports can't monopolize, so cyc=stb
 
         .wbm1_adr_i(wba_adr),
         .wbm1_dat_i({CACHE_WIDTH{1'bx}}),
@@ -123,7 +123,7 @@ module memcontrol #(
         .wbm1_ack_o(wba_ack),
         .wbm1_err_o(wba_err),
         .wbm1_rty_o(wba_rty),
-        .wbm1_cyc_i(wba_stb),
+        .wbm1_cyc_i(wba_stb), // individual ports can't monopolize, so cyc=stb
 
         .wbs_adr_o(wb_adr_o),
         .wbs_dat_i(wb_dat_i),
@@ -221,6 +221,8 @@ module memcontrol #(
             fetched_valid_b <= 0;
             scrub_addr <= 0;
             scrub_ready <= 0;
+            wba_stb <= 0;
+            wbb_stb <= 0;
             /* lint_on */
         end
     endtask
