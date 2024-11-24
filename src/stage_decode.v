@@ -61,12 +61,15 @@ module stage_decode(
         .fwd_used(fwd_used)
     );
 
+    reg first_cycle;
     wire pred_priv;
     privileged p_priv(
         .reg_addr(ra_pred),
         .priv(pred_priv)
     );
-    wire pred = (rv_pred == 32'h00000000) ^ instr[23];
+    // First fetch will contain garbage because the signal for "bus ready for
+    // instruction" is the same as "data available on output", so we skip it
+    wire pred = ((rv_pred == 32'h00000000) ^ instr[23]) & ~first_cycle;
     wire [26:0] instr_pred = {instr[27:24], instr[22:0]};
 
     wire [3:0] ra_dest;
@@ -130,6 +133,7 @@ module stage_decode(
             mem <= 1'b0;
             mem_write <= 1'b0;
             jump <= 1'b0;
+            first_cycle <= 1'b1;
             /* lint_on */
         end
     endtask
@@ -138,6 +142,9 @@ module stage_decode(
     always @(posedge clk) begin
         if(rst) reset();
         else begin
+            if(instr_valid) begin
+                first_cycle <= 1'b0;
+            end
             if(do_emit) begin
                 pc <= pc_in;
                 reg_a <= operand_a;

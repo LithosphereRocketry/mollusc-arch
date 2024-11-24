@@ -125,7 +125,7 @@ module core #(
         .wbs0_cyc_o(wb_mem_cyc_o),
 
         .wbs0_addr(32'h00000000),
-        .wbs0_addr_msk(~32'h3FFF), // 512B main memory
+        .wbs0_addr_msk(~32'h3FFF), // 16K main memory
 
         .wbs1_adr_o(wb_narrow_adr_o),
         .wbs1_dat_o(wb_narrow_dat_o),
@@ -139,7 +139,7 @@ module core #(
         .wbs1_cyc_o(wb_narrow_cyc_o),
 
         .wbs1_addr(32'h00004000),
-        .wbs1_addr_msk(~32'h3FFF) // 512B I/O space (not all used)
+        .wbs1_addr_msk(~32'h3FFF) // 16K I/O space (not all used)
     );
 
     wb_ram #(
@@ -238,6 +238,7 @@ module core #(
     assign debug[6] = wb_host_stb_o;
     assign debug[5] = clk;
     assign debug[4] = rst;
+    // assign debug[3] = wb_host_err_i;
     assign debug[3:0] = cpudbg;
     // assign debug[3:0] = wb_host_adr_o[8:5];
 

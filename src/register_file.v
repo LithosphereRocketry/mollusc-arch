@@ -56,7 +56,10 @@ module register_file(
     reg [31:0] real_regs [15:1];
 
     genvar i;
-    for(i = 1; i < 16; i = i + 1) assign reg_outputs[i] = real_regs[i];
+    for(i = 1; i < 16; i = i + 1) begin
+        wire [31:0] value = real_regs[i]; // Dummy variable to make simulation viewable
+        assign reg_outputs[i] = real_regs[i];
+    end
 
     assign reg_outputs[0] = 32'h00000000;
 

@@ -18,8 +18,8 @@ l_down:
 busywait:
         ; each iteration is about 3 clocks = 75 ns at 40 MHz
         ; 0x6800 iters ~= 2 ms
-        lui a5, 0x6800 ; 
+        lui a2, 0x6800
 busyloop:
-        subi a5, a5, 1
-    ?a5 j zero, busyloop
+        subi a2, a2, 1
+    ?a2 j zero, busyloop
         jx zero, zero, ra

@@ -22,6 +22,6 @@ module stage_fetch(
     initial reset();
 
     always @(posedge clk) if(rst) reset();
-            else if(~stall_in) presentpc <= fetchpc;
+            else presentpc <= fetchpc;
 
 endmodule

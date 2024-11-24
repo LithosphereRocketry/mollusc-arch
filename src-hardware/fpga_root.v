@@ -72,7 +72,7 @@ module fpga_root(
     );
     assign rgb_led0_r = ~led_r;
     assign rgb_led0_g = ~led_g & hbb_sw;
-    assign rgb_led0_b = ~led_b;
+    assign rgb_led0_b = ~led_b & ~debug[3];
 
     orangecrab_reset reset_instance(
 		.clk(clk48),

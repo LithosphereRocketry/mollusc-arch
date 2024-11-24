@@ -117,7 +117,7 @@ module memcontrol #(
         .wbm1_adr_i(wba_adr),
         .wbm1_dat_i({CACHE_WIDTH{1'bx}}),
         .wbm1_dat_o(wba_dat_r),
-        .wbm1_we_i(0),
+        .wbm1_we_i(1'b0),
         .wbm1_sel_i(wba_sel),
         .wbm1_stb_i(wba_stb),
         .wbm1_ack_o(wba_ack),
