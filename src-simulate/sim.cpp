@@ -35,9 +35,11 @@ void step() {
     core.eval();
     context.timeInc(timeincs / clockspeed / 2);
     core.clk = true;
+    core.ioclk = true;
     core.eval();
     context.timeInc(timeincs / clockspeed / 2);
     core.clk = false;
+    core.ioclk = false;
     core.eval();
     clocks_since_refresh ++;
     clocks_since_key ++;

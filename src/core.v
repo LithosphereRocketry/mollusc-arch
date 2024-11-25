@@ -9,6 +9,7 @@ module core #(
         localparam NARROW_SEL_WIDTH = 32/BUS_GRANULARITY
     ) (
         input clk,
+        input ioclk,
         input rst,
 
         output led_r,
@@ -80,25 +81,26 @@ module core #(
     wire wb_mem_we_o;
     wire [SEL_WIDTH-1:0] wb_mem_sel_o;
     wire wb_mem_stb_o;
-    wire wb_mem_ack_i;
+    wire wb_mem_ack_i = 1'b0; // the WB mux doesn't deal well with unconnected ACK
     // wire wb_mem_err_i;
     // wire wb_mem_rty_i;
     wire wb_mem_cyc_o;
 
     // Connection to narrowing adapter for I/O registers
     // 128-bit width, byte addressable
-    wire [31:0] wb_narrow_adr_o;
-    wire [CACHE_WIDTH-1:0] wb_narrow_dat_i;
-    wire [CACHE_WIDTH-1:0] wb_narrow_dat_o;
-    wire wb_narrow_we_o;
-    wire [SEL_WIDTH-1:0] wb_narrow_sel_o;
-    wire wb_narrow_stb_o;
-    wire wb_narrow_ack_i;
-    wire wb_narrow_err_i;
-    wire wb_narrow_rty_i;
-    wire wb_narrow_cyc_o;
+    wire [31:0] wb_narrowbus_adr_o;
+    wire [CACHE_WIDTH-1:0] wb_narrowbus_dat_i;
+    wire [CACHE_WIDTH-1:0] wb_narrowbus_dat_o;
+    wire wb_narrowbus_we_o;
+    wire [SEL_WIDTH-1:0] wb_narrowbus_sel_o;
+    wire wb_narrowbus_stb_o;
+    wire wb_narrowbus_ack_i;
+    wire wb_narrowbus_err_i;
+    wire wb_narrowbus_rty_i;
+    wire wb_narrowbus_cyc_o;
 
-    wb_mux_2 #(CACHE_WIDTH, 32, SEL_WIDTH) mainbus(
+    // Large bus connecting to CPU. Mostly used for access to DDR3
+    wb_mux_host #(CACHE_WIDTH, 32, SEL_WIDTH) hostbus(
         .clk(clk),
         .rst(rst),
 
@@ -113,63 +115,45 @@ module core #(
         .wbm_rty_o(wb_host_rty_i),
         .wbm_cyc_i(wb_host_cyc_o),
 
-        .wbs0_adr_o(wb_mem_adr_o),
-        .wbs0_dat_o(wb_mem_dat_o),
-        .wbs0_dat_i(wb_mem_dat_i),
-        .wbs0_we_o(wb_mem_we_o),
-        .wbs0_sel_o(wb_mem_sel_o),
-        .wbs0_stb_o(wb_mem_stb_o),
-        .wbs0_ack_i(wb_mem_ack_i),
-        .wbs0_err_i(1'b0),
-        .wbs0_rty_i(1'b0),
-        .wbs0_cyc_o(wb_mem_cyc_o),
+        .wbs0_adr_o(wb_narrowbus_adr_o),
+        .wbs0_dat_o(wb_narrowbus_dat_o),
+        .wbs0_dat_i(wb_narrowbus_dat_i),
+        .wbs0_we_o(wb_narrowbus_we_o),
+        .wbs0_sel_o(wb_narrowbus_sel_o),
+        .wbs0_stb_o(wb_narrowbus_stb_o),
+        .wbs0_ack_i(wb_narrowbus_ack_i),
+        .wbs0_err_i(wb_narrowbus_err_i),
+        .wbs0_rty_i(wb_narrowbus_rty_i),
+        .wbs0_cyc_o(wb_narrowbus_cyc_o),
 
         .wbs0_addr(32'h00000000),
-        .wbs0_addr_msk(~32'h3FFF), // 16K main memory
+        .wbs0_addr_msk(~32'h01FFFFFF), // first 32MB mapped to 32-bit sub-bus
 
-        .wbs1_adr_o(wb_narrow_adr_o),
-        .wbs1_dat_o(wb_narrow_dat_o),
-        .wbs1_dat_i(wb_narrow_dat_i),
-        .wbs1_we_o(wb_narrow_we_o),
-        .wbs1_sel_o(wb_narrow_sel_o),
-        .wbs1_stb_o(wb_narrow_stb_o),
-        .wbs1_ack_i(wb_narrow_ack_i),
-        .wbs1_err_i(wb_narrow_err_i),
-        .wbs1_rty_i(wb_narrow_rty_i),
-        .wbs1_cyc_o(wb_narrow_cyc_o),
+        .wbs1_adr_o(wb_mem_adr_o),
+        .wbs1_dat_o(wb_mem_dat_o),
+        .wbs1_dat_i(wb_mem_dat_i),
+        .wbs1_we_o(wb_mem_we_o),
+        .wbs1_sel_o(wb_mem_sel_o),
+        .wbs1_stb_o(wb_mem_stb_o),
+        .wbs1_ack_i(wb_mem_ack_i),
+        .wbs1_err_i(1'b0),
+        .wbs1_rty_i(1'b0),
+        .wbs1_cyc_o(wb_mem_cyc_o),
 
-        .wbs1_addr(32'h00004000),
-        .wbs1_addr_msk(~32'h3FFF) // 16K I/O space (not all used)
+        .wbs1_addr(32'h00000000),
+        .wbs1_addr_msk(32'h00000000) // Everything else mapped to DRAM
     );
 
-    wb_ram #(
-        .ADDR_WIDTH(14),
-        .DATA_WIDTH(CACHE_WIDTH),
-        .SELECT_WIDTH(SEL_WIDTH),
-        .INIT_PATH(`ROMPATH)
-    ) ram(
-        .clk(clk),
-        .adr_i(wb_mem_adr_o[13:0]),
-        .dat_i(wb_mem_dat_o),
-        .dat_o(wb_mem_dat_i),
-        .we_i(wb_mem_we_o),
-        .sel_i(wb_mem_sel_o),
-        .stb_i(wb_mem_stb_o),
-        .ack_o(wb_mem_ack_i),
-        .cyc_i(wb_mem_stb_o)
-    );
-
-    wire [31:0] wb_nb_adr_o;
-    wire [31:0] wb_nb_dat_i;
-    wire [31:0] wb_nb_dat_o;
-    wire wb_nb_we_o;
-    wire [NARROW_SEL_WIDTH-1:0] wb_nb_sel_o;
-    wire wb_nb_stb_o;
-    wire wb_nb_ack_i;
-    wire wb_nb_err_i;
-    wire wb_nb_rty_i;
-    wire wb_nb_cyc_o;
-
+    wire [31:0] wb_narrow_adr_o;
+    wire [31:0] wb_narrow_dat_i;
+    wire [31:0] wb_narrow_dat_o;
+    wire wb_narrow_we_o;
+    wire [NARROW_SEL_WIDTH-1:0] wb_narrow_sel_o;
+    wire wb_narrow_stb_o;
+    wire wb_narrow_ack_i;
+    wire wb_narrow_err_i;
+    wire wb_narrow_rty_i;
+    wire wb_narrow_cyc_o;
 
     wb_adapter #(
         .ADDR_WIDTH(32),
@@ -181,6 +165,66 @@ module core #(
         .clk(clk),
         .rst(rst),
         
+        .wbm_adr_i(wb_narrowbus_adr_o),
+        .wbm_dat_i(wb_narrowbus_dat_o),
+        .wbm_dat_o(wb_narrowbus_dat_i),
+        .wbm_we_i(wb_narrowbus_we_o),
+        .wbm_sel_i(wb_narrowbus_sel_o),
+        .wbm_stb_i(wb_narrowbus_stb_o),
+        .wbm_ack_o(wb_narrowbus_ack_i),
+        .wbm_err_o(wb_narrowbus_err_i),
+        .wbm_rty_o(wb_narrowbus_rty_i),
+        .wbm_cyc_i(wb_narrowbus_cyc_o),
+
+        .wbs_adr_o(wb_narrow_adr_o),
+        .wbs_dat_o(wb_narrow_dat_o),
+        .wbs_dat_i(wb_narrow_dat_i),
+        .wbs_we_o(wb_narrow_we_o),
+        .wbs_sel_o(wb_narrow_sel_o),
+        .wbs_stb_o(wb_narrow_stb_o),
+        .wbs_ack_i(wb_narrow_ack_i),
+        .wbs_err_i(wb_narrow_err_i),
+        .wbs_rty_i(wb_narrow_rty_i),
+        .wbs_cyc_o(wb_narrow_cyc_o)
+    );
+
+    wire [31:0] wb_sram_adr_o;
+    wire [31:0] wb_sram_dat_i;
+    wire [31:0] wb_sram_dat_o;
+    wire wb_sram_we_o;
+    wire [NARROW_SEL_WIDTH-1:0] wb_sram_sel_o;
+    wire wb_sram_stb_o;
+    wire wb_sram_ack_i;
+    wire wb_sram_err_i;
+    wire wb_sram_rty_i;
+    wire wb_sram_cyc_o;
+
+    wire [31:0] wb_brom_adr_o;
+    wire [31:0] wb_brom_dat_i;
+    wire [31:0] wb_brom_dat_o;
+    wire wb_brom_we_o;
+    wire [NARROW_SEL_WIDTH-1:0] wb_brom_sel_o;
+    wire wb_brom_stb_o;
+    wire wb_brom_ack_i;
+    wire wb_brom_err_i;
+    wire wb_brom_rty_i;
+    wire wb_brom_cyc_o;
+
+    wire [31:0] wb_iobus_adr_o;
+    wire [31:0] wb_iobus_dat_i;
+    wire [31:0] wb_iobus_dat_o;
+    wire wb_iobus_we_o;
+    wire [NARROW_SEL_WIDTH-1:0] wb_iobus_sel_o;
+    wire wb_iobus_stb_o;
+    wire wb_iobus_ack_i;
+    wire wb_iobus_err_i;
+    wire wb_iobus_rty_i;
+    wire wb_iobus_cyc_o;
+
+    wb_mux_narrow #(32, 32, 4) narrowbus (
+        .clk(clk),
+        .rst(rst),
+
         .wbm_adr_i(wb_narrow_adr_o),
         .wbm_dat_i(wb_narrow_dat_o),
         .wbm_dat_o(wb_narrow_dat_i),
@@ -192,39 +236,188 @@ module core #(
         .wbm_rty_o(wb_narrow_rty_i),
         .wbm_cyc_i(wb_narrow_cyc_o),
 
-        .wbs_adr_o(wb_nb_adr_o),
-        .wbs_dat_o(wb_nb_dat_o),
-        .wbs_dat_i(wb_nb_dat_i),
-        .wbs_we_o(wb_nb_we_o),
-        .wbs_sel_o(wb_nb_sel_o),
-        .wbs_stb_o(wb_nb_stb_o),
-        .wbs_ack_i(wb_nb_ack_i),
-        .wbs_err_i(wb_nb_err_i),
-        .wbs_rty_i(wb_nb_rty_i),
-        .wbs_cyc_o(wb_nb_cyc_o)
+        .wbs0_adr_o(wb_sram_adr_o),
+        .wbs0_dat_o(wb_sram_dat_o),
+        .wbs0_dat_i(wb_sram_dat_i),
+        .wbs0_we_o(wb_sram_we_o),
+        .wbs0_sel_o(wb_sram_sel_o),
+        .wbs0_stb_o(wb_sram_stb_o),
+        .wbs0_ack_i(wb_sram_ack_i),
+        .wbs0_err_i(wb_sram_err_i),
+        .wbs0_rty_i(wb_sram_rty_i),
+        .wbs0_cyc_o(wb_sram_cyc_o),
+
+        .wbs0_addr(32'h00000000),
+        .wbs0_addr_msk(~32'h000007FF), // 2KB scratch RAM
+
+        .wbs1_adr_o(wb_brom_adr_o),
+        .wbs1_dat_o(wb_brom_dat_o),
+        .wbs1_dat_i(wb_brom_dat_i),
+        .wbs1_we_o(wb_brom_we_o),
+        .wbs1_sel_o(wb_brom_sel_o),
+        .wbs1_stb_o(wb_brom_stb_o),
+        .wbs1_ack_i(wb_brom_ack_i),
+        .wbs1_err_i(wb_brom_err_i),
+        .wbs1_rty_i(wb_brom_rty_i),
+        .wbs1_cyc_o(wb_brom_cyc_o),
+
+        .wbs1_addr(32'h00008000),
+        .wbs1_addr_msk(~32'h000007FF), // 2KB boot ROM
+
+        .wbs2_adr_o(wb_iobus_adr_o),
+        .wbs2_dat_o(wb_iobus_dat_o),
+        .wbs2_dat_i(wb_iobus_dat_i),
+        .wbs2_we_o(wb_iobus_we_o),
+        .wbs2_sel_o(wb_iobus_sel_o),
+        .wbs2_stb_o(wb_iobus_stb_o),
+        .wbs2_ack_i(wb_iobus_ack_i),
+        .wbs2_err_i(wb_iobus_err_i),
+        .wbs2_rty_i(wb_iobus_rty_i),
+        .wbs2_cyc_o(wb_iobus_cyc_o),
+
+        .wbs2_addr(32'h01000000),
+        .wbs2_addr_msk(~32'h00FFFFFF) // 16MB mapped into IO clock domain
     );
 
-    assign wb_nb_err_i = 0;
-    assign wb_nb_rty_i = 0;
+    wb_ram #(
+        .ADDR_WIDTH(11),
+        .DATA_WIDTH(32),
+        .SELECT_WIDTH(4)
+    ) sram(
+        .clk(clk),
+        .adr_i(wb_sram_adr_o[10:0]),
+        .dat_i(wb_sram_dat_o),
+        .dat_o(wb_sram_dat_i),
+        .we_i(wb_sram_we_o),
+        .sel_i(wb_sram_sel_o),
+        .stb_i(wb_sram_stb_o),
+        .ack_o(wb_sram_ack_i),
+        .cyc_i(wb_sram_cyc_o)
+    );
+    assign wb_sram_err_i = 0;
+    assign wb_sram_rty_i = 0;
+
+    wb_ram #(
+        .ADDR_WIDTH(11),
+        .DATA_WIDTH(32),
+        .SELECT_WIDTH(4),
+        .INIT_PATH(`ROMPATH)
+    ) brom(
+        .clk(clk),
+        .adr_i(wb_brom_adr_o[10:0]),
+        .dat_i(wb_brom_dat_o),
+        .dat_o(wb_brom_dat_i),
+        .we_i(1'b0), // Never write so that our boot ROM can't be corrupted
+        .sel_i(wb_brom_sel_o),
+        .stb_i(wb_brom_stb_o),
+        .ack_o(wb_brom_ack_i),
+        .cyc_i(wb_brom_cyc_o)
+    );
+    // Throw a bus error if someone tries to write to ROM
+    assign wb_brom_err_i = wb_brom_stb_o & wb_brom_we_o;
+    assign wb_brom_rty_i = 0;
+
+    wire [31:0] wb_io_adr_o;
+    wire [31:0] wb_io_dat_i;
+    wire [31:0] wb_io_dat_o;
+    wire wb_io_we_o;
+    wire [NARROW_SEL_WIDTH-1:0] wb_io_sel_o;
+    wire wb_io_stb_o;
+    wire wb_io_ack_i;
+    wire wb_io_err_i;
+    wire wb_io_rty_i;
+    wire wb_io_cyc_o;
+
+    wb_async_reg #(32, 32, 4) io_sync (
+        .wbm_clk(clk),
+        .wbm_rst(rst),
+        .wbm_adr_i(wb_iobus_adr_o),
+        .wbm_dat_i(wb_iobus_dat_o),
+        .wbm_dat_o(wb_iobus_dat_i),
+        .wbm_we_i(wb_iobus_we_o),
+        .wbm_sel_i(wb_iobus_sel_o),
+        .wbm_stb_i(wb_iobus_stb_o),
+        .wbm_ack_o(wb_iobus_ack_i),
+        .wbm_err_o(wb_iobus_err_i),
+        .wbm_rty_o(wb_iobus_rty_i),
+        .wbm_cyc_i(wb_iobus_cyc_o),
+
+        .wbs_clk(ioclk),
+        .wbs_rst(1'b0),
+        .wbs_adr_o(wb_io_adr_o),
+        .wbs_dat_o(wb_io_dat_o),
+        .wbs_dat_i(wb_io_dat_i),
+        .wbs_we_o(wb_io_we_o),
+        .wbs_sel_o(wb_io_sel_o),
+        .wbs_stb_o(wb_io_stb_o),
+        .wbs_ack_i(wb_io_ack_i),
+        .wbs_err_i(wb_io_err_i),
+        .wbs_rty_i(wb_io_rty_i),
+        .wbs_cyc_o(wb_io_cyc_o)
+    );
+
+    wire [31:0] wb_led_adr_o;
+    wire [31:0] wb_led_dat_i;
+    wire [31:0] wb_led_dat_o;
+    wire wb_led_we_o;
+    wire [NARROW_SEL_WIDTH-1:0] wb_led_sel_o;
+    wire wb_led_stb_o;
+    wire wb_led_ack_i;
+    wire wb_led_err_i;
+    wire wb_led_rty_i;
+    wire wb_led_cyc_o;
+
+    wb_mux_io #(32, 32, 4) iobus (
+        .clk(clk),
+        .rst(1'b0),
+
+        .wbm_adr_i(wb_io_adr_o),
+        .wbm_dat_i(wb_io_dat_o),
+        .wbm_dat_o(wb_io_dat_i),
+        .wbm_we_i(wb_io_we_o),
+        .wbm_sel_i(wb_io_sel_o),
+        .wbm_stb_i(wb_io_stb_o),
+        .wbm_ack_o(wb_io_ack_i),
+        .wbm_err_o(wb_io_err_i),
+        .wbm_rty_o(wb_io_rty_i),
+        .wbm_cyc_i(wb_io_cyc_o),
+
+        .wbs0_adr_o(wb_led_adr_o),
+        .wbs0_dat_o(wb_led_dat_o),
+        .wbs0_dat_i(wb_led_dat_i),
+        .wbs0_we_o(wb_led_we_o),
+        .wbs0_sel_o(wb_led_sel_o),
+        .wbs0_stb_o(wb_led_stb_o),
+        .wbs0_ack_i(wb_led_ack_i),
+        .wbs0_err_i(wb_led_err_i),
+        .wbs0_rty_i(wb_led_rty_i),
+        .wbs0_cyc_o(wb_led_cyc_o),
+
+        .wbs0_addr(32'h01000000),
+        .wbs0_addr_msk(~32'h00000003) // LED controller (one 32-bit word)
+    );
 
     wire [31:0] led_value;
     wb_port #(32, NARROW_SEL_WIDTH) led_port (
-        .clk(clk),
+        .clk(ioclk),
 
-        .dat_o(wb_nb_dat_i),
-        .dat_i(wb_nb_dat_o),
-        .we_i(wb_nb_we_o),
-        .sel_i(wb_nb_sel_o),
-        .stb_i(wb_nb_stb_o),
-        .ack_o(wb_nb_ack_i),
-        .cyc_i(wb_nb_cyc_o),
+        .dat_o(wb_led_dat_i),
+        .dat_i(wb_led_dat_o),
+        .we_i(wb_led_we_o),
+        .sel_i(wb_led_sel_o),
+        .stb_i(wb_led_stb_o),
+        .ack_o(wb_led_ack_i),
+        .cyc_i(wb_led_cyc_o),
 
         .out(led_value)
     );
+    assign wb_led_err_i = 1'b0;
+    assign wb_led_rty_i = 1'b0;
 
     wire pwmclk;
-    clkdiv #(1200) pwm_div(
-        .clkin(clk),
+    // 48MHz / 100Hz / 255 steps ~= 1882
+    clkdiv #(1882) pwm_div(
+        .clkin(ioclk),
         .clkout(pwmclk)
     );
 
@@ -238,39 +431,11 @@ module core #(
     assign debug[6] = wb_host_stb_o;
     assign debug[5] = clk;
     assign debug[4] = rst;
-    // assign debug[3] = wb_host_err_i;
-    assign debug[3:0] = cpudbg;
+    // assign debug[3] = wb_host_stb_o & wb_host_we_o & (wb_host_adr_o == 32'h01000000);
+    assign debug[3] = wb_host_err_i;
+    // assign debug[3:0] = cpudbg;
     // assign debug[3:0] = wb_host_adr_o[8:5];
 
-    // wire [1SEL_WIDTH-1:0] wb_vga_adr_i;
-    // wire [CACHE_WIDTH-1:0] wb_vga_dat_i;
-    // wire wb_vga_we_i;
-    // wire [SEL_WIDTH-1:0] wb_vga_sel_i;
-    // wire wb_vga_stb_i;
-    // wire wb_vga_ack_o;
-    // wire wb_vga_cyc_i;
-
-    // wire vga_adapt_wb_stb;
-    // wire vga_adapt_wb_we;
-    // wb_adapter #(14, 128, 16, 8, 1) vga_widen(
-    //     .wbm_adr_i(wb_vga_adr_i),
-    //     .wbm_dat_i(wb_vga_dat_i),
-    //     .wbm_we_i(wb_vga_we_i),
-    //     .wbm_sel_i(wb_vga_sel_i),
-    //     .wbm_stb_i(wb_vga_stb_i),
-    //     .wbm_ack_o(wb_vga_ack_o),
-    //     .wbm_cyc_i(wb_vga_cyc_i),
-
-    //     .wbs_adr_o(vga_waddr),
-    //     .wbs_dat_i(8'hxx), // Never read back data
-    //     .wbs_dat_o(vga_wdata),
-    //     .wbs_we_o(vga_adapt_wb_we),
-    //     .wbs_stb_o(vga_adapt_wb_stb),
-    //     .wbs_ack_i(vga_adapt_wb_stb), // Always acknowledge right away
-    //     .wbs_err_i(1'b0), // Never error
-    //     .wbs_rty_i(1'b0) // Never retry
-    // );
-    // assign vga_wr_en = vga_adapt_wb_stb & vga_adapt_wb_we;
 
 
 endmodule

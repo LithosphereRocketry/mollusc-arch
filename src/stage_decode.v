@@ -124,9 +124,9 @@ module stage_decode(
         begin
             /* verilator lint_off INITIALDLY */
             pc <= 32'hxxxxxxxx;
-            reg_a <= 4'hx;
-            reg_b <= 4'hx;
-            reg_m <= 4'hx;
+            reg_a <= 32'hxxxxxxxx;
+            reg_b <= 32'hxxxxxxxx;
+            reg_m <= 32'hxxxxxxxx;
 
             dest <= 4'h0;
             aluop <= 4'hx;

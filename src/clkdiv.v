@@ -7,7 +7,7 @@ module clkdiv #(
         output clkout
     );
 
-    reg [COUNT_WIDTH-1:0] counter;
+    reg [COUNT_WIDTH-1:0] counter = {COUNT_WIDTH{1'b0}};
     assign clkout = (counter < HIGHCOUNT);
 
     always @(negedge clkin) counter <= (counter == DIVISOR-1) ? 0 : counter+1;

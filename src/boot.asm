@@ -1,4 +1,4 @@
-        lui s2, 0x00004000 ; address of LED controller
+        lui s2, 0x01000000 ; address of LED controller
         add s3, zero, zero
 loop:   
 l_up:

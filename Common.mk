@@ -31,11 +31,13 @@ CFG = mollusc.cfg $(TOOLSDIR)/getcfg.py
 CPU_SPEED = $(shell tools/getcfg.py mollusc.cfg CPU speed)
 RESET_VECTOR = $(shell tools/getcfg.py mollusc.cfg Layout reset)
 
-N_MUX_PORTS = 2
+N_PORTS_HOST = 2
+N_PORTS_NARROW = 3
+N_PORTS_IO = 1
 
-COMMONGENS = wb_mux_$(N_MUX_PORTS).v
+COMMONGENS = wb_mux_host.v wb_mux_narrow.v wb_mux_io.v
 
-GATEWARE = $(wildcard $(GATEWARE_DIR)/*.v) $(wildcard external/verilog-wishbone/rtl/*.v)
+GATEWARE = $(wildcard $(GATEWARE_DIR)/*.v) $(wildcard external/verilog-wishbone/rtl/*.v) $(foreach g,$(COMMONGENS),$(GENERATE_DIR)/$(g)) 
 
 # Rules common to all builds
 .PHONY: clean lint
@@ -59,9 +61,13 @@ $(BUILD_DIR)/myst.hex: $(TOOLSDIR)/maketext.py
 	$^
 
 # Non-hardware-or-sim-specific generated files
-$(GENERATE_DIR)/wb_mux_$(N_MUX_PORTS).v: external/verilog-wishbone/rtl/wb_mux.py | $(GENERATE_DIR)
-	$< -p $(N_MUX_PORTS) -o $@
+$(GENERATE_DIR)/wb_mux_host.v: external/verilog-wishbone/rtl/wb_mux.py | $(GENERATE_DIR)
+	$< -p $(N_PORTS_HOST) -n wb_mux_host -o $@
+$(GENERATE_DIR)/wb_mux_narrow.v: external/verilog-wishbone/rtl/wb_mux.py | $(GENERATE_DIR)
+	$< -p $(N_PORTS_NARROW) -n wb_mux_narrow -o $@
+$(GENERATE_DIR)/wb_mux_io.v: external/verilog-wishbone/rtl/wb_mux.py | $(GENERATE_DIR)
+	$< -p $(N_PORTS_IO) -n wb_mux_io -o $@
 
 # Common boot binary
 $(BUILD_DIR)/boot.hex: $(GATEWARE_DIR)/boot.asm $(TOOLSDIR)/simpleasm.py
-	$(TOOLSDIR)/simpleasm.py $< $@ --pack 16384
+	$(TOOLSDIR)/simpleasm.py $< $@ --pack 2048

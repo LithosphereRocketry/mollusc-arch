@@ -9,6 +9,8 @@ module cputest(
     wire [15:0] wb_sel;
     wire wb_stb, wb_ack, wb_cyc;
 
+    wire [7:0] dbg;
+
     cpu #(
         .CACHE_WIDTH(128),
         .CACHE_DEPTH(4),
@@ -26,7 +28,8 @@ module cputest(
         .wb_ack_i(wb_ack),
         .wb_err_i(1'b0),
         .wb_rty_i(1'b0),
-        .wb_cyc_o(wb_cyc)
+        .wb_cyc_o(wb_cyc),
+        .dbg(dbg)
     );
 
     wb_ram #(

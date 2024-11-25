@@ -132,17 +132,13 @@ with open(args.asmfile, "r") as asmfile:
         if instr is not None:
             text_instrs.append(instr)        
     bytecode = [instr_table[instr[1]](ind*4, instr) for ind, instr in enumerate(text_instrs)]
-    if len(bytecode) % 4 != 0:
-        bytecode += [0] * (4 - len(bytecode) % 4)
-    if args.pack != None and len(bytecode) > args.pack:
+    if args.pack != None and len(bytecode)*4 > args.pack:
         print(f"Assembled binary too large for ROM:"
-              f"needs {len(bytecode)} bytes, {args.pack} available")
-    # my python version doesn't have itertools.batched
+              f"needs {len(bytecode)*4} bytes, {args.pack} available")
     print({n : hex(v) for n, v in labels.items()})
     with open(args.hexfile, "w") as hexfile:
-        for i in range(0, len(bytecode), 4):
-            hexfile.write("{0:08x}{1:08x}{2:08x}{3:08x}\n"
-                          .format(bytecode[i+3], bytecode[i+2], bytecode[i+1], bytecode[i]))
+        for i in range(0, len(bytecode)):
+            hexfile.write("{0:08x}\n".format(bytecode[i]))
         if args.pack != None:
-            hexfile.write(("0"*32 + "\n") * ((args.pack - len(bytecode)*4) // 16))
+            hexfile.write(("0"*8 + "\n") * ((args.pack - len(bytecode)*4) // 4))
 

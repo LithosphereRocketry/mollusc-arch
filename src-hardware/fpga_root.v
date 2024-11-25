@@ -52,6 +52,7 @@ module fpga_root(
     wire led_r, led_g, led_b;
     core root(
         .clk(cpuclk),
+        .ioclk(clk48),
         .rst(~hbb_sw | ~pll_lock),
         .led_r(led_r),
         .led_g(led_g),

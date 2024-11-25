@@ -1,22 +1,19 @@
+`timescale 1ns/1ps;
+
 module tb_icarus();
 
-    reg clk = 0, rst = 1;
-    cputest dut(.clk(clk), .rst(rst));
+    reg clk = 0, ioclk = 0, rst = 1;
+    core dut(.clk(clk), .ioclk(ioclk), .rst(rst));
+
+    always #(25) clk <= ~clk; // 40MHz
+    always #(21) ioclk <= ~ioclk; //48MHz
 
     initial begin
         $dumpfile("waveforms/icarus.vcd");
         $dumpvars;
-        clk = 1;
-        #1;
-        clk = 0;
-        #1;
+        #100;
         rst = 0;
-        repeat(256) begin
-            clk = 1;
-            #1;
-            clk = 0;
-            #1;
-        end
+        #250000;
         $finish;
     end
 endmodule
