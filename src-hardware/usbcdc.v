@@ -1,5 +1,6 @@
 module usbcdc(
         input clk48,
+        input rst,
 
         // core -> tty
         input [7:0] tx_data,
@@ -15,11 +16,11 @@ module usbcdc(
         output usb_pullup
     );
 
-    // Generate reset signal
-    reg [5:0] reset_cnt = 0;
-    wire usb_rst = ~reset_cnt[5];
-    always @(posedge clk48)
-        reset_cnt <= reset_cnt + usb_rst;
+    // // Generate reset signal
+    // reg [5:0] reset_cnt = 0;
+    // wire usb_rst = ~reset_cnt[5];
+    // always @(posedge clk48)
+    //     reset_cnt <= reset_cnt + usb_rst;
 
     wire usb_p_in;
     wire usb_n_in;
@@ -33,7 +34,7 @@ module usbcdc(
     // usb uart - this instanciates the entire USB device.
     usb_uart_core uart (
         .clk_48mhz  (clk48),
-        .reset      (usb_rst),
+        .reset      (rst),
 
         // pins
         .usb_p_tx(usb_p_tx),

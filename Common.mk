@@ -33,7 +33,7 @@ RESET_VECTOR = $(shell tools/getcfg.py mollusc.cfg Layout reset)
 
 N_PORTS_HOST = 2
 N_PORTS_NARROW = 3
-N_PORTS_IO = 1
+N_PORTS_IO = 2
 
 COMMONGENS = wb_mux_host.v wb_mux_narrow.v wb_mux_io.v
 

@@ -24,10 +24,10 @@ module wb_port #(
     );
 
     assign dat_o = out;
-    assign ack_o = stb_i;
+    assign ack_o = stb_i & cyc_i;
 
     integer i;
-    always @(posedge clk) if(we_i & stb_i) begin
+    always @(posedge clk) if(we_i & stb_i & cyc_i) begin
         for(i = 0; i < SELECT_WIDTH; i++) if(sel_i[i]) begin
             out[i*WORD_WIDTH +: WORD_WIDTH] <= dat_i[i*WORD_WIDTH +: WORD_WIDTH];
         end

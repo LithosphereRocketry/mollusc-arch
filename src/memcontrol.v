@@ -37,13 +37,13 @@ module memcontrol #(
         output wb_cyc_o
     );
 
+    function automatic is_volatile(input [31:0] addr);
+        is_volatile = (addr[31:24] == 8'h01);
+    endfunction
+
     wire wb_arb_cyc;
     assign wb_cyc_o = wb_arb_cyc;
     // TODO: In the future this will be used for bus exclusivity
-
-    // // Cache valid is a separate register so other accesses can force us to 
-    // // re-fetch
-    // reg [(1 << CACHE_DEPTH)-1:0] cache_valid;
 
     // Cache lines corresponding to incoming address request
     wire [CACHE_DEPTH-1:0] caddr_a = addr_a[CACHE_LINE_DEPTH +: CACHE_DEPTH];
@@ -141,8 +141,8 @@ module memcontrol #(
     wire busfetch_done_b = wbb_stb & wbb_ack & ~wbb_we;
     wire buswrite_done_b = wbb_stb & wbb_ack & wbb_we;
 
-    wire a_wants_busfetch = a_is_read & ~rdata_correct_a;
-    wire b_wants_busfetch = b_is_read & ~rdata_correct_b;
+    wire a_wants_busfetch = a_is_read & (~rdata_correct_a | is_volatile(sync_addr_a));
+    wire b_wants_busfetch = b_is_read & (~rdata_correct_b | is_volatile(sync_addr_b));
 
 
     // Initial cache scrubbing
@@ -164,9 +164,10 @@ module memcontrol #(
             ~scrub_ready ? a_scrub_data : a_fetch_data;
 
     wire [CACHE_DEPTH-1:0] a_write_addr = wba_adr[CACHE_LINE_DEPTH +: CACHE_DEPTH];
+    wire a_write_cacheable = ~is_volatile(wba_adr);
     wire [CACHE_DEPTH-1:0] a_cache_addr = ~scrub_ready ? scrub_addr
             : busfetch_done_a ? a_write_addr : caddr_a;
-    wire a_writes_cache = busfetch_done_a | ~scrub_ready;
+    wire a_writes_cache = (busfetch_done_a & a_write_cacheable) | ~scrub_ready;
 
     // B handles data read and write
     wire b_uses_writethrough = b_is_write & rdata_correct_b;
@@ -187,8 +188,9 @@ module memcontrol #(
 
     wire [CACHE_DEPTH-1:0] b_write_addr = b_uses_writethrough ? sync_caddr_b
                                      : wbb_adr[CACHE_LINE_DEPTH +: CACHE_DEPTH];
+    wire b_write_cacheable = ~is_volatile(b_uses_writethrough ? sync_addr_b : wbb_adr);
     wire [CACHE_DEPTH-1:0] b_cache_addr = b_writes_cache ? b_write_addr : caddr_b;
-    wire b_writes_cache = b_uses_writethrough | busfetch_done_b;
+    wire b_writes_cache = (b_uses_writethrough | busfetch_done_b) & b_write_cacheable;
 
     assign ready_a = scrub_ready & ~wba_stb & ~a_wants_busfetch;
     assign ready_b = scrub_ready & (wr_b ? ~wbb_stb | buswrite_done_b
@@ -239,7 +241,16 @@ module memcontrol #(
             if(a_wants_busfetch) begin
                 wba_stb <= 1'b1;
                 wba_adr <= {sync_addr_a[ADDR_WIDTH-1:CACHE_LINE_DEPTH], {CACHE_LINE_DEPTH{1'b0}}};
-                wba_sel <= {(CACHE_WIDTH/ADDR_GRANULARITY){1'b1}};
+                // This whole section exists to support executing code from IO
+                // memory, which is a stupid and bad use case but theoretically
+                // a plausible one
+                if(is_volatile(sync_addr_a)) begin
+                    wba_sel <= {(CACHE_WIDTH/ADDR_GRANULARITY){1'b0}};
+                    wba_sel[WORD_WIDTH/ADDR_GRANULARITY * sync_addr_a[CACHE_LINE_DEPTH-1:WORD_DEPTH]
+                            +: WORD_WIDTH/ADDR_GRANULARITY] <= {(WORD_WIDTH/ADDR_GRANULARITY){1'b1}};
+                end else begin
+                    wba_sel <= {(CACHE_WIDTH/ADDR_GRANULARITY){1'b1}};
+                end
                 wba_word_pos <= sync_addr_a[CACHE_LINE_DEPTH-1:WORD_DEPTH];
             end
 
@@ -248,7 +259,13 @@ module memcontrol #(
                 wbb_we <= 1'b0;
                 wbb_adr <= {sync_addr_b[ADDR_WIDTH-1:CACHE_LINE_DEPTH], {CACHE_LINE_DEPTH{1'b0}}};
                 wbb_dat_w <= {CACHE_WIDTH{1'bx}};
-                wbb_sel <= {(CACHE_WIDTH/ADDR_GRANULARITY){1'b1}};
+                if(is_volatile(sync_addr_b)) begin
+                    wbb_sel <= {(CACHE_WIDTH/ADDR_GRANULARITY){1'b0}};
+                    wbb_sel[WORD_WIDTH/ADDR_GRANULARITY * sync_addr_b[CACHE_LINE_DEPTH-1:WORD_DEPTH]
+                            +: WORD_WIDTH/ADDR_GRANULARITY] <= {(WORD_WIDTH/ADDR_GRANULARITY){1'b1}};
+                end else begin
+                    wbb_sel <= {(CACHE_WIDTH/ADDR_GRANULARITY){1'b1}};
+                end
                 wbb_word_pos <= sync_addr_b[CACHE_LINE_DEPTH-1:WORD_DEPTH];
             end
 

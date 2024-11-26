@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import codecs
 import argparse
 import itertools
 from typing import Callable, Optional
@@ -96,9 +97,15 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
     "subi": lambda _, instr: (cond_arg_mask(instr[0]) |
                               0x00090000 |
                               imm_arg_mask(instr[2])),
+    "andi": lambda _, instr: (cond_arg_mask(instr[0]) |
+                              0x000A0000 |
+                              imm_arg_mask(instr[2])),
     "xori": lambda _, instr: (cond_arg_mask(instr[0]) |
                               0x000C0000 |
                               imm_arg_mask(instr[2])),
+    "sri": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x000E0000 |
+                             imm_arg_mask(instr[2])),
     "ldp": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x00140000 |
                              reg_arg_mask(instr[2])),
@@ -130,7 +137,7 @@ with open(args.asmfile, "r") as asmfile:
     for l in asmlines:
         instr = parse_instr(len(text_instrs), l)
         if instr is not None:
-            text_instrs.append(instr)        
+            text_instrs.append(instr)
     bytecode = [instr_table[instr[1]](ind*4, instr) for ind, instr in enumerate(text_instrs)]
     if args.pack != None and len(bytecode)*4 > args.pack:
         print(f"Assembled binary too large for ROM:"

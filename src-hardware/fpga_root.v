@@ -24,13 +24,13 @@ module fpga_root(
     );
 
     
-    // wire [7:0] uart_tx_data;
-    // wire uart_tx_valid;
-    // wire uart_tx_ready;
+    wire [7:0] uart_tx_data;
+    wire uart_tx_valid;
+    wire uart_tx_ready;
     
-    // wire [7:0] uart_rx_data;
-    // wire uart_rx_valid;
-    // wire uart_rx_ready;
+    wire [7:0] uart_rx_data;
+    wire uart_rx_valid;
+    wire uart_rx_ready;
     
     // wire [7:0] kb_data;
     // wire kb_valid;
@@ -48,12 +48,13 @@ module fpga_root(
         .locked(pll_lock)
     );
 
+    wire reset = ~usr_btn | ~pll_lock;
     wire [7:0] debug;
     wire led_r, led_g, led_b;
     core root(
         .clk(cpuclk),
         .ioclk(clk48),
-        .rst(~hbb_sw | ~pll_lock),
+        .rst(reset),
         .led_r(led_r),
         .led_g(led_g),
         .led_b(led_b),
@@ -72,10 +73,10 @@ module fpga_root(
         .debug(debug)
     );
     assign rgb_led0_r = ~led_r;
-    assign rgb_led0_g = ~led_g & hbb_sw;
-    assign rgb_led0_b = ~led_b & ~debug[3];
+    assign rgb_led0_g = ~led_g;
+    assign rgb_led0_b = ~led_b;
 
-    orangecrab_reset reset_instance(
+    orangecrab_reset #(48000000) reset_instance(
 		.clk(clk48),
 		.do_reset(~usr_btn),
 		.nreset_out(rst_n)
@@ -86,19 +87,20 @@ module fpga_root(
     assign vga_hsync = debug[5];
     assign vga_green[1:0] = debug[7:6];
 
-    // usbcdc usb(
-    //     .clk48(clk48),
-    //     .tx_data(uart_tx_data),
-    //     .tx_valid(uart_tx_valid),
-    //     .tx_ready(uart_tx_ready),
-    //     .rx_data(uart_rx_data),
-    //     .rx_valid(uart_rx_valid),
-    //     .rx_ready(uart_rx_ready),
+    usbcdc usb(
+        .clk48(clk48),
+        .rst(reset),
+        .tx_data(uart_tx_data),
+        .tx_valid(uart_tx_valid),
+        .tx_ready(uart_tx_ready),
+        .rx_data(uart_rx_data),
+        .rx_valid(uart_rx_valid),
+        .rx_ready(uart_rx_ready),
 
-    //     .usb_d_n(usb_d_n),
-    //     .usb_d_p(usb_d_p),
-    //     .usb_pullup(usb_pullup)
-    // );
+        .usb_d_n(usb_d_n),
+        .usb_d_p(usb_d_p),
+        .usb_pullup(usb_pullup)
+    );
 
     // ps2phy kb(
     //     .clkin(clk48),

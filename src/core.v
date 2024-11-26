@@ -367,6 +367,17 @@ module core #(
     wire wb_led_rty_i;
     wire wb_led_cyc_o;
 
+    wire [31:0] wb_tty_adr_o;
+    wire [31:0] wb_tty_dat_i;
+    wire [31:0] wb_tty_dat_o;
+    wire wb_tty_we_o;
+    wire [NARROW_SEL_WIDTH-1:0] wb_tty_sel_o;
+    wire wb_tty_stb_o;
+    wire wb_tty_ack_i;
+    wire wb_tty_err_i;
+    wire wb_tty_rty_i;
+    wire wb_tty_cyc_o;
+
     wb_mux_io #(32, 32, 4) iobus (
         .clk(clk),
         .rst(1'b0),
@@ -394,15 +405,30 @@ module core #(
         .wbs0_cyc_o(wb_led_cyc_o),
 
         .wbs0_addr(32'h01000000),
-        .wbs0_addr_msk(~32'h00000003) // LED controller (one 32-bit word)
+        .wbs0_addr_msk(~32'h00000003), // LED controller (one 32-bit word)
+
+        .wbs1_adr_o(wb_tty_adr_o),
+        .wbs1_dat_o(wb_tty_dat_o),
+        .wbs1_dat_i(wb_tty_dat_i),
+        .wbs1_we_o(wb_tty_we_o),
+        .wbs1_sel_o(wb_tty_sel_o),
+        .wbs1_stb_o(wb_tty_stb_o),
+        .wbs1_ack_i(wb_tty_ack_i),
+        .wbs1_err_i(wb_tty_err_i),
+        .wbs1_rty_i(wb_tty_rty_i),
+        .wbs1_cyc_o(wb_tty_cyc_o),
+
+        .wbs1_addr(32'h01000008),
+        .wbs1_addr_msk(~32'h00000007) // USB serial controller (2 words)
+
     );
 
     wire [31:0] led_value;
     wb_port #(32, NARROW_SEL_WIDTH) led_port (
         .clk(ioclk),
 
-        .dat_o(wb_led_dat_i),
         .dat_i(wb_led_dat_o),
+        .dat_o(wb_led_dat_i),
         .we_i(wb_led_we_o),
         .sel_i(wb_led_sel_o),
         .stb_i(wb_led_stb_o),
@@ -426,6 +452,31 @@ module core #(
         .value(led_value[23:0]),
         .signal({led_b, led_g, led_r})
     );
+
+    wb_flow_port #(8) tty_port (
+        .clk(ioclk),
+        .rst(rst),
+        
+        .adr_i(wb_tty_adr_o[2]),
+        .dat_o(wb_tty_dat_i[7:0]),
+        .dat_i(wb_tty_dat_o[7:0]),
+        .we_i(wb_tty_we_o),
+        .stb_i(wb_tty_stb_o),
+        .cyc_i(wb_tty_cyc_o),
+        .ack_o(wb_tty_ack_i),
+
+        .write_data(uart_tx_data),
+        .write_valid(uart_tx_valid),
+        .write_ready(uart_tx_ready),
+
+        .read_data(uart_rx_data),
+        .read_valid(uart_rx_valid),
+        .read_ready(uart_rx_ready)
+    );
+
+    assign wb_tty_dat_i[31:8] = 24'h000000;
+    assign wb_tty_err_i = 1'b0;
+    assign wb_tty_rty_i = 1'b0;
 
     assign debug[7] = wb_host_ack_i;
     assign debug[6] = wb_host_stb_o;

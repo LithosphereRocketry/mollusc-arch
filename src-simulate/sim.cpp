@@ -58,7 +58,7 @@ int main(int, char**) {
     // Our magical echo port never stalls
     core.uart_tx_ready = true;
 
-    SDL_Init(SDL_INIT_VIDEO);
+    // SDL_Init(SDL_INIT_VIDEO);
     SDL_Window* window = SDL_CreateWindow("SVGA Display",
                                           SDL_WINDOWPOS_UNDEFINED,
                                           SDL_WINDOWPOS_UNDEFINED,
@@ -71,29 +71,31 @@ int main(int, char**) {
     
     bool quit = false;
     while(!quit) {
+
         // Check if we should send to TTY
-        if(stdinAvail() && core.uart_rx_ready) {
+        if(core.uart_rx_ready && core.uart_rx_valid) {
+            core.uart_rx_valid = false;
+        }
+        if(stdinAvail() && !core.uart_rx_valid) {
             core.uart_rx_data = getchar();
             core.uart_rx_valid = true;
-        } else {
-            core.uart_rx_valid = false;
         }
 
         // Check if we should receive from TTY
         if(core.uart_tx_valid) { putchar(core.uart_tx_data); }
 
-        // Check if we should write to the screen
-        if(core.vga_wr_en) { vga_mem[core.vga_waddr] = core.vga_wdata; }
+        // // Check if we should write to the screen
+        // if(core.vga_wr_en) { vga_mem[core.vga_waddr] = core.vga_wdata; }
 
-        // Check if we should read from the keyboard
-        if(clocks_since_key >= clocks_per_key && !key_out.empty() && core.kb_ready) {
-            clocks_since_key -= clocks_per_key;
-            core.kb_data = key_out.front();
-            key_out.pop_front();
-            core.kb_valid = true;
-        } else {
-            core.kb_valid = false;
-        }
+        // // Check if we should read from the keyboard
+        // if(clocks_since_key >= clocks_per_key && !key_out.empty() && core.kb_ready) {
+        //     clocks_since_key -= clocks_per_key;
+        //     core.kb_data = key_out.front();
+        //     key_out.pop_front();
+        //     core.kb_valid = true;
+        // } else {
+        //     core.kb_valid = false;
+        // }
 
         // Check if we should render a new frame
         if(clocks_since_refresh >= clocks_per_frame) {
@@ -129,8 +131,8 @@ int main(int, char**) {
         trace.advance();
         step();
     }
-    SDL_DestroyTexture(char_texture);
-    SDL_FreeSurface(surf);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    // SDL_DestroyTexture(char_texture);
+    // SDL_FreeSurface(surf);
+    // SDL_DestroyRenderer(renderer);
+    // SDL_DestroyWindow(window);
 }
