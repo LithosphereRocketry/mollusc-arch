@@ -22,6 +22,7 @@ module stage_decode(
 
         output reg [3:0] dest,
         output reg [3:0] aluop,
+        output reg cmp,
         output reg mem,
         output reg mem_write,
 
@@ -131,6 +132,7 @@ module stage_decode(
 
             dest <= 4'h0;
             aluop <= 4'hx;
+            cmp <= 1'bx;
             mem <= 1'b0;
             mem_write <= 1'b0;
             jump <= 1'b0;
@@ -153,6 +155,7 @@ module stage_decode(
                 reg_m <= rv_mem;
                 dest <= ra_dest;
                 aluop <= dec_aluop;
+                cmp <= is_cmp;
                 mem <= is_mem;
                 mem_write <= is_mem_write;
             end else if(~stall_in) begin
@@ -163,6 +166,7 @@ module stage_decode(
                 reg_m <= 32'hxxxxxxxx;
                 dest <= 4'h0;
                 aluop <= 4'hx;
+                cmp <= 1'bx;
                 mem <= 1'b0;
                 mem_write <= 1'b0;
             end

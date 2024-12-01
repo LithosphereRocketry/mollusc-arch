@@ -46,7 +46,7 @@ module decode(
     assign is_jump = (basecode == 2'b01) // long relative jump
                    | (basecode == 2'b00 & subcode == 2'b10 & funccode[2:0] == 3'b111); // register jump
     assign aluop = use_upper_imm ? 4'h0 : {subcode[1], funccode[2:0]};
-    assign is_cmp = basecode == 2'b00 & subcode == 2'b10 & funccode[2] == 1'b0
+    assign is_cmp = basecode == 2'b00 & subcode == 2'b10 & funccode[2] == 1'b0;
 
     assign ra_d = m_format ? 4'b0 : instr[26:23];
     assign ra_m = m_format ? instr[19:16] : 4'b0;

@@ -110,11 +110,14 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
     "xori": lambda _, instr: (cond_arg_mask(instr[0]) |
                               0x000C0000 |
                               imm_arg_mask(instr[2])),
+    "sli": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x000D0000 |
+                             imm_arg_mask(instr[2])),
     "sri": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x000E0000 |
                              imm_arg_mask(instr[2])),
-    "lti": lambda _, instr: (cond_arg_mask(instr[0]) |
-                             0x000E0000 |
+    "ltui": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x00180000 |
                              imm_arg_mask(instr[2])),
     "ldp": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x00140000 |

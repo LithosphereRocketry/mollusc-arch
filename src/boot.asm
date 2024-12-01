@@ -1,7 +1,7 @@
         lui s2, 0x01000000 ; address of IO segment
         ldpi a0, s2, 8          ; need to wait for here for some reason, otherwise USB CDC fails
-        lui a0, 0x12345000
-        addi a0, a0, 0x678      ; load value 0x12345678
+        lui a0, 0x12345800
+        addi a0, a0, 0x6EF      ; load value 0x123456ef
         j ra, putx              ; print value
         lui a0, 0x00008000      ; base ROM address
         addi a0, a0, hellorld   ; offset to location of hellorld string
@@ -29,13 +29,13 @@ puts_shiftloop:
         ; Put hexadecimal word to TTY
 putx:
         lui a4, 0x01000000      ; preload address of TTY
-        lui a3, 8               ; i = 8
+        addi a3, zero, 8               ; i = 8
 putx_loop:
         sri a1, a0, 28          ; nibble = word >> 28
         ltui a2, a1, 10          ; isnum = (nibble < 10)
     !a2 addi a1, a1, 87         ; if(isnum) nibble += 'a' - 10
     ?a2 addi a1, a1, 48         ; else nibble += '0'
-        stpi a3, a4, 8          ; putchar(nibble)
+        stpi a1, a4, 8          ; putchar(nibble)
         subi a3, a3, 1          ; i--
         sli a0, a0, 4           ; word <<= 4
     ?a3 j zero, putx_loop       ; if(i != 0) goto putx_loop

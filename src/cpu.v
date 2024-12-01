@@ -59,6 +59,7 @@ module cpu #(
     wire [31:0] decode_m;
     wire [3:0] decode_dest;
     wire [3:0] decode_aluop;
+    wire decode_is_cmp;
     wire decode_is_mem;
     wire decode_mem_write;
     wire decode_is_jump;
@@ -85,6 +86,7 @@ module cpu #(
         .reg_m(decode_m),
         .dest(decode_dest),
         .aluop(decode_aluop),
+        .cmp(decode_is_cmp),
         .mem(decode_is_mem),
         .mem_write(decode_mem_write),
 
@@ -108,6 +110,7 @@ module cpu #(
 
         .dest(decode_dest),
         .aluop(decode_aluop),
+        .is_cmp(decode_is_cmp),
     
         .reg_a(decode_a),
         .reg_b(decode_b),
