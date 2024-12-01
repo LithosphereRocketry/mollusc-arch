@@ -1,10 +1,14 @@
         lui s2, 0x01000000 ; address of IO segment
-        ldpi a0, s2, 8
-        lui a0, 0x00008000 ; base ROM address
-        addi a0, a0, hellorld ; offset to location of hellorld string
-        j ra, puts
-loop:   j zero, loop
+        ldpi a0, s2, 8          ; need to wait for here for some reason, otherwise USB CDC fails
+        lui a0, 0x12345000
+        addi a0, a0, 0x678      ; load value 0x12345678
+        j ra, putx              ; print value
+        lui a0, 0x00008000      ; base ROM address
+        addi a0, a0, hellorld   ; offset to location of hellorld string
+        j ra, puts              ; print string
+loop:   j zero, loop            ; halt
 
+        ; Put string to TTY
 puts:                           ; void puts(word* p)
         lui a4, 0x01000000      ; preload address of TTY
 puts_loop:                      
@@ -20,7 +24,19 @@ puts_shiftloop:
         addi a0, a0, 4          ; p += 4
         j zero, puts_loop       ; goto puts_loop
 
-hellorld:
-        const 0x6C6C6548
-        const 0x646C726F
-        const 0x000a0d21
+        string hellorld "Hellorld!\r\n"
+
+        ; Put hexadecimal word to TTY
+putx:
+        lui a4, 0x01000000      ; preload address of TTY
+        lui a3, 8               ; i = 8
+putx_loop:
+        sri a1, a0, 28          ; nibble = word >> 28
+        ltui a2, a1, 10          ; isnum = (nibble < 10)
+    !a2 addi a1, a1, 87         ; if(isnum) nibble += 'a' - 10
+    ?a2 addi a1, a1, 48         ; else nibble += '0'
+        stpi a3, a4, 8          ; putchar(nibble)
+        subi a3, a3, 1          ; i--
+        sli a0, a0, 4           ; word <<= 4
+    ?a3 j zero, putx_loop       ; if(i != 0) goto putx_loop
+        jx zero, zero, ra       ; return

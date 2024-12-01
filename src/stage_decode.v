@@ -75,7 +75,7 @@ module stage_decode(
     wire [3:0] ra_dest;
     wire [20:0] upper_imm;
     wire [10:0] lower_imm;
-    wire priv, upper_shiftmode, aui_mode, use_upper_imm, use_imm, is_jump;
+    wire priv, upper_shiftmode, aui_mode, use_upper_imm, use_imm, is_jump, is_cmp;
     wire is_mem, is_mem_write;
     wire [3:0] dec_aluop;
     decode dec(
@@ -98,7 +98,8 @@ module stage_decode(
         .is_mem(is_mem),
         .is_jump(is_jump),
         .mem_write(is_mem_write),
-        .aluop(dec_aluop)
+        .aluop(dec_aluop),
+        .is_cmp(is_cmp)
     );
 
     assign stall = stall_in | ~instr_valid | (fwd_used & ~forward_valid);

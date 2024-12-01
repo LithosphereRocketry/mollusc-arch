@@ -15,8 +15,15 @@ argparser.add_argument("-p", "--pack", type=int,
 args = argparser.parse_args()
 
 labels: dict[str, int] = {}
+strings: list[tuple[str, str]] = []
 
 def parse_instr(line: int, text: str) -> Optional[tuple[str, str, list[str]]]:
+    if text.strip().startswith("string"):
+        name, value = text.split("string", 1)[1].split(None, 1)
+        value_str = "\"".join(value.split("\"")[1:-1])
+        strings.append((name, codecs.decode(value_str, 'unicode_escape')))
+        return None
+
     if ":" in text:
         lbl, untrimmed_instr = text.split(":", 1)
         instr_cond = untrimmed_instr.strip()
@@ -106,6 +113,9 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
     "sri": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x000E0000 |
                              imm_arg_mask(instr[2])),
+    "lti": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x000E0000 |
+                             imm_arg_mask(instr[2])),
     "ldp": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x00140000 |
                              reg_arg_mask(instr[2])),
@@ -133,11 +143,17 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
 
 with open(args.asmfile, "r") as asmfile:
     asmlines = [line.split(";", 1)[0].strip() for line in asmfile]
-    text_instrs = []
+    text_instrs: list[tuple[str, str, list[str]]] = []
     for l in asmlines:
         instr = parse_instr(len(text_instrs), l)
         if instr is not None:
             text_instrs.append(instr)
+    for label, value in strings:
+        labels[label] = len(text_instrs)*4
+        bytes = value.encode('ascii') + b'\0'
+        strides = [bytes[n:n+4] for n in range(0, len(bytes), 4)]
+        words = [hex(sum(b * 2**(8*i) for i, b in enumerate(stride))) for stride in strides]
+        text_instrs += (("!x0", "const", [word]) for word in words)
     bytecode = [instr_table[instr[1]](ind*4, instr) for ind, instr in enumerate(text_instrs)]
     if args.pack != None and len(bytecode)*4 > args.pack:
         print(f"Assembled binary too large for ROM:"

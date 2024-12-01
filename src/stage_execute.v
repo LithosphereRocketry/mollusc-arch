@@ -1,4 +1,5 @@
 module stage_execute(
+        input [4:0] corenum,
         input clk,
         input rst,
         input [31:0] pc,
@@ -55,6 +56,12 @@ module stage_execute(
     assign alumux[4'h5] = alu_a << alu_b;
     assign alumux[4'h6] = alu_a >> alu_b;
     assign alumux[4'h7] = alu_a >>> alu_b;
+
+    wire [31:0] cmpmux [3:0];
+    assign cmpmux[2'h0] = alu_a > alu_b;
+    assign cmpmux[2'h1] = (alu_a ^ 32'h80000000) > (alu_b ^ 32'h80000000); // signed comparison
+    assign cmpmux[2'h2] = alu_a == alu_b;
+    assign cmpmux[2'h3] = {27'h0000000, corenum};
 
     assign fwd_valid = ~is_mem_in;
     assign fwd_addr = dest;
