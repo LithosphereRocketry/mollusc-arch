@@ -38,7 +38,8 @@ module memcontrol #(
     );
 
     function automatic is_volatile(input [31:0] addr);
-        is_volatile = (addr[31:24] == 8'h01);
+        is_volatile = (addr[31:24] == 8'h01)     // I/O mapped region
+                    | (addr[31:16] == 16'h0001); // DRAM control registers
     endfunction
 
     wire wb_arb_cyc;

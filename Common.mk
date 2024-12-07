@@ -32,7 +32,7 @@ CPU_SPEED = $(shell tools/getcfg.py mollusc.cfg CPU speed)
 RESET_VECTOR = $(shell tools/getcfg.py mollusc.cfg Layout reset)
 
 N_PORTS_HOST = 2
-N_PORTS_NARROW = 3
+N_PORTS_NARROW = 4
 N_PORTS_IO = 2
 
 COMMONGENS = wb_mux_host.v wb_mux_narrow.v wb_mux_io.v
@@ -70,4 +70,4 @@ $(GENERATE_DIR)/wb_mux_io.v: external/verilog-wishbone/rtl/wb_mux.py | $(GENERAT
 
 # Common boot binary
 $(BUILD_DIR)/boot.hex: $(GATEWARE_DIR)/boot.asm $(TOOLSDIR)/simpleasm.py
-	$(TOOLSDIR)/simpleasm.py $< $@ --pack 2048
+	$(TOOLSDIR)/simpleasm.py $< $@ --pack 2048 --base 32768

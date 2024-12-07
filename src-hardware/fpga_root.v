@@ -16,6 +16,25 @@ module fpga_root(
         output [2:0] vga_green,
         output [1:0] vga_blue,
 
+        output [15:0] ddram_a,
+        output [2:0] ddram_ba,
+        output ddram_ras_n,
+        output ddram_cas_n,
+        output ddram_cke,
+        output ddram_we_n,
+        output ddram_cs_n,
+        output [1:0] ddram_dm,
+        input [15:0] ddram_dq,
+        input [1:0] ddram_dqs_p,
+        output ddram_clk_p,
+        // Only the positive differential pin is instantiated
+        // input [1:0] ddram_dqs_n,
+        // input ddram_clk_n,
+        output [5:0] ddram_vccio,
+        output [1:0] ddram_gnd,
+        output ddram_odt,
+        output ddram_reset_n,
+
         input ps2_kbdat,
         input ps2_kbclk,
 
@@ -41,16 +60,40 @@ module fpga_root(
     // wire vga_wr_en;
 
     wire cpuclk;
-    wire pll_lock;
-    pll_cpu pll(
-        .clkin(clk48),
-        .clkout0(cpuclk),
-        .locked(pll_lock)
-    );
+    // wire pll_lock;
+    // pll_cpu pll(
+    //     .clkin(clk48),
+    //     .clkout0(cpuclk),
+    //     .locked(pll_lock)
+    // );
 
-    wire reset = ~usr_btn | ~pll_lock;
+    wire reset_in = ~usr_btn/* | ~pll_lock*/;
+    wire reset;
     wire [7:0] debug;
     wire led_r, led_g, led_b;
+
+    // DRAM bus
+    wire [31:0] wb_mem_adr_o;
+    wire [127:0] wb_mem_dat_i;
+    wire [127:0] wb_mem_dat_o;
+    wire wb_mem_we_o;
+    wire [15:0] wb_mem_sel_o;
+    wire wb_mem_stb_o;
+    wire wb_mem_ack_i;
+    wire wb_mem_err_i;
+    wire wb_mem_cyc_o;
+
+    // DRAM control interface
+    wire [31:0] wb_ddrctrl_adr_o;
+    wire [31:0] wb_ddrctrl_dat_i;
+    wire [31:0] wb_ddrctrl_dat_o;
+    wire wb_ddrctrl_we_o;
+    wire [3:0] wb_ddrctrl_sel_o;
+    wire wb_ddrctrl_stb_o;
+    wire wb_ddrctrl_ack_i;
+    wire wb_ddrctrl_err_i;
+    wire wb_ddrctrl_cyc_o;
+
     core root(
         .clk(cpuclk),
         .ioclk(clk48),
@@ -70,6 +113,27 @@ module fpga_root(
         .vga_waddr(vga_waddr),
         .vga_wdata(vga_wdata),
         .vga_wr_en(vga_wr_en),
+
+        .wb_mem_adr_o(wb_mem_adr_o),
+        .wb_mem_dat_o(wb_mem_dat_o),
+        .wb_mem_dat_i(wb_mem_dat_i),
+        .wb_mem_we_o(wb_mem_we_o),
+        .wb_mem_sel_o(wb_mem_sel_o),
+        .wb_mem_stb_o(wb_mem_stb_o),
+        .wb_mem_ack_i(wb_mem_ack_i),
+        .wb_mem_err_i(wb_mem_err_i),
+        .wb_mem_cyc_o(wb_mem_cyc_o),
+
+        .wb_ddrctrl_adr_o(wb_ddrctrl_adr_o),
+        .wb_ddrctrl_dat_o(wb_ddrctrl_dat_o),
+        .wb_ddrctrl_dat_i(wb_ddrctrl_dat_i),
+        .wb_ddrctrl_we_o(wb_ddrctrl_we_o),
+        .wb_ddrctrl_sel_o(wb_ddrctrl_sel_o),
+        .wb_ddrctrl_stb_o(wb_ddrctrl_stb_o),
+        .wb_ddrctrl_ack_i(wb_ddrctrl_ack_i),
+        .wb_ddrctrl_err_i(wb_ddrctrl_err_i),
+        .wb_ddrctrl_cyc_o(wb_ddrctrl_cyc_o),
+
         .debug(debug)
     );
     assign rgb_led0_r = ~led_r;
@@ -100,6 +164,56 @@ module fpga_root(
         .usb_d_n(usb_d_n),
         .usb_d_p(usb_d_p),
         .usb_pullup(usb_pullup)
+    );
+
+    assign ddram_vccio = 6'b111111;
+    assign ddram_gnd = 2'b00;
+    lite_ddr3l ddr3 (
+        .clk(clk48),
+        .ddram_a(ddram_a[12:0]),
+        .ddram_ba(ddram_ba),
+        .ddram_cas_n(ddram_cas_n),
+        .ddram_cke(ddram_cke),
+        .ddram_clk_n(ddram_clk_n),
+        .ddram_clk_p(ddram_clk_p),
+        .ddram_cs_n(ddram_cs_n),
+        .ddram_dm(ddram_dm),
+        .ddram_dq(ddram_dq),
+        .ddram_dqs_n(ddram_dqs_n),
+        .ddram_dqs_p(ddram_dqs_p),
+        .ddram_odt(ddram_odt),
+        .ddram_ras_n(ddram_ras_n),
+        .ddram_reset_n(ddram_reset_n),
+        .ddram_we_n(ddram_we_n),
+
+        // output wire          init_done,
+        // output wire          init_error,
+        // .pll_locked(pll_lock),
+        .rst(reset_in),
+        .user_clk(cpuclk),
+        .user_rst(reset),
+
+        .user_port_wishbone_0_ack(wb_mem_ack_i),
+        .user_port_wishbone_0_adr(wb_mem_adr_o[26:4]),
+        .user_port_wishbone_0_cyc(wb_mem_cyc_o),
+        .user_port_wishbone_0_dat_r(wb_mem_dat_i),
+        .user_port_wishbone_0_dat_w(wb_mem_dat_o),
+        .user_port_wishbone_0_err(wb_mem_err_i),
+        .user_port_wishbone_0_sel(wb_mem_sel_o),
+        .user_port_wishbone_0_stb(wb_mem_stb_o),
+        .user_port_wishbone_0_we(wb_mem_we_o),
+
+        .wb_ctrl_ack(wb_ddrctrl_ack_i),
+        .wb_ctrl_adr(wb_ddrctrl_adr_o[31:2]),
+        .wb_ctrl_bte(2'b00),
+        .wb_ctrl_cti(3'b000),
+        .wb_ctrl_cyc(wb_ddrctrl_cyc_o),
+        .wb_ctrl_dat_r(wb_ddrctrl_dat_i),
+        .wb_ctrl_dat_w(wb_ddrctrl_dat_o),
+        .wb_ctrl_err(wb_ddrctrl_err_i),
+        .wb_ctrl_sel(wb_ddrctrl_sel_o),
+        .wb_ctrl_stb(wb_ddrctrl_stb_o),
+        .wb_ctrl_we(wb_ddrctrl_we_o)
     );
 
     // ps2phy kb(

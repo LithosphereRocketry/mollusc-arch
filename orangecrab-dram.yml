@@ -18,9 +18,9 @@
     "sdram_phy":       "ECP5DDRPHY",  # Type of FPGA PHY
 
     # Frequency ----------------------------------------------------------------
-    "input_clk_freq":   100e6, # Input clock frequency
-    "sys_clk_freq":     50e6,  # System clock frequency (DDR_clk = 4 x sys_clk)
-    "init_clk_freq":    25e6,  # Init clock frequency
+    "input_clk_freq":   48e6, # Input clock frequency
+    "sys_clk_freq":     40e6,  # System clock frequency (DDR_clk = 4 x sys_clk)
+    "init_clk_freq":    20e6,  # Init clock frequency
 
     # Core ---------------------------------------------------------------------
     "cmd_buffer_depth": 16,    # Depth of the command buffer

@@ -10,6 +10,8 @@ argparser.add_argument("asmfile", type=str,
         help="The source file to assemble")
 argparser.add_argument("hexfile", type=str,
         help="The ASCII hex file to output")
+argparser.add_argument("-b", "--base", type=int,
+        help="Base address of code")
 argparser.add_argument("-p", "--pack", type=int,
         help="Amount of memory to size for")
 args = argparser.parse_args()
@@ -17,7 +19,7 @@ args = argparser.parse_args()
 labels: dict[str, int] = {}
 strings: list[tuple[str, str]] = []
 
-def parse_instr(line: int, text: str) -> Optional[tuple[str, str, list[str]]]:
+def parse_instr(line: int, text: str) -> None | tuple[str, str, list[str]] | int:
     if text.strip().startswith("string"):
         name, value = text.split("string", 1)[1].split(None, 1)
         value_str = "\"".join(value.split("\"")[1:-1])
@@ -28,7 +30,7 @@ def parse_instr(line: int, text: str) -> Optional[tuple[str, str, list[str]]]:
         lbl, untrimmed_instr = text.split(":", 1)
         instr_cond = untrimmed_instr.strip()
 
-        labels[lbl] = line*4
+        labels[lbl] = line*4 + args.base
     else:
         instr_cond = text
 
@@ -43,11 +45,11 @@ def parse_instr(line: int, text: str) -> Optional[tuple[str, str, list[str]]]:
     
     split_instr = instr.split(maxsplit=1)
     if len(split_instr) > 1: 
-        args = [arg.strip() for arg in split_instr[1].split(",")]
+        instr_args = [arg.strip() for arg in split_instr[1].split(",")]
     else:
-        args = []
+        instr_args = []
     
-    return (cond, split_instr[0].strip(), args)
+    return (cond, split_instr[0].strip(), instr_args)
 
 regnames: dict[str, int] = {
     "x0": 0, "zero": 0,
@@ -55,17 +57,17 @@ regnames: dict[str, int] = {
     "x2": 2, "s1": 2, "sp": 2,
     "x3": 3, "s2": 3,
     "x4": 4, "s3": 4,
-    "x5": 5, "a0": 5,
-    "x6": 6, "a1": 6,
-    "x7": 7, "a2": 7,
-    "x8": 8, "a3": 8,
-    "x9": 9, "a4": 9,
-    "x10": 10, "a5": 10,
-    "x11": 11, "a6": 11,
-    "x12": 12,
-    "x13": 13,
-    "x14": 14,
-    "x15": 15
+    "x5": 5, "s4": 5,
+    "x6": 6, "s5": 6,
+    "x7": 7, "a0": 7,
+    "x8": 8, "a1": 8,
+    "x9": 9, "a2": 9,
+    "x10": 10, "a3": 10,
+    "x11": 11, "a4": 11,
+    "x12": 12, "a5": 12,
+    "x13": 13, "a6": 13,
+    "x14": 14, "pta": 14,
+    "x15": 15, "epc": 15
 }
 
 def resolve(arg: str) -> int:
@@ -98,6 +100,21 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
     "add": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x00000000 |
                              reg_arg_mask(instr[2])),
+    "sub": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x00010000 |
+                             reg_arg_mask(instr[2])),
+    "and": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x00020000 |
+                             reg_arg_mask(instr[2])),
+    "or": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x00030000 |
+                             reg_arg_mask(instr[2])),
+    "xor": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x00040000 |
+                             reg_arg_mask(instr[2])),
+    "sl": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x00050000 |
+                             reg_arg_mask(instr[2])),
     "addi": lambda _, instr: (cond_arg_mask(instr[0]) |
                               0x00080000 |
                               imm_arg_mask(instr[2])),
@@ -116,6 +133,9 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
     "sri": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x000E0000 |
                              imm_arg_mask(instr[2])),
+    "ltu": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x00100000 |
+                             imm_arg_mask(instr[2])),
     "ltui": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x00180000 |
                              imm_arg_mask(instr[2])),
@@ -131,6 +151,9 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
     "jxi": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x001F0000 |
                              imm_arg_mask(instr[2])),
+    "stp": lambda _, instr: (cond_arg_mask(instr[0]) |
+                              0x04100800 | 
+                              reg_store_arg_mask(instr[2])),
     "stpi": lambda _, instr: (cond_arg_mask(instr[0]) |
                               0x0C100800 | 
                               imm_store_arg_mask(instr[2])),
@@ -140,7 +163,8 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
                                           (resolve(instr[2][1]) - pc) >> 2)),
     "lui": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x00400000 | 
-                             long_arg_mask(instr[2][0], resolve(instr[2][1]) >> 11)),
+                             # roll over to next alignment if misaligned
+                             long_arg_mask(instr[2][0], (resolve(instr[2][1]) + (1 << 10)) >> 11)),
     "const": lambda _, instr: resolve(instr[2][0]),
 }
 
@@ -152,16 +176,17 @@ with open(args.asmfile, "r") as asmfile:
         if instr is not None:
             text_instrs.append(instr)
     for label, value in strings:
-        labels[label] = len(text_instrs)*4
+        labels[label] = len(text_instrs)*4 + args.base
         bytes = value.encode('ascii') + b'\0'
         strides = [bytes[n:n+4] for n in range(0, len(bytes), 4)]
         words = [hex(sum(b * 2**(8*i) for i, b in enumerate(stride))) for stride in strides]
         text_instrs += (("!x0", "const", [word]) for word in words)
-    bytecode = [instr_table[instr[1]](ind*4, instr) for ind, instr in enumerate(text_instrs)]
+    bytecode = [instr_table[instr[1]](ind*4 + args.base, instr) for ind, instr in enumerate(text_instrs)]
     if args.pack != None and len(bytecode)*4 > args.pack:
         print(f"Assembled binary too large for ROM:"
               f"needs {len(bytecode)*4} bytes, {args.pack} available")
     print({n : hex(v) for n, v in labels.items()})
+    print(f"Used bytecode: {len(bytecode)*4} bytes")
     with open(args.hexfile, "w") as hexfile:
         for i in range(0, len(bytecode)):
             hexfile.write("{0:08x}\n".format(bytecode[i]))

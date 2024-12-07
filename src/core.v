@@ -34,6 +34,26 @@ module core #(
         output [7:0] vga_wdata,
         output vga_wr_en,
 
+        output [31:0] wb_mem_adr_o,
+        input [CACHE_WIDTH-1:0] wb_mem_dat_i,
+        output [CACHE_WIDTH-1:0] wb_mem_dat_o,
+        output wb_mem_we_o,
+        output [SEL_WIDTH-1:0] wb_mem_sel_o,
+        output wb_mem_stb_o,
+        input wb_mem_ack_i,
+        input wb_mem_err_i,
+        output wb_mem_cyc_o,
+
+        output [31:0] wb_ddrctrl_adr_o,
+        input [31:0] wb_ddrctrl_dat_i,
+        output [31:0] wb_ddrctrl_dat_o,
+        output wb_ddrctrl_we_o,
+        output [NARROW_SEL_WIDTH-1:0] wb_ddrctrl_sel_o,
+        output wb_ddrctrl_stb_o,
+        input wb_ddrctrl_ack_i,
+        input wb_ddrctrl_err_i,
+        output wb_ddrctrl_cyc_o,
+
         output [7:0] debug
     );
 
@@ -73,18 +93,18 @@ module core #(
         .dbg(cpudbg)
     );
 
-    // Connection to common memory
-    // 128-bit width, byte addressable
-    wire [31:0] wb_mem_adr_o;
-    wire [CACHE_WIDTH-1:0] wb_mem_dat_i;
-    wire [CACHE_WIDTH-1:0] wb_mem_dat_o;
-    wire wb_mem_we_o;
-    wire [SEL_WIDTH-1:0] wb_mem_sel_o;
-    wire wb_mem_stb_o;
-    wire wb_mem_ack_i = 1'b0; // the WB mux doesn't deal well with unconnected ACK
-    // wire wb_mem_err_i;
-    // wire wb_mem_rty_i;
-    wire wb_mem_cyc_o;
+    // // Connection to common memory
+    // // 128-bit width, byte addressable
+    // wire [31:0] wb_mem_adr_o;
+    // wire [CACHE_WIDTH-1:0] wb_mem_dat_i;
+    // wire [CACHE_WIDTH-1:0] wb_mem_dat_o;
+    // wire wb_mem_we_o;
+    // wire [SEL_WIDTH-1:0] wb_mem_sel_o;
+    // wire wb_mem_stb_o;
+    // wire wb_mem_ack_i = 1'b0; // the WB mux doesn't deal well with unconnected ACK
+    // // wire wb_mem_err_i;
+    // // wire wb_mem_rty_i;
+    // wire wb_mem_cyc_o;
 
     // Connection to narrowing adapter for I/O registers
     // 128-bit width, byte addressable
@@ -136,7 +156,7 @@ module core #(
         .wbs1_sel_o(wb_mem_sel_o),
         .wbs1_stb_o(wb_mem_stb_o),
         .wbs1_ack_i(wb_mem_ack_i),
-        .wbs1_err_i(1'b0),
+        .wbs1_err_i(wb_mem_err_i),
         .wbs1_rty_i(1'b0),
         .wbs1_cyc_o(wb_mem_cyc_o),
 
@@ -264,19 +284,33 @@ module core #(
         .wbs1_addr(32'h00008000),
         .wbs1_addr_msk(~32'h000007FF), // 2KB boot ROM
 
-        .wbs2_adr_o(wb_iobus_adr_o),
-        .wbs2_dat_o(wb_iobus_dat_o),
-        .wbs2_dat_i(wb_iobus_dat_i),
-        .wbs2_we_o(wb_iobus_we_o),
-        .wbs2_sel_o(wb_iobus_sel_o),
-        .wbs2_stb_o(wb_iobus_stb_o),
-        .wbs2_ack_i(wb_iobus_ack_i),
-        .wbs2_err_i(wb_iobus_err_i),
-        .wbs2_rty_i(wb_iobus_rty_i),
-        .wbs2_cyc_o(wb_iobus_cyc_o),
+        .wbs2_adr_o(wb_ddrctrl_adr_o),
+        .wbs2_dat_o(wb_ddrctrl_dat_o),
+        .wbs2_dat_i(wb_ddrctrl_dat_i),
+        .wbs2_we_o(wb_ddrctrl_we_o),
+        .wbs2_sel_o(wb_ddrctrl_sel_o),
+        .wbs2_stb_o(wb_ddrctrl_stb_o),
+        .wbs2_ack_i(wb_ddrctrl_ack_i),
+        .wbs2_err_i(wb_ddrctrl_err_i),
+        .wbs2_rty_i(1'b0),
+        .wbs2_cyc_o(wb_ddrctrl_cyc_o),
 
-        .wbs2_addr(32'h01000000),
-        .wbs2_addr_msk(~32'h00FFFFFF) // 16MB mapped into IO clock domain
+        .wbs2_addr(32'h00010000),
+        .wbs2_addr_msk(~32'h0000FFFF), // 64K address space for DRAM interface
+
+        .wbs3_adr_o(wb_iobus_adr_o),
+        .wbs3_dat_o(wb_iobus_dat_o),
+        .wbs3_dat_i(wb_iobus_dat_i),
+        .wbs3_we_o(wb_iobus_we_o),
+        .wbs3_sel_o(wb_iobus_sel_o),
+        .wbs3_stb_o(wb_iobus_stb_o),
+        .wbs3_ack_i(wb_iobus_ack_i),
+        .wbs3_err_i(wb_iobus_err_i),
+        .wbs3_rty_i(wb_iobus_rty_i),
+        .wbs3_cyc_o(wb_iobus_cyc_o),
+
+        .wbs3_addr(32'h01000000),
+        .wbs3_addr_msk(~32'h00FFFFFF) // 16MB mapped into IO clock domain
     );
 
     wb_ram #(

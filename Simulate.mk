@@ -19,11 +19,11 @@ TESTTGTS = $(patsubst $(TEST_DIR)/tb_%.cpp,$(LOG_DIR)/tb_%.txt,$(TESTSRCS))
 .PHONY: run build test
 build: $(OUT_DIR)/$(TOPLEVEL)
 
-SIM_GATEWARE = $(GATEWARE) $(SIM_GEN_DIR)/lite_ddr3l.v
+SIM_GATEWARE = $(GATEWARE) #$(SIM_GEN_DIR)/lite_ddr3l.v
 
 # LiteDRAM simulation model
-$(SIM_GEN_DIR)/lite_ddr3l.v: orangecrab-dram.yml | $(GENERATE_DIR)
-	python -m litedram.gen orangecrab-dram.yml --name lite_ddr3l --no-compile --gateware-dir ${SIM_GEN_DIR}/ --doc --sim
+# $(SIM_GEN_DIR)/lite_ddr3l.v: orangecrab-dram.yml | $(GENERATE_DIR)
+# 	python -m litedram.gen orangecrab-dram.yml --name lite_ddr3l --no-compile --gateware-dir ${SIM_GEN_DIR}/ --doc --sim
 
 # Static library generated from Verilog source
 .PRECIOUS: $(SIM_GEN_DIR)/libV%.a
