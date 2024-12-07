@@ -52,25 +52,17 @@ module register_file(
         output fwd_used
     );
 
-    wire [31:0] reg_outputs [15:0];
-    reg [31:0] real_regs [15:1];
-
-    genvar i;
-    for(i = 1; i < 16; i = i + 1) begin
-        wire [31:0] value = real_regs[i]; // Dummy variable to make simulation viewable
-        assign reg_outputs[i] = real_regs[i];
-    end
-
-    assign reg_outputs[0] = 32'h00000000;
+    reg [31:0] regs [15:0];
+    initial regs[0] = 32'd0;
 
     wire [3:0] fwd_used_arr;
 
     reg_forwarder fwd [3:0] (
         .non_forward({
-            reg_outputs[a_addr],
-            reg_outputs[b_addr],
-            reg_outputs[m_addr],
-            reg_outputs[p_addr]
+            regs[a_addr],
+            regs[b_addr],
+            regs[m_addr],
+            regs[p_addr]
         }),
         .read_addr({a_addr, b_addr, m_addr, p_addr}),
         
@@ -86,5 +78,5 @@ module register_file(
 
     assign fwd_used = |fwd_used_arr;
 
-    always @(posedge clk) if(write_addr != 4'b0) real_regs[write_addr] <= write_data;
+    always @(posedge clk) if(write_addr != 4'b0) regs[write_addr] <= write_data;
 endmodule
