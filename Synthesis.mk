@@ -83,4 +83,4 @@ $(OUT_DIR)/%.dfu : $(BUILD_DIR)/%.bit | $(OUT_DIR)
 	dfu-suffix -v 1209 -p 5af0 -a $@
 
 lint:
-	verilator --lint-only $(FPGA_GATEWARE) $(YOSYS_GATEWARE_LOC)/lattice/cells_sim_ecp5.v -I./src -I$(YOSYS_GATEWARE_LOC)/lattice
+	verilator --lint-only --top-module fpga_root $(FPGA_GATEWARE) $(YOSYS_GATEWARE_LOC)/lattice/cells_sim_ecp5.v -I./src -I$(YOSYS_GATEWARE_LOC)/lattice -DROMPATH=\"$(BUILD_DIR)/boot.hex\" -DRESET_VECTOR=$(RESET_VECTOR)
