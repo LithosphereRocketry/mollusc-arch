@@ -48,25 +48,25 @@ module stage_execute(
     // Return address is always 4 bytes after PC
     wire [3:0] op = is_jump ? 4'h0 : aluop; // return address = addition
 
-    wire [31:0] alumux [15:0];
-    assign alumux[4'h0] = alu_a + alu_b;
-    assign alumux[4'h1] = alu_a - alu_b;
-    assign alumux[4'h2] = alu_a & alu_b;
-    assign alumux[4'h3] = alu_a | alu_b;
-    assign alumux[4'h4] = alu_a ^ alu_b;
-    assign alumux[4'h5] = alu_a << alu_b;
-    assign alumux[4'h6] = alu_a >> alu_b;
-    assign alumux[4'h7] = alu_a >>> alu_b;
+    wire [31:0] alumux = ~op[3] ? (
+        ~op[2] ? (
+            ~op[1] ? (~op[0] ? alu_a + alu_b : alu_a - alu_b)
+                   : (~op[0] ? alu_a & alu_b : alu_a | alu_b)
+        ) : (
+            ~op[1] ? (~op[0] ? alu_a ^ alu_b : alu_a << alu_b)
+                   : (~op[0] ? alu_a >> alu_b : alu_a >>> alu_b)
+        )
+    ) : (
+        32'hxxxxxxxx
+    );
 
-    wire [31:0] cmpmux [3:0];
-    assign cmpmux[2'h0] = alu_a < alu_b;
-    assign cmpmux[2'h1] = (alu_a ^ 32'h80000000) < (alu_b ^ 32'h80000000); // signed comparison
-    assign cmpmux[2'h2] = alu_a == alu_b;
-    assign cmpmux[2'h3] = {27'h0000000, corenum};
+    wire [31:0] cmpmux  = {27'h0000000, ~op[1] ?
+        ({4'h0, ~op[0] ? alu_a < alu_b : (alu_a ^ 32'h80000000) < (alu_b ^ 32'h80000000)})
+      : (~op[0] ? {4'h0, alu_a == alu_b} : corenum)};
 
     assign fwd_valid = ~is_mem_in;
     assign fwd_addr = dest;
-    assign fwd_val = is_cmp ? cmpmux[op[1:0]] : alumux[op];
+    assign fwd_val = is_cmp ? cmpmux : alumux;
 
     assign mem_val = reg_m;
     assign mem_addr = memop_addr;
