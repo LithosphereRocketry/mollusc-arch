@@ -115,6 +115,9 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
     "sl": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x00050000 |
                              reg_arg_mask(instr[2])),
+    "sr": lambda _, instr: (cond_arg_mask(instr[0]) |
+                             0x00060000 |
+                             reg_arg_mask(instr[2])),
     "addi": lambda _, instr: (cond_arg_mask(instr[0]) |
                               0x00080000 |
                               imm_arg_mask(instr[2])),

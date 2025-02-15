@@ -256,8 +256,16 @@ leveling_phy_delay_loop:
         add a0, zero, s3
         j ra, run_test_pattern ; this function hangs currently
                                 ; 	working = errors == 0;
+        eqi a1, a0, 0
                                 ; 	/* When any scan is working then the final score will always be higher then if no scan was working */
-                                ; 	score += (working * max_errors*SDRAM_PHY_DELAYS) + (max_errors - errors);
+                                ; 	score += (working * max_errors*SDRAM_PHY_DELAYS) + (max_errors - errors); // max_errors = 3*64
+        sli a2, a1, 9
+        sli a1, a1, 10
+        add a1, a2, a1 ; a1 = working * (max_errors*SDRAM_PHY_DELAYS /*=3*64*8*/)
+        addi a1, a1, 192 ; a1 = working * (max_errors*SDRAM_PHY_DELAYS) + max_errors
+        sub a1, a1, a0 ; a1 = (working * max_errors*SDRAM_PHY_DELAYS) + (max_errors - errors)
+                                        ; score += a1
+        j zero, done ; TODO REMOVE
                                 ; 	if (_show) {
                                 ; 		print_scan_errors(errors);
                                 ; 	}
@@ -447,15 +455,17 @@ sdram_leveling_action:
         jx zero, zero, ra
 
 run_test_pattern: ; a0 = module, ignoring dq_line
-        addi sp, sp, -56 ; int ra, s2, s3, s4, s5; char tst[8]; char prs[2][8]; int scratch[3];
+        addi sp, sp, -64 ; int ra, s2, s3, s4, s5; char tst[8]; char prs[2][8]; int scratch[3]; int module; unalloc;
         stpi ra, sp, 0
         stpi s2, sp, 4
         stpi s3, sp, 8
         stpi s4, sp, 12
         stpi s5, sp, 16
+        stpi a0, sp, 56
         ; tst = sp+20
         ; prs = sp+28
         ; scratch = sp+44
+        ; module = sp+56
 
 	; int errors = 0;
         lui s2, 0
@@ -534,16 +544,6 @@ test_pattern_bit_loop:
     ?a0 j zero, test_pattern_phase_loop
         ; ldpi s4, sp, 52 ; discard s4 (prv)
 
-        ldpi a0, sp, 28
-        j ra, putx
-        ldpi a0, sp, 32
-        j ra, putx
-        ldpi a0, sp, 36
-        j ra, putx
-        ldpi a0, sp, 40
-        j ra, putx
-
-
         lui s3, 0x11000 ; s3 = CSR_BASE + 0x1000
                 ; /* Activate */
                 ; sdram_activate_test_row();
@@ -562,8 +562,6 @@ test_pattern_bit_loop:
         addi a0, zero, 15
         j ra, cdelay
 
-        j zero, done ; TODO: REMOVE
-
         ; Because we only have 2 phases, we can save ourselves some trouble by
         ; unrolling this loop
                 ; /* Write pseudo-random sequence */
@@ -574,68 +572,184 @@ test_pattern_bit_loop:
         ; values to CSRs 32 bits at a time, because that's what csr_wr... does
         ; anyway
 
-                ; sdram_dfii_piwr_address_write(0);
-                ; sdram_dfii_piwr_baddress_write(0);
-                ; command_pwr(DFII_COMMAND_CAS|DFII_COMMAND_WE|DFII_COMMAND_CS|DFII_COMMAND_WRDATA);
-                ; cdelay(15);
+        ldpi a0, sp, 28
+        stpi a0, s3, 0x14
+        ldpi a0, sp, 32
+        stpi a0, s3, 0x18
+        ldpi a0, sp, 36
+        stpi a0, s3, 0x34
+        ldpi a0, sp, 40
+        stpi a0, s3, 0x38        
         
-
+                ; sdram_dfii_piwr_address_write(0);
+                        ; unsigned char wrphase = sdram_dfii_get_wrphase(); // 1
+                        ; sdram_dfii_pix_address_write(wrphase, value);
+                                ; sdram_dfii_pi1_address_write(value);
+                                	; csr_write_simple(v, (CSR_BASE + 0x102cL));
+        stpi zero, s3, 0x2C
+                ; sdram_dfii_piwr_baddress_write(0);
+                        ; unsigned char wrphase = sdram_dfii_get_wrphase(); // 1
+                        ; sdram_dfii_pix_baddress_write(wrphase, value);
+                                ; sdram_dfii_pi1_baddress_write(value);
+	                                ; csr_write_simple(v, (CSR_BASE + 0x1030L));
+        stpi zero, s3, 0x30
+                ; command_pwr(DFII_COMMAND_CAS|DFII_COMMAND_WE|DFII_COMMAND_CS|DFII_COMMAND_WRDATA);
+                        ; unsigned char wrphase = sdram_dfii_get_wrphase(); // 1
+                        ; command_px(wrphase, value);
+                                ; command_p1(value);
+                                        ; sdram_dfii_pi1_command_write(cmd);
+                                                ; csr_write_simple(v, (CSR_BASE + 0x1024L));
+        addi a0, zero, 0b10111
+        stpi a0, s3, 0x24
+                                        ; sdram_dfii_pi1_command_issue_write(1);
+                                                ; csr_write_simple(v, (CSR_BASE + 0x1028L));
+        addi a0, zero, 1
+        stpi a0, s3, 0x28
+                ; cdelay(15);
+        addi a0, zero, 15
+        j ra, cdelay
+        
                 ; ddrphy_burstdet_clr_write(1);
+                	; csr_write_simple(v, (CSR_BASE + 0x814L));
+        lui a1, 0x10800
+        addi a0, zero, 1
+        stpi a0, a1, 0x14
 
                 ; /* Read/Check pseudo-random sequence */
                 ; sdram_dfii_pird_address_write(0);
+                        ; unsigned char rdphase = sdram_dfii_get_rdphase(); // 0
+                	; sdram_dfii_pix_address_write(rdphase, value);
+                                ; sdram_dfii_pi0_address_write(value);
+                                        ; csr_write_simple(v, (CSR_BASE + 0x100cL));
+        stpi zero, s3, 0xc
                 ; sdram_dfii_pird_baddress_write(0);
+                	; unsigned char rdphase = sdram_dfii_get_rdphase();
+	                ; sdram_dfii_pix_baddress_write(rdphase, value);
+                                ; sdram_dfii_pi0_baddress_write(value);
+                                	; csr_write_simple(v, (CSR_BASE + 0x1010L));
+        stpi zero, s3, 0x10
                 ; command_prd(DFII_COMMAND_CAS|DFII_COMMAND_CS|DFII_COMMAND_RDDATA);
+                        ; unsigned char rdphase = sdram_dfii_get_rdphase(); // 0
+                        ; command_px(rdphase, value);
+                                ; command_p0(value);
+                                        ; sdram_dfii_pi0_command_write(cmd);
+                                                ; csr_write_simple(v, (CSR_BASE + 0x1004L));
+        addi a0, zero, 0x25
+                                        ; sdram_dfii_pi0_command_issue_write(1);
+                                                ; csr_write_simple(v, (CSR_BASE + 0x1008L));
                 ; cdelay(15);
+        addi a0, zero, 15
+        j ra, cdelay
 
                 ; /* Precharge */
                 ; sdram_precharge_test_row();
-
+                        ; sdram_dfii_pi0_address_write(0);
+                                ; csr_write_simple(v, (CSR_BASE + 0x100cL));
+        stpi zero, s3, 0xc
+                        ; sdram_dfii_pi0_baddress_write(0);
+                                ; csr_write_simple(v, (CSR_BASE + 0x1010L));
+        stpi zero, s3, 0x10
+                        ; command_p0(DFII_COMMAND_RAS|DFII_COMMAND_WE|DFII_COMMAND_CS);
+                                ; sdram_dfii_pi0_command_write(cmd);
+                                        ; csr_write_simple(v, (CSR_BASE + 0x1004L));
+        addi a0, zero, 0b1011
+        stpi a0, s3, 0x4
+                        ; cdelay(15);
+        addi a0, zero, 15
+        j ra, cdelay
                 ; errors = 0;
+        lui s2, 0
                 ; for(p=0;p<SDRAM_PHY_PHASES;p++) {
+        lui s5, 0
+test_pattern_readback_loop:
+        ; at least here
                 ; 	/* Read back test pattern */
                 ; 	csr_rd_buf_uint8(sdram_dfii_pix_rddata_addr(p), tst, DFII_PIX_DATA_BYTES);
+                        ; a1 = sdram_dfii_pix_rddata_addr(p)
+        add a1, zero, s3
+    ?s5 addi a1, a1, 0x20
+
+        ldpi a0, a1, 0x1C
+        stpi a0, sp, 20
+        ldpi a0, a1, 0x20
+        stpi a0, sp, 24
+
                 ; 	/* Verify bytes matching current 'module' */
                 ; 	int pebo;   // module's positive_edge_byte_offset
                 ; 	int nebo;   // module's negative_edge_byte_offset, could be undefined if SDR DRAM is used
                 ; 	int ibo;    // module's in byte offset (x4 ICs)
                 ; 	int mask;   // Check data lines
 
-                ; 	mask = MODULE_BITMASK;
+                ; 	mask = MODULE_BITMASK; // 0xFF
 
                 ; 	/* Values written into CSR are Big Endian */
                 ; 	/* SDRAM_PHY_XDR is define 1 if SDR and 2 if DDR*/
                 ; 	nebo = (DFII_PIX_DATA_BYTES / SDRAM_PHY_XDR) - 1 - (module * SDRAM_PHY_DQ_DQS_RATIO)/8;
+                        ; nebo = 3 - module
+                                ; except we actually save data as LE instead of
+                                ; BE as the example code does, so nebo is just module
+                                ; nebo = module
+        ldpi a1, sp, 56 ; a1 = nebo
                 ; 	pebo = nebo + DFII_PIX_DATA_BYTES / SDRAM_PHY_XDR;
-                ; 	/* When DFII_PIX_DATA_BYTES is 1 and SDRAM_PHY_XDR is 2, pebo and nebo are both -1s,
-                ; 	* but only correct value is 0. This can happen when single x4 IC is used */
-                ; 	if ((DFII_PIX_DATA_BYTES/SDRAM_PHY_XDR) == 0) {
-                ; 		pebo = 0;
-                ; 		nebo = 0;
-                ; 	}
-
-                ; 	ibo = (module * SDRAM_PHY_DQ_DQS_RATIO)%8; // Non zero only if x4 ICs are used
-
+                        ; pebo = nebo + 4
+        addi a2, a1, 4  ; a2 = pebo
+                ;       // skipped: not using x4 ICs
                 ; 	errors += popcount(((prs[p][pebo] >> ibo) & mask) ^
                 ; 	                   ((tst[pebo] >> ibo) & mask));
-                ; 	if (SDRAM_PHY_DQ_DQS_RATIO == 16)
-                ; 		errors += popcount(((prs[p][pebo+1] >> ibo) & mask) ^
-                ; 		                   ((tst[pebo+1] >> ibo) & mask));
-
-
-                ; 	if (DFII_PIX_DATA_BYTES == 1) // Special case for x4 single IC
-                ; 		ibo = 0x4;
+                        ; 	errors += popcount((prs[p][pebo] & mask) ^ (tst[pebo] & mask));
+        ; conveniently, nebo will always be in the first word, and pebo will
+        ; always be in the second, so we can turn the indexes into shifts
+        ; convert nebo & pebo to bits
+        sli a1, a1, 3
+        sli a2, a2, 3
+        addi a3, sp, 28 ; a3 = prs
+    ?s5 addi a3, a3, 8  ; a3 = &prs[p] (this only works because p is either 0 or 1)
+        
+        ldpi a4, a3, 0  ; a4 = prs[p][0..3]
+        ldpi a5, sp, 20 ; a5 = tst[0..3]
+        xor a4, a4, a5  ; a4 = a4 ^ a5
+        sr a4, a4, a2   ; a4 >>= pebo
+        andi a4, a4, 0xFF ; a4 = (a4 ^ a5) & mask
+        ; since we only compare errors in 8 bits at a time, we
+        ; can use only one call to popcount by masking the two
+        ; results together into a single halfword
+        sli a0, a4, 8
+                ;       // skipped: SDRAM_PHY_DQ_DQS_RATIO == 8
+                ;       // skipped: not using x4 ICs
                 ; 	errors += popcount(((prs[p][nebo] >> ibo) & mask) ^
                 ; 	                   ((tst[nebo] >> ibo) & mask));
-                ; 	if (SDRAM_PHY_DQ_DQS_RATIO == 16)
-                ; 		errors += popcount(((prs[p][nebo+1] >> ibo) & mask) ^
-                ; 		                   ((tst[nebo+1] >> ibo) & mask));
+                        ; 	errors += popcount((prs[p][nebo] & mask) ^ (tst[nebo] & mask));
+        
+                ;       // skipped: SDRAM_PHY_DQ_DQS_RATIO == 8
+        ldpi a4, a3, 4  ; a4 = prs[p][0..3]
+        ldpi a5, sp, 24 ; a5 = tst[4..7]
+        xor a4, a4, a5  ; a4 = a4 ^ a5
+        sr a4, a4, a1   ; a4 >>= nebo
+        andi a4, a4, 0xFF ; a4 = (a4 ^ a5) & mask
+        ; pack the other byte into the leftover 8 bits of our word
+        or a0, a0, a4
+
+        j ra, popcount
+        add s2, s2, a0
                 ; }
-
+        addi s5, s5, 1
+        ltui a0, s5, 2
+    ?a0 j zero, test_pattern_readback_loop
+        ; at most here
+        
                 ; if (((ddrphy_burstdet_seen_read() >> module) & 0x1) != 1)
+                        ; return csr_read_simple((CSR_BASE + 0x818L));
+        lui a1, 0x10800 ; a1 = CSR_BASE + 0x800
+        ldpi a1, a1, 0x18 ; a1 = ddrphy_burstdet_seen_read()
+        ldpi a2, sp, 56 ; a2 = module
+        sr a1, a1, a2 ; a1 = (ddrphy_burstdet_seen_read() >> module)
+        andi a1, a1, 1 ; a1 = ((ddrphy_burstdet_seen_read() >> module) & 0x1)
                 ; 	errors += 1;
+    !a1 addi s2, s2, 1
 
-        ldpi s2, sp, 44
+        add a0, zero, s2
+        ldpi s2, sp, 44 ; outside loop's errors
+        add s2, s2, a0 ; errors += sdram_write_read_check_test_pattern(module, _seed_array[i], dq_line);
         ldpi s3, sp, 48
 
 	; }
@@ -672,6 +786,44 @@ lfsr32:
         ; return prev;
         jx zero, zero, ra
 
+popcount:
+        ; technically this is only used once, but it's a useful function so I'm
+        ; keeping it here anyway
+	; however, it gets a while loop instead of the fancy bitmask
+        ; version because I'm not convinced loading that many constants is worth
+        ; the tiny speedup and ROM space is probably more valuable anyway
+        lui a1, 0
+popcount_loop:
+        andi a2, a0, 1
+    ?a2 addi a1, a1, 1
+        sri a0, a0, 1
+    ?a0 j zero, popcount_loop
+        add a1, zero, a0
+        jx zero, zero, ra        
+
+print_scan_errors:
+; static void print_scan_errors(unsigned int errors) {
+; #ifdef SDRAM_LEVELING_SCAN_DISPLAY_HEX_DIV
+; 	// Display '.' for no errors, errors/div in hex if it is a single char, else show 'X'
+; 	errors = errors / SDRAM_LEVELING_SCAN_DISPLAY_HEX_DIV;
+; 	if (errors == 0)
+; 		printf(".");
+; 	else if (errors > 0xf)
+; 		printf("X");
+; 	else
+; 		printf("%x", errors);
+; #else
+; 		printf("%d", errors == 0);
+; #endif // SDRAM_LEVELING_SCAN_DISPLAY_HEX_DIV
+; }
+    ?a0 addi a0, zero, 1
+        xori a0, a0, 1
+        addi a0, a0, 48 ; '0'
+        ; putchar
+        lui a4, 0x01000000
+        stpi a0, a4, 8
+        jx zero, zero, ra
+
         ; Put string to TTY
 puts:                           ; void puts(word* p)
         lui a4, 0x01000000      ; preload address of TTY
@@ -703,14 +855,6 @@ putx_loop:
     ?a3 j zero, putx_loop       ; if(i != 0) goto putx_loop
         jx zero, zero, ra       ; return
 
-csr_rd_buf_uint8:
-        ; TODO
-        jx zero, zero, ra
-
-csr_wr_buf_uint8:
-        ; TODO
-        jx zero, zero, ra
-
 ; static int _seed_array[] = {42, 84, 36};
 ; static int _seed_array_length = sizeof(_seed_array) / sizeof(_seed_array[0]);
 seed_array:
@@ -727,5 +871,6 @@ seed_array:
         string msg_leveling_comma ", b"
         string msg_leveling_startbar ": |"
         string msg_leveling_endbar "| "
+        string msg_endl "\r\n"
 
         string msg_done "Boot sequence complete, halting.\r\n"
