@@ -5,6 +5,7 @@ CPU architecture with support for usermode restriction and multicore operation,
 designed around the capabilities of the OrangeCrab-25F FPGA development board.
 
 ## Goals
+
 * Develop a capable computer architecture with a focus on performance-per-LUT.
 * Achieve efficient multicore parallel processing with a minimal amount of
 hardware.
@@ -12,7 +13,9 @@ hardware.
 * Hopefully not go insane by the end of the project.
 
 ## Dependencies
-* Verilator
+
+* Icarus Verilog (simulation)
+* Verilator (linting)
 * GNU Make
 * Lattice ECP5 Yosys toolchain (I used the toolchain as specified here:
 https://orangecrab-fpga.github.io/orangecrab-hardware/r0.2/docs/getting-started/)

@@ -1,10 +1,14 @@
-out/
-generated/
-build/
-verilator/
-logs/
-failed_logs/
-waveforms/
 *.drawio.dtmp
+*.drawio.bkp
 .vscode
-/*-log.txt
+vvp
+rom
+waveforms
+rtl/generated
+
+# out/
+# build/
+# verilator/
+# logs/
+# failed_logs/
+# /*-log.txt

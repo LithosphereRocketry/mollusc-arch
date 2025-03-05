@@ -10,6 +10,7 @@ module stage_execute(
         input [3:0] dest,
         input [3:0] aluop,
         input is_cmp,
+        input is_jump,
 
         input [31:0] reg_a,
         input [31:0] reg_b,

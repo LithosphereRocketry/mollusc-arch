@@ -138,15 +138,9 @@ instr_table: dict[str, Callable[[int, tuple[str, str, list[str]]], int]] = {
                              imm_arg_mask(instr[2])),
     "ltu": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x00100000 |
-                             reg_arg_mask(instr[2])),
-    "lt": lambda _, instr: (cond_arg_mask(instr[0]) |
-                             0x00110000 |
-                             reg_arg_mask(instr[2])),
+                             imm_arg_mask(instr[2])),
     "ltui": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x00180000 |
-                             imm_arg_mask(instr[2])),
-    "lti": lambda _, instr: (cond_arg_mask(instr[0]) |
-                             0x00190000 |
                              imm_arg_mask(instr[2])),
     "ldp": lambda _, instr: (cond_arg_mask(instr[0]) |
                              0x00140000 |

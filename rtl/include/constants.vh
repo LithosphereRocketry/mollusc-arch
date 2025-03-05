@@ -1,0 +1,1 @@
+`define RESET_VECTOR 32'h00008000

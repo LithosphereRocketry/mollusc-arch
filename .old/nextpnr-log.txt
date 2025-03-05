@@ -1,0 +1,951 @@
+Info: constraining clock net 'clk48' to 48.00 MHz
+
+Info: Logic utilisation before packing:
+Info:     Total LUT4s:      8154/24288    33%
+Info:         logic LUTs:   6850/24288    28%
+Info:         carry LUTs:    584/24288     2%
+Info:           RAM LUTs:    480/ 3036    15%
+Info:          RAMW LUTs:    240/ 6072     3%
+
+Info:      Total DFFs:      2955/24288    12%
+
+Info: Packing IOs..
+Info: usb_d_p feeds TRELLIS_IO usb.io_p, removing $nextpnr_iobuf usb_d_p.
+Info: pin 'usb.io_p' constrained to Bel 'X72/Y47/PIOD'.
+Info: usb_d_n feeds TRELLIS_IO usb.io_n, removing $nextpnr_iobuf usb_d_n.
+Info: pin 'usb.io_n' constrained to Bel 'X72/Y44/PIOC'.
+Info: pin 'vga_vsync$tr_io' constrained to Bel 'X29/Y0/PIOA'.
+Info: pin 'vga_red[2]$tr_io' constrained to Bel 'X72/Y38/PIOC'.
+Info: pin 'vga_red[1]$tr_io' constrained to Bel 'X72/Y38/PIOD'.
+Info: pin 'vga_red[0]$tr_io' constrained to Bel 'X72/Y38/PIOB'.
+Info: pin 'vga_hsync$tr_io' constrained to Bel 'X13/Y50/PIOB'.
+Info: pin 'vga_green[2]$tr_io' constrained to Bel 'X4/Y50/PIOB'.
+Info: pin 'vga_green[1]$tr_io' constrained to Bel 'X4/Y50/PIOA'.
+Info: pin 'vga_green[0]$tr_io' constrained to Bel 'X13/Y50/PIOA'.
+Info: pin 'vga_blue[1]$tr_io' constrained to Bel 'X72/Y26/PIOB'.
+Info: pin 'vga_blue[0]$tr_io' constrained to Bel 'X72/Y26/PIOA'.
+Info: pin 'usr_btn$tr_io' constrained to Bel 'X0/Y38/PIOC'.
+Info: pin 'usb_pullup$tr_io' constrained to Bel 'X72/Y44/PIOD'.
+Info: pin 'rst_n$tr_io' constrained to Bel 'X15/Y50/PIOB'.
+Info: pin 'rgb_led0_r$tr_io' constrained to Bel 'X72/Y38/PIOA'.
+Info: pin 'rgb_led0_g$tr_io' constrained to Bel 'X72/Y41/PIOA'.
+Info: pin 'rgb_led0_b$tr_io' constrained to Bel 'X72/Y29/PIOC'.
+Info: pin 'ps2_kbdat$tr_io' constrained to Bel 'X33/Y0/PIOA'.
+Info: pin 'ps2_kbclk$tr_io' constrained to Bel 'X67/Y0/PIOB'.
+Info: pin 'hbb_sw$tr_io' constrained to Bel 'X72/Y35/PIOA'.
+Info: pin 'ddram_we_n$tr_io' constrained to Bel 'X0/Y2/PIOB'.
+Info: pin 'ddram_vccio[5]$tr_io' constrained to Bel 'X72/Y5/PIOB'.
+Info: pin 'ddram_vccio[4]$tr_io' constrained to Bel 'X0/Y23/PIOC'.
+Info: pin 'ddram_vccio[3]$tr_io' constrained to Bel 'X0/Y44/PIOA'.
+Info: pin 'ddram_vccio[2]$tr_io' constrained to Bel 'X0/Y41/PIOD'.
+Info: pin 'ddram_vccio[1]$tr_io' constrained to Bel 'X0/Y26/PIOA'.
+Info: pin 'ddram_vccio[0]$tr_io' constrained to Bel 'X0/Y41/PIOC'.
+Info: pin 'ddram_reset_n$tr_io' constrained to Bel 'X0/Y44/PIOB'.
+Info: pin 'ddram_ras_n$tr_io' constrained to Bel 'X0/Y2/PIOA'.
+Info: pin 'ddram_odt$tr_io' constrained to Bel 'X0/Y8/PIOB'.
+Info: pin 'ddram_gnd[1]$tr_io' constrained to Bel 'X0/Y44/PIOD'.
+Info: pin 'ddram_gnd[0]$tr_io' constrained to Bel 'X0/Y44/PIOC'.
+Info: ddram_dqs_p[1] feeds TRELLIS_IO ddr3.TRELLIS_IO_9, removing $nextpnr_ibuf ddram_dqs_p[1].
+Info: pin 'ddr3.TRELLIS_IO_9' constrained to Bel 'X0/Y32/PIOA'.
+Info: ddram_dqs_p[0] feeds TRELLIS_IO ddr3.TRELLIS_IO, removing $nextpnr_ibuf ddram_dqs_p[0].
+Info: pin 'ddr3.TRELLIS_IO' constrained to Bel 'X0/Y20/PIOA'.
+Info: ddram_dq[15] feeds TRELLIS_IO ddr3.TRELLIS_IO_17, removing $nextpnr_ibuf ddram_dq[15].
+Info: pin 'ddr3.TRELLIS_IO_17' constrained to Bel 'X0/Y26/PIOD'.
+Info: ddram_dq[14] feeds TRELLIS_IO ddr3.TRELLIS_IO_16, removing $nextpnr_ibuf ddram_dq[14].
+Info: pin 'ddr3.TRELLIS_IO_16' constrained to Bel 'X0/Y35/PIOC'.
+Info: ddram_dq[13] feeds TRELLIS_IO ddr3.TRELLIS_IO_15, removing $nextpnr_ibuf ddram_dq[13].
+Info: pin 'ddr3.TRELLIS_IO_15' constrained to Bel 'X0/Y26/PIOB'.
+Info: ddram_dq[12] feeds TRELLIS_IO ddr3.TRELLIS_IO_14, removing $nextpnr_ibuf ddram_dq[12].
+Info: pin 'ddr3.TRELLIS_IO_14' constrained to Bel 'X0/Y35/PIOD'.
+Info: ddram_dq[11] feeds TRELLIS_IO ddr3.TRELLIS_IO_13, removing $nextpnr_ibuf ddram_dq[11].
+Info: pin 'ddr3.TRELLIS_IO_13' constrained to Bel 'X0/Y29/PIOC'.
+Info: ddram_dq[10] feeds TRELLIS_IO ddr3.TRELLIS_IO_12, removing $nextpnr_ibuf ddram_dq[10].
+Info: pin 'ddr3.TRELLIS_IO_12' constrained to Bel 'X0/Y35/PIOA'.
+Info: ddram_dq[9] feeds TRELLIS_IO ddr3.TRELLIS_IO_11, removing $nextpnr_ibuf ddram_dq[9].
+Info: pin 'ddr3.TRELLIS_IO_11' constrained to Bel 'X0/Y29/PIOB'.
+Info: ddram_dq[8] feeds TRELLIS_IO ddr3.TRELLIS_IO_10, removing $nextpnr_ibuf ddram_dq[8].
+Info: pin 'ddr3.TRELLIS_IO_10' constrained to Bel 'X0/Y29/PIOA'.
+Info: ddram_dq[7] feeds TRELLIS_IO ddr3.TRELLIS_IO_8, removing $nextpnr_ibuf ddram_dq[7].
+Info: pin 'ddr3.TRELLIS_IO_8' constrained to Bel 'X0/Y14/PIOB'.
+Info: ddram_dq[6] feeds TRELLIS_IO ddr3.TRELLIS_IO_7, removing $nextpnr_ibuf ddram_dq[6].
+Info: pin 'ddr3.TRELLIS_IO_7' constrained to Bel 'X0/Y23/PIOA'.
+Info: ddram_dq[5] feeds TRELLIS_IO ddr3.TRELLIS_IO_6, removing $nextpnr_ibuf ddram_dq[5].
+Info: pin 'ddr3.TRELLIS_IO_6' constrained to Bel 'X0/Y14/PIOA'.
+Info: ddram_dq[4] feeds TRELLIS_IO ddr3.TRELLIS_IO_5, removing $nextpnr_ibuf ddram_dq[4].
+Info: pin 'ddr3.TRELLIS_IO_5' constrained to Bel 'X0/Y14/PIOD'.
+Info: ddram_dq[3] feeds TRELLIS_IO ddr3.TRELLIS_IO_4, removing $nextpnr_ibuf ddram_dq[3].
+Info: pin 'ddr3.TRELLIS_IO_4' constrained to Bel 'X0/Y20/PIOC'.
+Info: ddram_dq[2] feeds TRELLIS_IO ddr3.TRELLIS_IO_3, removing $nextpnr_ibuf ddram_dq[2].
+Info: pin 'ddr3.TRELLIS_IO_3' constrained to Bel 'X0/Y23/PIOB'.
+Info: ddram_dq[1] feeds TRELLIS_IO ddr3.TRELLIS_IO_2, removing $nextpnr_ibuf ddram_dq[1].
+Info: pin 'ddr3.TRELLIS_IO_2' constrained to Bel 'X0/Y17/PIOA'.
+Info: ddram_dq[0] feeds TRELLIS_IO ddr3.TRELLIS_IO_1, removing $nextpnr_ibuf ddram_dq[0].
+Info: pin 'ddr3.TRELLIS_IO_1' constrained to Bel 'X0/Y23/PIOD'.
+Info: pin 'ddram_dm[1]$tr_io' constrained to Bel 'X0/Y29/PIOD'.
+Info: pin 'ddram_dm[0]$tr_io' constrained to Bel 'X0/Y17/PIOB'.
+Info: pin 'ddram_cs_n$tr_io' constrained to Bel 'X0/Y5/PIOA'.
+Info: pin 'ddram_clk_p$tr_io' constrained to Bel 'X0/Y41/PIOA'.
+Info: pin 'ddram_cke$tr_io' constrained to Bel 'X0/Y26/PIOC'.
+Info: pin 'ddram_cas_n$tr_io' constrained to Bel 'X0/Y8/PIOA'.
+Info: pin 'ddram_ba[2]$tr_io' constrained to Bel 'X72/Y11/PIOA'.
+Info: pin 'ddram_ba[1]$tr_io' constrained to Bel 'X72/Y2/PIOB'.
+Info: pin 'ddram_ba[0]$tr_io' constrained to Bel 'X72/Y5/PIOA'.
+Info: pin 'ddram_a[15]$tr_io' constrained to Bel 'X72/Y2/PIOA'.
+Info: pin 'ddram_a[14]$tr_io' constrained to Bel 'X72/Y20/PIOC'.
+Info: pin 'ddram_a[13]$tr_io' constrained to Bel 'X72/Y23/PIOC'.
+Info: pin 'ddram_a[12]$tr_io' constrained to Bel 'X72/Y8/PIOA'.
+Info: pin 'ddram_a[11]$tr_io' constrained to Bel 'X72/Y17/PIOB'.
+Info: pin 'ddram_a[10]$tr_io' constrained to Bel 'X72/Y8/PIOB'.
+Info: pin 'ddram_a[9]$tr_io' constrained to Bel 'X72/Y23/PIOD'.
+Info: pin 'ddram_a[8]$tr_io' constrained to Bel 'X72/Y23/PIOB'.
+Info: pin 'ddram_a[7]$tr_io' constrained to Bel 'X72/Y20/PIOB'.
+Info: pin 'ddram_a[6]$tr_io' constrained to Bel 'X72/Y14/PIOD'.
+Info: pin 'ddram_a[5]$tr_io' constrained to Bel 'X72/Y14/PIOA'.
+Info: pin 'ddram_a[4]$tr_io' constrained to Bel 'X72/Y11/PIOB'.
+Info: pin 'ddram_a[3]$tr_io' constrained to Bel 'X72/Y20/PIOA'.
+Info: pin 'ddram_a[2]$tr_io' constrained to Bel 'X72/Y17/PIOA'.
+Info: pin 'ddram_a[1]$tr_io' constrained to Bel 'X72/Y23/PIOA'.
+Info: pin 'ddram_a[0]$tr_io' constrained to Bel 'X72/Y14/PIOB'.
+Info: pin 'clk48$tr_io' constrained to Bel 'X35/Y0/PIOA'.
+Info: Constrained DQSBUFM 'ddr3.DQSBUFM_1' to LDQS32
+Info: Constrained DQSBUFM 'ddr3.DQSBUFM' to LDQS20
+Info: IOLOGIC component ddr3.DELAYG_9 connected to PIO Bel X72/Y14/PIOD
+Info: IOLOGIC component ddr3.DELAYG_8 connected to PIO Bel X72/Y14/PIOA
+Info: IOLOGIC component ddr3.DELAYG_7 connected to PIO Bel X72/Y11/PIOB
+Info: IOLOGIC component ddr3.DELAYG_6 connected to PIO Bel X72/Y20/PIOA
+Info: IOLOGIC component ddr3.DELAYG_5 connected to PIO Bel X72/Y17/PIOA
+Info: IOLOGIC component ddr3.DELAYG_4 connected to PIO Bel X72/Y23/PIOA
+Info: IOLOGIC component ddr3.DELAYG_39 connected to PIO Bel X0/Y26/PIOD
+Info: IOLOGIC component ddr3.DELAYG_38 connected to PIO Bel X0/Y35/PIOC
+Info: IOLOGIC component ddr3.DELAYG_37 connected to PIO Bel X0/Y26/PIOB
+Info: IOLOGIC component ddr3.DELAYG_36 connected to PIO Bel X0/Y35/PIOD
+Info: IOLOGIC component ddr3.DELAYG_35 connected to PIO Bel X0/Y29/PIOC
+Info: IOLOGIC component ddr3.DELAYG_34 connected to PIO Bel X0/Y35/PIOA
+Info: IOLOGIC component ddr3.DELAYG_33 connected to PIO Bel X0/Y29/PIOB
+Info: IOLOGIC component ddr3.DELAYG_32 connected to PIO Bel X0/Y29/PIOA
+Info: IOLOGIC component ddr3.DELAYG_31 connected to PIO Bel X0/Y14/PIOB
+Info: IOLOGIC component ddr3.DELAYG_30 connected to PIO Bel X0/Y23/PIOA
+Info: IOLOGIC component ddr3.DELAYG_3 connected to PIO Bel X72/Y14/PIOB
+Info: IOLOGIC component ddr3.DELAYG_29 connected to PIO Bel X0/Y14/PIOA
+Info: IOLOGIC component ddr3.DELAYG_28 connected to PIO Bel X0/Y14/PIOD
+Info: IOLOGIC component ddr3.DELAYG_27 connected to PIO Bel X0/Y20/PIOC
+Info: IOLOGIC component ddr3.DELAYG_26 connected to PIO Bel X0/Y23/PIOB
+Info: IOLOGIC component ddr3.DELAYG_25 connected to PIO Bel X0/Y17/PIOA
+Info: IOLOGIC component ddr3.DELAYG_24 connected to PIO Bel X0/Y23/PIOD
+Info: IOLOGIC component ddr3.DELAYG_23 connected to PIO Bel X0/Y8/PIOB
+Info: IOLOGIC component ddr3.DELAYG_22 connected to PIO Bel X0/Y26/PIOC
+Info: IOLOGIC component ddr3.DELAYG_21 connected to PIO Bel X0/Y2/PIOB
+Info: IOLOGIC component ddr3.DELAYG_20 connected to PIO Bel X0/Y8/PIOA
+Info: IOLOGIC component ddr3.DELAYG_2 connected to PIO Bel X0/Y5/PIOA
+Info: IOLOGIC component ddr3.DELAYG_19 connected to PIO Bel X0/Y2/PIOA
+Info: IOLOGIC component ddr3.DELAYG_18 connected to PIO Bel X72/Y11/PIOA
+Info: IOLOGIC component ddr3.DELAYG_17 connected to PIO Bel X72/Y2/PIOB
+Info: IOLOGIC component ddr3.DELAYG_16 connected to PIO Bel X72/Y5/PIOA
+Info: IOLOGIC component ddr3.DELAYG_15 connected to PIO Bel X72/Y8/PIOA
+Info: IOLOGIC component ddr3.DELAYG_14 connected to PIO Bel X72/Y17/PIOB
+Info: IOLOGIC component ddr3.DELAYG_13 connected to PIO Bel X72/Y8/PIOB
+Info: IOLOGIC component ddr3.DELAYG_12 connected to PIO Bel X72/Y23/PIOD
+Info: IOLOGIC component ddr3.DELAYG_11 connected to PIO Bel X72/Y23/PIOB
+Info: IOLOGIC component ddr3.DELAYG_10 connected to PIO Bel X72/Y20/PIOB
+Info: IOLOGIC component ddr3.DELAYG_1 connected to PIO Bel X0/Y44/PIOB
+Info: IOLOGIC component ddr3.DELAYG connected to PIO Bel X0/Y41/PIOA
+Info: IOLOGIC component ddr3.TSHX2DQSA_1 connected to PIO Bel X0/Y32/PIOA
+Info: IOLOGIC component ddr3.TSHX2DQSA connected to PIO Bel X0/Y20/PIOA
+Info: IOLOGIC component ddr3.ODDRX2DQA_9 connected to PIO Bel X0/Y29/PIOD
+Info: IOLOGIC component ddr3.ODDRX2DQA connected to PIO Bel X0/Y17/PIOB
+Info: Promoted 'ddr3.sys2x_clk' to bank 7 ECLK1.
+Info: Promoted 'ddr3.sys2x_clk' to bank 6 ECLK1.
+Info: Promoted 'ddr3.sys2x_clk' to bank 2 ECLK1.
+Info: Constraining DDRDLLA 'ddr3.DDRDLLA' to bel 'X0/Y50/DDRDLL'
+Info: Packing constants..
+Info: Packing carries...
+Info: Packing LUTs...
+Info: Packing LUT5-7s...
+Info: Packing FFs...
+Info:     1613 FFs paired with LUTs.
+Info: Generating derived timing constraints...
+Info:     Input frequency of PLL 'ddr3.EHXPLLL' is constrained to 48.0 MHz
+Info:     Derived frequency constraint of 80.0 MHz for net ddr3.crg_clkout0
+Info:     Derived frequency constraint of 20.0 MHz for net ddr3.crg_clkout1
+Info:     Derived frequency constraint of 480.1 MHz for net ddr3.litedramecp5ddrphycrg_ecp5pll
+Info:     Derived frequency constraint of 80.0 MHz for net ddr3.crg_sys2x_clk_ecsout
+Info:     Derived frequency constraint of 80.0 MHz for net ddr3.sys2x_clk
+Info:     Derived frequency constraint of 80.0 MHz for net ddr3.sys2x_clk$eclk2_1
+Info:     Derived frequency constraint of 80.0 MHz for net ddr3.sys2x_clk$eclk6_1
+Info:     Derived frequency constraint of 80.0 MHz for net ddr3.sys2x_clk$eclk7_1
+Info:     Derived frequency constraint of 40.0 MHz for net vga_hsync$TRELLIS_IO_OUT
+Info: Promoting globals...
+Info:     promoting clock net vga_hsync$TRELLIS_IO_OUT to global network
+Info:     promoting clock net clk48$TRELLIS_IO_IN to global network
+Info:     promoting clock net root.pwm_div.counter_TRELLIS_FF_Q_LSR_LUT4_Z_B_LUT4_C_Z to global network
+Info:     promoting clock net ddr3.crg_clkout1 to global network
+Info: Checksum: 0x136674e3
+
+Info: Device utilisation:
+Info: 	          TRELLIS_IO:    77/  197    39%
+Info: 	                DCCA:     4/   56     7%
+Info: 	              DP16KD:    11/   56    19%
+Info: 	          MULT18X18D:     0/   28     0%
+Info: 	              ALU54B:     0/   14     0%
+Info: 	             EHXPLLL:     1/    2    50%
+Info: 	             EXTREFB:     0/    1     0%
+Info: 	                DCUA:     0/    1     0%
+Info: 	           PCSCLKDIV:     0/    2     0%
+Info: 	             IOLOGIC:    44/  128    34%
+Info: 	            SIOLOGIC:     0/   69     0%
+Info: 	                 GSR:     0/    1     0%
+Info: 	               JTAGG:     0/    1     0%
+Info: 	                OSCG:     0/    1     0%
+Info: 	               SEDGA:     0/    1     0%
+Info: 	                 DTR:     0/    1     0%
+Info: 	             USRMCLK:     0/    1     0%
+Info: 	             CLKDIVF:     1/    4    25%
+Info: 	           ECLKSYNCB:     1/   10    10%
+Info: 	             DLLDELD:     0/    8     0%
+Info: 	              DDRDLL:     1/    4    25%
+Info: 	             DQSBUFM:     2/    8    25%
+Info: 	     TRELLIS_ECLKBUF:     3/    8    37%
+Info: 	        ECLKBRIDGECS:     1/    2    50%
+Info: 	                DCSC:     0/    2     0%
+Info: 	          TRELLIS_FF:  2955/24288    12%
+Info: 	        TRELLIS_COMB:  8400/24288    34%
+Info: 	        TRELLIS_RAMW:   120/ 3036     3%
+
+Info: Placed 131 cells based on constraints.
+Info: Creating initial analytic placement for 6842 cells, random placement wirelen = 436740.
+Info:     at initial placer iter 0, wirelen = 10084
+Info:     at initial placer iter 1, wirelen = 7848
+Info:     at initial placer iter 2, wirelen = 7201
+Info:     at initial placer iter 3, wirelen = 7211
+Info: Running main analytical placer, max placement attempts per cell = 16880955.
+Info:     at iteration #1, type ALL: wirelen solved = 7349, spread = 78531, legal = 81102; time = 0.40s
+Info:     at iteration #2, type ALL: wirelen solved = 14585, spread = 71477, legal = 74017; time = 0.39s
+Info:     at iteration #3, type ALL: wirelen solved = 18689, spread = 64813, legal = 68610; time = 0.38s
+Info:     at iteration #4, type ALL: wirelen solved = 20895, spread = 63156, legal = 67157; time = 0.38s
+Info:     at iteration #5, type ALL: wirelen solved = 24791, spread = 59669, legal = 63968; time = 0.39s
+Info:     at iteration #6, type ALL: wirelen solved = 27481, spread = 60541, legal = 64027; time = 0.38s
+Info:     at iteration #7, type ALL: wirelen solved = 30305, spread = 58954, legal = 62733; time = 0.37s
+Info:     at iteration #8, type ALL: wirelen solved = 30099, spread = 58006, legal = 62673; time = 0.37s
+Info:     at iteration #9, type ALL: wirelen solved = 32400, spread = 56932, legal = 61322; time = 0.37s
+Info:     at iteration #10, type ALL: wirelen solved = 32889, spread = 55597, legal = 60294; time = 0.37s
+Info:     at iteration #11, type ALL: wirelen solved = 33485, spread = 55722, legal = 59974; time = 0.34s
+Info:     at iteration #12, type ALL: wirelen solved = 33931, spread = 55532, legal = 60016; time = 0.34s
+Info:     at iteration #13, type ALL: wirelen solved = 34284, spread = 55125, legal = 59349; time = 0.34s
+Info:     at iteration #14, type ALL: wirelen solved = 35176, spread = 55051, legal = 59359; time = 0.39s
+Info:     at iteration #15, type ALL: wirelen solved = 35758, spread = 55066, legal = 59132; time = 0.34s
+Info:     at iteration #16, type ALL: wirelen solved = 36224, spread = 54953, legal = 59214; time = 0.36s
+Info:     at iteration #17, type ALL: wirelen solved = 36801, spread = 54975, legal = 59742; time = 0.34s
+Info:     at iteration #18, type ALL: wirelen solved = 37088, spread = 54845, legal = 58550; time = 0.33s
+Info:     at iteration #19, type ALL: wirelen solved = 37706, spread = 55320, legal = 59068; time = 0.34s
+Info:     at iteration #20, type ALL: wirelen solved = 38304, spread = 55202, legal = 58766; time = 0.33s
+Info:     at iteration #21, type ALL: wirelen solved = 38706, spread = 55111, legal = 58862; time = 0.33s
+Info:     at iteration #22, type ALL: wirelen solved = 39189, spread = 54684, legal = 58939; time = 0.32s
+Info:     at iteration #23, type ALL: wirelen solved = 39728, spread = 54540, legal = 58226; time = 0.32s
+Info:     at iteration #24, type ALL: wirelen solved = 39546, spread = 54681, legal = 58575; time = 0.33s
+Info:     at iteration #25, type ALL: wirelen solved = 39552, spread = 49348, legal = 59180; time = 0.33s
+Info:     at iteration #26, type ALL: wirelen solved = 39751, spread = 54770, legal = 58512; time = 0.32s
+Info:     at iteration #27, type ALL: wirelen solved = 39920, spread = 54711, legal = 58311; time = 0.32s
+Info:     at iteration #28, type ALL: wirelen solved = 40364, spread = 54690, legal = 58422; time = 0.32s
+Info: HeAP Placer Time: 13.71s
+Info:   of which solving equations: 7.54s
+Info:   of which spreading cells: 1.71s
+Info:   of which strict legalisation: 1.44s
+
+Info: Running simulated annealing placer for refinement.
+Info:   at iteration #1: temp = 0.000000, timing cost = 3450, wirelen = 58226
+Info:   at iteration #5: temp = 0.000000, timing cost = 2579, wirelen = 51766
+Info:   at iteration #10: temp = 0.000000, timing cost = 1941, wirelen = 49207
+Info:   at iteration #15: temp = 0.000000, timing cost = 1751, wirelen = 47854
+Info:   at iteration #20: temp = 0.000000, timing cost = 1713, wirelen = 47303
+Info:   at iteration #25: temp = 0.000000, timing cost = 1657, wirelen = 47153
+Info:   at iteration #29: temp = 0.000000, timing cost = 1638, wirelen = 47110 
+Info: SA placement time 30.12s
+
+Info: Max frequency for clock '$glbnet$root.pwm_div.counter_TRELLIS_FF_Q_LSR_LUT4_Z_B_LUT4_C_Z': 269.03 MHz (PASS at 12.00 MHz)
+Info: Max frequency for clock                                     '$glbnet$clk48$TRELLIS_IO_IN': 69.23 MHz (PASS at 48.00 MHz)
+Info: Max frequency for clock                                '$glbnet$vga_hsync$TRELLIS_IO_OUT': 34.42 MHz (FAIL at 40.00 MHz)
+Info: Max frequency for clock                                        '$glbnet$ddr3.crg_clkout1': 185.01 MHz (PASS at 20.00 MHz)
+
+Info: Max delay <async>                                                                 -> <async>                                 : 4.56 ns
+Info: Max delay <async>                                                                 -> posedge $glbnet$clk48$TRELLIS_IO_IN     : 6.18 ns
+Info: Max delay <async>                                                                 -> posedge $glbnet$ddr3.crg_clkout1        : 5.46 ns
+Info: Max delay <async>                                                                 -> posedge $glbnet$vga_hsync$TRELLIS_IO_OUT: 8.33 ns
+Info: Max delay posedge $glbnet$clk48$TRELLIS_IO_IN                                     -> <async>                                 : 14.02 ns
+Info: Max delay posedge $glbnet$clk48$TRELLIS_IO_IN                                     -> posedge $glbnet$ddr3.crg_clkout1        : 5.97 ns
+Info: Max delay posedge $glbnet$clk48$TRELLIS_IO_IN                                     -> posedge $glbnet$vga_hsync$TRELLIS_IO_OUT: 8.85 ns
+Info: Max delay posedge $glbnet$ddr3.crg_clkout1                                        -> <async>                                 : 12.52 ns
+Info: Max delay posedge $glbnet$ddr3.crg_clkout1                                        -> posedge $glbnet$vga_hsync$TRELLIS_IO_OUT: 5.39 ns
+Info: Max delay negedge $glbnet$root.pwm_div.counter_TRELLIS_FF_Q_LSR_LUT4_Z_B_LUT4_C_Z -> <async>                                 : 13.75 ns
+Info: Max delay posedge $glbnet$vga_hsync$TRELLIS_IO_OUT                                -> <async>                                 : 11.71 ns
+Info: Max delay posedge $glbnet$vga_hsync$TRELLIS_IO_OUT                                -> posedge $glbnet$clk48$TRELLIS_IO_IN     : 7.16 ns
+
+Info: Slack histogram:
+Info:  legend: * represents 36 endpoint(s)
+Info:          + represents [1,36) endpoint(s)
+Info: [ -4052,    280) |***+
+Info: [   280,   4612) |************+
+Info: [  4612,   8944) |********************************************+
+Info: [  8944,  13276) |**********************************************************+
+Info: [ 13276,  17608) |*********************************************************+
+Info: [ 17608,  21940) |************************************************************ 
+Info: [ 21940,  26272) |****************************************************+
+Info: [ 26272,  30604) | 
+Info: [ 30604,  34936) | 
+Info: [ 34936,  39268) | 
+Info: [ 39268,  43600) | 
+Info: [ 43600,  47932) |+
+Info: [ 47932,  52264) |+
+Info: [ 52264,  56596) | 
+Info: [ 56596,  60928) | 
+Info: [ 60928,  65260) | 
+Info: [ 65260,  69592) | 
+Info: [ 69592,  73924) | 
+Info: [ 73924,  78256) | 
+Info: [ 78256,  82588) |*+
+Info: Checksum: 0xd1746884
+Info: Routing globals...
+Info:     routing clock net $glbnet$ddr3.crg_clkout1 using global 0
+Info:     routing clock net $glbnet$root.pwm_div.counter_TRELLIS_FF_Q_LSR_LUT4_Z_B_LUT4_C_Z using global 1
+Info:     routing clock net $glbnet$clk48$TRELLIS_IO_IN using global 2
+Info:     routing clock net $glbnet$vga_hsync$TRELLIS_IO_OUT using global 3
+Info:     trying dedicated routing for edge clock source ddr3.sys2x_clk
+Info:     trying dedicated routing for edge clock source ddr3.sys2x_clk
+Info:     trying dedicated routing for edge clock source ddr3.sys2x_clk
+Info:     trying dedicated routing for edge clock source ddr3.crg_sys2x_clk_ecsout
+Info:     trying dedicated routing for edge clock source ddr3.crg_clkout0
+
+Info: Routing..
+Info: Setting up routing queue.
+Info: Routing 37559 arcs.
+Info:            |   (re-)routed arcs  |   delta    | remaining|       time spent     |
+Info:    IterCnt |  w/ripup   wo/ripup |  w/r  wo/r |      arcs| batch(sec) total(sec)|
+Info:       1000 |      305        694 |  305   694 |     36952|       0.80       0.80|
+Info:       2000 |      631       1368 |  326   674 |     36394|       0.31       1.11|
+Info:       3000 |      977       2022 |  346   654 |     35943|       0.25       1.36|
+Info:       4000 |     1237       2762 |  260   740 |     35525|       0.24       1.60|
+Info:       5000 |     1598       3401 |  361   639 |     35090|       0.25       1.86|
+Info:       6000 |     1839       4160 |  241   759 |     34596|       0.29       2.14|
+Info:       7000 |     2157       4842 |  318   682 |     34184|       0.28       2.42|
+Info:       8000 |     2542       5457 |  385   615 |     33824|       0.29       2.71|
+Info:       9000 |     2904       6095 |  362   638 |     33553|       0.32       3.04|
+Info:      10000 |     3273       6726 |  369   631 |     33198|       0.29       3.33|
+Info:      11000 |     3622       7377 |  349   651 |     32789|       0.29       3.62|
+Info:      12000 |     3912       8087 |  290   710 |     32276|       0.32       3.95|
+Info:      13000 |     4208       8791 |  296   704 |     31829|       0.31       4.26|
+Info:      14000 |     4568       9431 |  360   640 |     31483|       0.40       4.65|
+Info:      15000 |     4893      10106 |  325   675 |     31127|       0.28       4.93|
+Info:      16000 |     5281      10718 |  388   612 |     30796|       0.35       5.28|
+Info:      17000 |     5662      11337 |  381   619 |     30686|       0.41       5.68|
+Info:      18000 |     5928      12071 |  266   734 |     30398|       0.41       6.09|
+Info:      19000 |     6263      12736 |  335   665 |     29920|       0.27       6.37|
+Info:      20000 |     6598      13401 |  335   665 |     29506|       0.31       6.68|
+Info:      21000 |     7015      13984 |  417   583 |     29393|       0.42       7.10|
+Info:      22000 |     7406      14593 |  391   609 |     29025|       0.50       7.60|
+Info:      23000 |     7738      15261 |  332   668 |     28774|       0.63       8.23|
+Info:      24000 |     8030      15969 |  292   708 |     28334|       0.32       8.55|
+Info:      25000 |     8335      16664 |  305   695 |     28021|       0.40       8.95|
+Info:      26000 |     8734      17265 |  399   601 |     27717|       0.47       9.43|
+Info:      27000 |     9148      17851 |  414   586 |     27411|       0.55       9.98|
+Info:      28000 |     9518      18481 |  370   630 |     27020|       0.45      10.43|
+Info:      29000 |     9900      19099 |  382   618 |     26752|       0.48      10.91|
+Info:      30000 |    10240      19759 |  340   660 |     26424|       0.35      11.26|
+Info:      31000 |    10608      20391 |  368   632 |     26049|       0.42      11.68|
+Info:      32000 |    11006      20993 |  398   602 |     25694|       0.41      12.09|
+Info:      33000 |    11410      21589 |  404   596 |     25355|       0.46      12.55|
+Info:      34000 |    11792      22207 |  382   618 |     25142|       0.47      13.02|
+Info:      35000 |    12104      22895 |  312   688 |     24795|       0.39      13.41|
+Info:      36000 |    12519      23480 |  415   585 |     24612|       0.43      13.84|
+Info:      37000 |    12946      24053 |  427   573 |     24444|       0.46      14.30|
+Info:      38000 |    13356      24643 |  410   590 |     24250|       0.56      14.87|
+Info:      39000 |    13741      25258 |  385   615 |     23796|       0.42      15.28|
+Info:      40000 |    14183      25816 |  442   558 |     23378|       0.39      15.67|
+Info:      41000 |    14603      26396 |  420   580 |     22973|       0.37      16.04|
+Info:      42000 |    15041      26958 |  438   562 |     22697|       0.47      16.51|
+Info:      43000 |    15458      27541 |  417   583 |     22621|       0.45      16.96|
+Info:      44000 |    15736      28263 |  278   722 |     22111|       0.40      17.36|
+Info:      45000 |    16122      28874 |  386   611 |     21820|       0.42      17.77|
+Info:      46000 |    16549      29445 |  427   571 |     21556|       0.59      18.36|
+Info:      47000 |    16955      30037 |  406   592 |     21180|       0.40      18.76|
+Info:      48000 |    17443      30546 |  488   509 |     20911|       0.54      19.30|
+Info:      49000 |    17836      31149 |  393   603 |     20523|       0.42      19.72|
+Info:      50000 |    18230      31742 |  394   593 |     20320|       0.54      20.26|
+Info:      51000 |    18647      32309 |  417   567 |     20090|       0.67      20.93|
+Info:      52000 |    19032      32871 |  385   562 |     19571|       0.41      21.33|
+Info:      53000 |    19429      33386 |  397   515 |     19136|       0.47      21.80|
+Info:      54000 |    19820      33938 |  391   552 |     18836|       0.60      22.40|
+Info:      55000 |    20185      34493 |  365   555 |     18293|       0.34      22.73|
+Info:      56000 |    20519      35117 |  334   624 |     17787|       0.35      23.08|
+Info:      57000 |    21043      35589 |  524   472 |     17730|       0.77      23.85|
+Info:      58000 |    21426      36194 |  383   605 |     17407|       0.40      24.25|
+Info:      59000 |    21822      36759 |  396   565 |     17035|       0.45      24.70|
+Info:      60000 |    22166      37407 |  344   648 |     16936|       0.59      25.29|
+Info:      61000 |    22569      37976 |  403   569 |     16648|       0.47      25.76|
+Info:      62000 |    22935      38596 |  366   620 |     16479|       0.64      26.41|
+Info:      63000 |    23331      39164 |  396   568 |     16018|       0.40      26.81|
+Info:      64000 |    23695      39764 |  364   600 |     15483|       0.37      27.18|
+Info:      65000 |    24074      40351 |  379   587 |     15083|       0.41      27.58|
+Info:      66000 |    24404      40978 |  330   627 |     14735|       0.37      27.96|
+Info:      67000 |    24676      41670 |  272   692 |     14115|       0.35      28.30|
+Info:      68000 |    25009      42326 |  333   656 |     13671|       0.44      28.74|
+Info:      69000 |    25293      43018 |  284   692 |     13098|       0.37      29.11|
+Info:      70000 |    25580      43707 |  287   689 |     12819|       0.39      29.50|
+Info:      71000 |    25996      44268 |  416   561 |     12493|       0.48      29.98|
+Info:      72000 |    26309      44923 |  313   655 |     12072|       0.34      30.32|
+Info:      73000 |    26675      45529 |  366   606 |     11755|       0.37      30.70|
+Info:      74000 |    26982      46174 |  307   645 |     11195|       0.35      31.04|
+Info:      75000 |    27337      46786 |  355   612 |     10717|       0.47      31.51|
+Info:      76000 |    27659      47446 |  322   660 |     10301|       0.51      32.02|
+Info:      77000 |    28030      48049 |  371   603 |      9863|       0.41      32.44|
+Info:      78000 |    28414      48646 |  384   597 |      9558|       0.45      32.89|
+Info:      79000 |    28771      49268 |  357   622 |      9075|       0.52      33.40|
+Info:      80000 |    29045      49965 |  274   697 |      8424|       0.34      33.75|
+Info:      81000 |    29363      50594 |  318   629 |      7885|       0.45      34.20|
+Info:      82000 |    29707      51200 |  344   606 |      7308|       0.49      34.69|
+Info:      83000 |    30052      51842 |  345   642 |      7000|       0.54      35.23|
+Info:      84000 |    30436      52442 |  384   600 |      6547|       0.41      35.64|
+Info:      85000 |    30784      53074 |  348   632 |      6226|       0.41      36.05|
+Info:      86000 |    31039      53788 |  255   714 |      5554|       0.32      36.37|
+Info:      87000 |    31286      54517 |  247   729 |      4878|       0.40      36.77|
+Info:      88000 |    31632      55146 |  346   629 |      4422|       0.55      37.32|
+Info:      89000 |    31947      55800 |  315   654 |      3997|       0.54      37.86|
+Info:      90000 |    32293      56442 |  346   642 |      3490|       0.44      38.29|
+Info:      91000 |    32508      57218 |  215   776 |      2871|       0.32      38.62|
+Info:      92000 |    32767      57959 |  259   741 |      2226|       0.35      38.96|
+Info:      93000 |    33212      58514 |  445   555 |      1953|       0.60      39.56|
+Info:      94000 |    33536      59161 |  324   647 |      1555|       0.51      40.07|
+Info:      95000 |    33631      59887 |   95   726 |       737|       0.30      40.37|
+Info:      95948 |    33767      60551 |  136   664 |         0|       0.41      40.78|
+Info: Routing complete.
+Info: Router1 time 40.78s
+Info: Checksum: 0x3d8a1fa8
+
+Info: Critical path report for clock '$glbnet$root.pwm_div.counter_TRELLIS_FF_Q_LSR_LUT4_Z_B_LUT4_C_Z' (negedge -> negedge):
+Info: curr total
+Info:  0.5  0.5  Source root.ledpwm[2].counter_TRELLIS_FF_Q.Q
+Info:  0.9  1.4    Net root.ledpwm[2].counter[7] (8,48) -> (9,48)
+Info:                Sink root.ledpwm[2].counter_TRELLIS_FF_Q_LSR_PFUMX_Z_C0_LUT4_Z_D_LUT4_Z.D
+Info:                Defined in:
+Info:                  src/pwm.v:10.21-10.28
+Info:  0.2  1.6  Source root.ledpwm[2].counter_TRELLIS_FF_Q_LSR_PFUMX_Z_C0_LUT4_Z_D_LUT4_Z.F
+Info:  0.4  2.1    Net root.ledpwm[2].counter_TRELLIS_FF_Q_LSR_PFUMX_Z_C0_LUT4_Z_D[3] (9,48) -> (9,48)
+Info:                Sink root.ledpwm[2].counter_TRELLIS_FF_Q_LSR_PFUMX_Z_C0_LUT4_Z.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  2.3  Source root.ledpwm[2].counter_TRELLIS_FF_Q_LSR_PFUMX_Z_C0_LUT4_Z.F
+Info:  0.7  3.0    Net root.ledpwm[2].counter_TRELLIS_FF_Q_LSR_PFUMX_Z_C0[4] (9,48) -> (8,48)
+Info:                Sink root.ledpwm[2].counter_TRELLIS_FF_Q_LSR_PFUMX_Z_BLUT_LUT4_Z.M
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.3  3.2  Source root.ledpwm[2].counter_TRELLIS_FF_Q_LSR_PFUMX_Z_BLUT_LUT4_Z.OFX
+Info:  0.6  3.8    Net root.ledpwm[2].counter_TRELLIS_FF_Q_LSR (8,48) -> (7,48)
+Info:                Sink root.ledpwm[2].counter_TRELLIS_FF_Q_6.LSR
+Info:  0.4  4.2  Setup root.ledpwm[2].counter_TRELLIS_FF_Q_6.LSR
+Info: 1.7 ns logic, 2.5 ns routing
+
+Info: Critical path report for clock '$glbnet$clk48$TRELLIS_IO_IN' (posedge -> posedge):
+Info: curr total
+Info:  0.5  0.5  Source root.io_sync.wbs_adr_o_reg_TRELLIS_FF_Q_12.Q
+Info:  1.0  1.5    Net root.wb_io_adr_o[19] (20,47) -> (20,47)
+Info:                Sink root.io_sync.wbs_err_i_LUT4_Z_C_LUT4_Z_A_LUT4_Z_3_C_PFUMX_Z_C0_LUT4_Z.D
+Info:                Defined in:
+Info:                  src/core.v:404.17-404.29
+Info:  0.2  1.7  Source root.io_sync.wbs_err_i_LUT4_Z_C_LUT4_Z_A_LUT4_Z_3_C_PFUMX_Z_C0_LUT4_Z.F
+Info:  0.8  2.5    Net root.io_sync.wbs_err_i_LUT4_Z_C_LUT4_Z_A_LUT4_Z_3_C_PFUMX_Z_C0[4] (20,47) -> (21,48)
+Info:                Sink root.io_sync.wbs_err_i_LUT4_Z_C_LUT4_Z_A_LUT4_Z_3_C_PFUMX_Z_BLUT_LUT4_Z.M
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.3  2.7  Source root.io_sync.wbs_err_i_LUT4_Z_C_LUT4_Z_A_LUT4_Z_3_C_PFUMX_Z_BLUT_LUT4_Z.OFX
+Info:  0.5  3.2    Net root.io_sync.wbs_err_i_LUT4_Z_C_LUT4_Z_A_LUT4_Z_3_C[3] (21,48) -> (21,47)
+Info:                Sink root.io_sync.wbs_err_i_LUT4_Z_C_LUT4_Z_A_LUT4_Z_3.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  3.4  Source root.io_sync.wbs_err_i_LUT4_Z_C_LUT4_Z_A_LUT4_Z_3.F
+Info:  0.8  4.2    Net root.io_sync.wbs_err_i_LUT4_Z_C_LUT4_Z_A[3] (21,47) -> (22,45)
+Info:                Sink root.io_sync.wbs_err_i_LUT4_Z_C_LUT4_Z.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  4.4  Source root.io_sync.wbs_err_i_LUT4_Z_C_LUT4_Z.F
+Info:  0.7  5.2    Net root.io_sync.wbs_ack_i_LUT4_Z_B[2] (22,45) -> (25,44)
+Info:                Sink root.io_sync.wbs_cyc_o_reg_LUT4_C_Z_LUT4_Z.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  5.4  Source root.io_sync.wbs_cyc_o_reg_LUT4_C_Z_LUT4_Z.F
+Info:  0.6  6.0    Net root.io_sync.wbs_cyc_o_reg_LUT4_C_Z[3] (25,44) -> (25,44)
+Info:                Sink root.io_sync.wbs_we_o_reg_LUT4_B.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  6.2  Source root.io_sync.wbs_we_o_reg_LUT4_B.F
+Info:  0.4  6.7    Net root.io_sync.wbs_we_o_reg_LUT4_B_Z[2] (25,44) -> (25,44)
+Info:                Sink root.tty_port.adr_i_LUT4_A_Z_LUT4_Z.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  6.9  Source root.tty_port.adr_i_LUT4_A_Z_LUT4_Z.F
+Info:  0.7  7.6    Net root.io_sync.wbs_ack_i_LUT4_Z_B[3] (25,44) -> (23,45)
+Info:                Sink root.io_sync.wbs_ack_i_LUT4_Z.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  7.9  Source root.io_sync.wbs_ack_i_LUT4_Z.F
+Info:  0.6  8.5    Net root.wb_io_ack_i (23,45) -> (23,45)
+Info:                Sink root.io_sync.wbs_err_i_LUT4_C.D
+Info:                Defined in:
+Info:                  src/core.v:360.10-360.21
+Info:  0.2  8.7  Source root.io_sync.wbs_err_i_LUT4_C.F
+Info:  1.1  9.9    Net root.io_sync.wbs_err_i_LUT4_C_Z[1] (23,45) -> (20,45)
+Info:                Sink root.io_sync.wbs_err_i_LUT4_C_Z_LUT4_C.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2 10.1  Source root.io_sync.wbs_err_i_LUT4_C_Z_LUT4_C.F
+Info:  0.7 10.8    Net root.io_sync.wbs_err_i_LUT4_C_Z_LUT4_C_Z[2] (20,45) -> (20,45)
+Info:                Sink root.io_sync.wbs_stb_o_sync3_LUT4_C.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2 11.0  Source root.io_sync.wbs_stb_o_sync3_LUT4_C.F
+Info:  1.5 12.5    Net root.io_sync.wbs_stb_o_sync3_LUT4_C_Z (20,45) -> (8,45)
+Info:                Sink root.io_sync.wbs_dat_o_reg_TRELLIS_FF_Q_8.LSR
+Info:  0.4 12.9  Setup root.io_sync.wbs_dat_o_reg_TRELLIS_FF_Q_8.LSR
+Info: 3.6 ns logic, 9.4 ns routing
+
+Info: Critical path report for clock '$glbnet$vga_hsync$TRELLIS_IO_OUT' (posedge -> posedge):
+Info: curr total
+Info:  5.8  5.8  Source root.cpucore.memctrl.cache.memory.0.7.DOB17
+Info:  1.2  7.0    Net root.cpucore.memctrl.b_writethrough_data[143] (22,37) -> (22,36)
+Info:                Sink root.cpucore.memctrl.cvalid_b_PFUMX_C0_Z_LUT4_A_Z_PFUMX_Z_2_C0_LUT4_Z_2.C
+Info:                Defined in:
+Info:                  src/memcontrol.v:55.31-55.36
+Info:  0.2  7.2  Source root.cpucore.memctrl.cvalid_b_PFUMX_C0_Z_LUT4_A_Z_PFUMX_Z_2_C0_LUT4_Z_2.F
+Info:  0.7  8.0    Net root.cpucore.memctrl.cvalid_b_PFUMX_C0_Z_LUT4_A_Z_PFUMX_Z_2_C0[4] (22,36) -> (22,34)
+Info:                Sink root.cpucore.memctrl.cvalid_b_PFUMX_C0_Z_LUT4_A_Z_PFUMX_Z_2_BLUT_LUT4_Z.M
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.3  8.2  Source root.cpucore.memctrl.cvalid_b_PFUMX_C0_Z_LUT4_A_Z_PFUMX_Z_2_BLUT_LUT4_Z.OFX
+Info:  1.1  9.3    Net root.cpucore.memctrl.cvalid_b_PFUMX_C0_Z_LUT4_A_Z[3] (22,34) -> (21,35)
+Info:                Sink root.cpucore.memctrl.cvalid_b_PFUMX_C0_Z_LUT4_A_Z_PFUMX_Z_C0_LUT4_C_Z_LUT4_Z.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  9.5  Source root.cpucore.memctrl.cvalid_b_PFUMX_C0_Z_LUT4_A_Z_PFUMX_Z_C0_LUT4_C_Z_LUT4_Z.F
+Info:  0.7 10.2    Net root.cpucore.memctrl.b_is_read_LUT4_A_B[3] (21,35) -> (21,33)
+Info:                Sink root.cpucore.memctrl.b_is_read_LUT4_A.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2 10.5  Source root.cpucore.memctrl.b_is_read_LUT4_A.F
+Info:  1.0 11.5    Net ddr3.aborted_LUT4_C_Z_PFUMX_ALUT_Z_L6MUX21_D1_Z_L6MUX21_D1_Z[6] (21,33) -> (18,31)
+Info:                Sink root.cpucore.memctrl.b_is_read_LUT4_A_Z_L6MUX21_SD_D1_L6MUX21_Z_D0_PFUMX_Z_ALUT_LUT4_Z.M
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.3 11.8  Source root.cpucore.memctrl.b_is_read_LUT4_A_Z_L6MUX21_SD_D1_L6MUX21_Z_D0_PFUMX_Z_ALUT_LUT4_Z.OFX
+Info:  1.5 13.3    Net root.cpucore.fetch_discard_PFUMX_Z_ALUT_LUT4_Z_D[2] (18,31) -> (16,23)
+Info:                Sink root.cpucore.decode.regfile.fwd[0].mem_fwd_addr_LUT4_Z.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2 13.5  Source root.cpucore.decode.regfile.fwd[0].mem_fwd_addr_LUT4_Z.F
+Info:  0.7 14.2    Net root.cpucore.writeback_dest[3] (16,23) -> (16,23)
+Info:                Sink root.cpucore.decode.regfile.regs.0.4_DO_LUT4_A_Z_LUT4_Z_3.D
+Info:                Defined in:
+Info:                  src/cpu.v:33.16-33.30
+Info:  0.2 14.4  Source root.cpucore.decode.regfile.regs.0.4_DO_LUT4_A_Z_LUT4_Z_3.F
+Info:  0.9 15.4    Net root.cpucore.decode.regfile.regs.0.4_DO_LUT4_A_Z[6] (16,23) -> (14,20)
+Info:                Sink root.cpucore.decode.first_cycle_LUT4_C_D_L6MUX21_Z_SD_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_ALUT_LUT4_Z.M
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.3 15.6  Source root.cpucore.decode.first_cycle_LUT4_C_D_L6MUX21_Z_SD_L6MUX21_Z_D1_L6MUX21_Z_D0_PFUMX_Z_ALUT_LUT4_Z.OFX
+Info:  1.3 16.9    Net root.cpucore.decode.first_cycle_LUT4_C_D_L6MUX21_Z_SD[1] (14,20) -> (14,29)
+Info:                Sink root.cpucore.decode.first_cycle_LUT4_C_D_L6MUX21_Z_D1_PFUMX_Z_ALUT_LUT4_Z.B
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2 17.1  Source root.cpucore.decode.first_cycle_LUT4_C_D_L6MUX21_Z_D1_PFUMX_Z_ALUT_LUT4_Z.F
+Info:  0.0 17.1    Net root.cpucore.decode.first_cycle_LUT4_C_D_L6MUX21_Z_D1_PFUMX_Z_ALUT (14,29) -> (14,29)
+Info:                Sink root.cpucore.decode.first_cycle_LUT4_C_D_L6MUX21_Z_D1_PFUMX_Z_BLUT_LUT4_Z.F1
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:141.30-141.32
+Info:  0.2 17.3  Source root.cpucore.decode.first_cycle_LUT4_C_D_L6MUX21_Z_D1_PFUMX_Z_BLUT_LUT4_Z.OFX
+Info:  0.0 17.3    Net root.cpucore.decode.first_cycle_LUT4_C_D_L6MUX21_Z_D1 (14,29) -> (14,29)
+Info:                Sink root.cpucore.decode.first_cycle_LUT4_C_D_L6MUX21_Z_D1_PFUMX_Z_ALUT_LUT4_Z.FXB
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:141.38-141.40
+Info:  0.2 17.6  Source root.cpucore.decode.first_cycle_LUT4_C_D_L6MUX21_Z_D1_PFUMX_Z_ALUT_LUT4_Z.OFX
+Info:  1.1 18.6    Net root.cpucore.decode.first_cycle_LUT4_C_D[1] (14,29) -> (16,28)
+Info:                Sink root.cpucore.decode.first_cycle_LUT4_C.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2 18.9  Source root.cpucore.decode.first_cycle_LUT4_C.F
+Info:  1.6 20.4    Net root.cpucore.fetch_discard_PFUMX_Z_ALUT_LUT4_Z_D[1] (16,28) -> (18,19)
+Info:                Sink root.cpucore.decode.mem_TRELLIS_FF_Q_DI_PFUMX_Z_ALUT_LUT4_Z.A
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2 20.7  Source root.cpucore.decode.mem_TRELLIS_FF_Q_DI_PFUMX_Z_ALUT_LUT4_Z.F
+Info:  0.0 20.7    Net root.cpucore.decode.mem_TRELLIS_FF_Q_DI_PFUMX_Z_ALUT (18,19) -> (18,19)
+Info:                Sink root.cpucore.decode.mem_TRELLIS_FF_Q_DI_PFUMX_Z_BLUT_LUT4_Z.F1
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:133.22-133.24
+Info:  0.2 20.8  Source root.cpucore.decode.mem_TRELLIS_FF_Q_DI_PFUMX_Z_BLUT_LUT4_Z.OFX
+Info:  0.2 21.0    Net root.cpucore.decode.mem_TRELLIS_FF_Q_DI[1] (18,19) -> (18,19)
+Info:                Sink root.cpucore.decode.mem_write_TRELLIS_FF_Q_DI_LUT4_Z.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2 21.3  Source root.cpucore.decode.mem_write_TRELLIS_FF_Q_DI_LUT4_Z.F
+Info:  0.1 21.4    Net root.cpucore.decode.mem_write_TRELLIS_FF_Q_DI (18,19) -> (18,19)
+Info:                Sink root.cpucore.decode.mem_write_TRELLIS_FF_Q.DI
+Info:  0.0 21.4  Setup root.cpucore.decode.mem_write_TRELLIS_FF_Q.DI
+Info: 9.3 ns logic, 12.1 ns routing
+
+Info: Critical path report for clock '$glbnet$ddr3.crg_clkout1' (posedge -> posedge):
+Info: curr total
+Info:  0.5  0.5  Source ddr3.ddrphy_counter_TRELLIS_FF_Q_3.Q
+Info:  0.9  1.5    Net ddr3.ddrphy_counter[3] (2,46) -> (2,45)
+Info:                Sink ddr3.ddrphy_pause1_TRELLIS_FF_Q_CE_LUT4_Z_D_LUT4_Z.A
+Info:                Defined in:
+Info:                  generated/lite_ddr3l.v:584.15-584.29
+Info:  0.2  1.7  Source ddr3.ddrphy_pause1_TRELLIS_FF_Q_CE_LUT4_Z_D_LUT4_Z.F
+Info:  0.5  2.2    Net ddr3.ddrphy_pause1_TRELLIS_FF_Q_CE_LUT4_Z_D[3] (2,45) -> (2,45)
+Info:                Sink ddr3.ddrphy_update_TRELLIS_FF_Q_LSR_PFUMX_Z_BLUT_LUT4_Z.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.4  2.6  Source ddr3.ddrphy_update_TRELLIS_FF_Q_LSR_PFUMX_Z_BLUT_LUT4_Z.OFX
+Info:  1.1  3.7    Net ddr3.ddrphy_update_TRELLIS_FF_Q_LSR (2,45) -> (11,46)
+Info:                Sink ddr3.ddrphy_update_TRELLIS_FF_Q.LSR
+Info:  0.4  4.1  Setup ddr3.ddrphy_update_TRELLIS_FF_Q.LSR
+Info: 1.6 ns logic, 2.5 ns routing
+
+Info: Critical path report for cross-domain path '<async>' -> '<async>':
+Info: curr total
+Info:  0.0  0.0  Source ddr3.DDRDLLA.DDRDEL
+Info:  0.2  0.2    Net ddr3.ddrphy_delay0 (0,50) -> (0,32)
+Info:                Sink ddr3.DQSBUFM_1.DDRDEL
+Info:                Defined in:
+Info:                  generated/lite_ddr3l.v:587.15-587.28
+Info: 0.0 ns logic, 0.2 ns routing
+
+Info: Critical path report for cross-domain path '<async>' -> 'posedge $glbnet$clk48$TRELLIS_IO_IN':
+Info: curr total
+Info:  0.0  0.0  Source usr_btn$tr_io.O
+Info:  2.1  2.1    Net usr_btn$TRELLIS_IO_IN (0,38) -> (17,47)
+Info:                Sink reset_instance.reset_sr_TRELLIS_FF_Q_CE_LUT4_Z.C
+Info:                Defined in:
+Info:                  src-hardware/fpga_root.v:41.15-41.22
+Info:  0.2  2.3  Source reset_instance.reset_sr_TRELLIS_FF_Q_CE_LUT4_Z.F
+Info:  0.2  2.5    Net reset_instance.reset_sr_TRELLIS_FF_Q_CE (17,47) -> (17,47)
+Info:                Sink reset_instance.reset_sr_TRELLIS_FF_Q.CE
+Info:  0.0  2.5  Setup reset_instance.reset_sr_TRELLIS_FF_Q.CE
+Info: 0.2 ns logic, 2.3 ns routing
+
+Info: Critical path report for cross-domain path '<async>' -> 'posedge $glbnet$ddr3.crg_clkout1':
+Info: curr total
+Info:  0.0  0.0  Source usr_btn$tr_io.O
+Info:  1.3  1.3    Net usr_btn$TRELLIS_IO_IN (0,38) -> (5,45)
+Info:                Sink ddr3.litedramecp5ddrphycrg_locked_LUT4_C_D_LUT4_Z.C
+Info:                Defined in:
+Info:                  src-hardware/fpga_root.v:41.15-41.22
+Info:  0.2  1.5  Source ddr3.litedramecp5ddrphycrg_locked_LUT4_C_D_LUT4_Z.F
+Info:  0.6  2.1    Net ddr3.litedramecp5ddrphycrg_locked_LUT4_C_D[1] (5,45) -> (5,45)
+Info:                Sink ddr3.litedramecp5ddrphycrg_locked_LUT4_C.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  2.4  Source ddr3.litedramecp5ddrphycrg_locked_LUT4_C.F
+Info:  0.9  3.3    Net ddr3.FD1S3BX_2_LSR[1] (5,45) -> (10,45)
+Info:                Sink ddr3.FD1S3BX_3.LSR
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.4  3.7  Setup ddr3.FD1S3BX_3.LSR
+Info: 0.9 ns logic, 2.8 ns routing
+
+Info: Critical path report for cross-domain path '<async>' -> 'posedge $glbnet$vga_hsync$TRELLIS_IO_OUT':
+Info: curr total
+Info:  0.0  0.0  Source usr_btn$tr_io.O
+Info:  1.3  1.3    Net usr_btn$TRELLIS_IO_IN (0,38) -> (5,45)
+Info:                Sink ddr3.litedramecp5ddrphycrg_locked_LUT4_C_D_LUT4_Z.C
+Info:                Defined in:
+Info:                  src-hardware/fpga_root.v:41.15-41.22
+Info:  0.2  1.5  Source ddr3.litedramecp5ddrphycrg_locked_LUT4_C_D_LUT4_Z.F
+Info:  0.6  2.1    Net ddr3.litedramecp5ddrphycrg_locked_LUT4_C_D[1] (5,45) -> (5,45)
+Info:                Sink ddr3.litedramecp5ddrphycrg_locked_LUT4_C.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  2.4  Source ddr3.litedramecp5ddrphycrg_locked_LUT4_C.F
+Info:  0.4  2.8    Net ddr3.FD1S3BX_2_LSR[1] (5,45) -> (5,45)
+Info:                Sink ddr3.ddrphy_reset1_LUT4_C.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  3.0  Source ddr3.ddrphy_reset1_LUT4_C.F
+Info:  1.5  4.6    Net ddr3.FD1S3BX_4_LSR (5,45) -> (21,39)
+Info:                Sink ddr3.FD1S3BX_5.LSR
+Info:  0.4  5.0  Setup ddr3.FD1S3BX_5.LSR
+Info: 1.1 ns logic, 3.8 ns routing
+
+Info: Critical path report for cross-domain path 'posedge $glbnet$clk48$TRELLIS_IO_IN' -> '<async>':
+Info: curr total
+Info:  0.5  0.5  Source root.led_port.out_TRELLIS_FF_Q_8.Q
+Info:  1.4  1.9    Net root.led_value[23] (8,47) -> (9,47)
+Info:                Sink rgb_led0_b_CCU2C_COUT$CCU2_COMB1.B
+Info:                Defined in:
+Info:                  src/core.v:394.17-394.29
+Info:  0.4  2.4  Source rgb_led0_b_CCU2C_COUT$CCU2_COMB1.FCO
+Info:  0.0  2.4    Net $nextpnr_CCU2C_35$CIN (9,47) -> (9,47)
+Info:                Sink $nextpnr_CCU2C_35$CCU2_COMB0.FCI
+Info:  0.4  2.8  Source $nextpnr_CCU2C_35$CCU2_COMB0.F
+Info:  4.7  7.6    Net rgb_led0_b$TRELLIS_IO_OUT (9,47) -> (72,29)
+Info:                Sink rgb_led0_b$tr_io.I
+Info:                Defined in:
+Info:                  src-hardware/fpga_root.v:11.16-11.26
+Info: 1.4 ns logic, 6.2 ns routing
+
+Info: Critical path report for cross-domain path 'posedge $glbnet$clk48$TRELLIS_IO_IN' -> 'posedge $glbnet$ddr3.crg_clkout1':
+Info: curr total
+Info:  0.5  0.5  Source ddr3.crg_por_count_TRELLIS_FF_Q_14.Q
+Info:  0.9  1.4    Net ddr3.crg_por_count[1] (3,48) -> (3,47)
+Info:                Sink ddr3.crg_reset1_LUT4_Z_D_LUT4_Z_A_LUT4_Z_1.C
+Info:                Defined in:
+Info:                  generated/lite_ddr3l.v:419.15-419.28
+Info:  0.2  1.7  Source ddr3.crg_reset1_LUT4_Z_D_LUT4_Z_A_LUT4_Z_1.F
+Info:  0.9  2.5    Net ddr3.crg_reset1_LUT4_Z_D_LUT4_Z_A[1] (3,47) -> (4,47)
+Info:                Sink ddr3.crg_reset1_LUT4_Z_D_LUT4_Z.B
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  2.8  Source ddr3.crg_reset1_LUT4_Z_D_LUT4_Z.F
+Info:  1.2  3.9    Net ddr3.crg_reset1_LUT4_Z_D[1] (4,47) -> (5,45)
+Info:                Sink ddr3.litedramecp5ddrphycrg_locked_LUT4_C_D_LUT4_Z.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  4.2  Source ddr3.litedramecp5ddrphycrg_locked_LUT4_C_D_LUT4_Z.F
+Info:  0.6  4.8    Net ddr3.litedramecp5ddrphycrg_locked_LUT4_C_D[1] (5,45) -> (5,45)
+Info:                Sink ddr3.litedramecp5ddrphycrg_locked_LUT4_C.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  5.0  Source ddr3.litedramecp5ddrphycrg_locked_LUT4_C.F
+Info:  0.9  5.9    Net ddr3.FD1S3BX_2_LSR[1] (5,45) -> (10,45)
+Info:                Sink ddr3.FD1S3BX_3.LSR
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.4  6.3  Setup ddr3.FD1S3BX_3.LSR
+Info: 1.9 ns logic, 4.4 ns routing
+
+Info: Critical path report for cross-domain path 'posedge $glbnet$clk48$TRELLIS_IO_IN' -> 'posedge $glbnet$vga_hsync$TRELLIS_IO_OUT':
+Info: curr total
+Info:  0.5  0.5  Source ddr3.crg_por_count_TRELLIS_FF_Q_14.Q
+Info:  0.9  1.4    Net ddr3.crg_por_count[1] (3,48) -> (3,47)
+Info:                Sink ddr3.crg_reset1_LUT4_Z_D_LUT4_Z_A_LUT4_Z_1.C
+Info:                Defined in:
+Info:                  generated/lite_ddr3l.v:419.15-419.28
+Info:  0.2  1.7  Source ddr3.crg_reset1_LUT4_Z_D_LUT4_Z_A_LUT4_Z_1.F
+Info:  0.9  2.5    Net ddr3.crg_reset1_LUT4_Z_D_LUT4_Z_A[1] (3,47) -> (4,47)
+Info:                Sink ddr3.crg_reset1_LUT4_Z_D_LUT4_Z.B
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  2.8  Source ddr3.crg_reset1_LUT4_Z_D_LUT4_Z.F
+Info:  1.2  3.9    Net ddr3.crg_reset1_LUT4_Z_D[1] (4,47) -> (5,45)
+Info:                Sink ddr3.litedramecp5ddrphycrg_locked_LUT4_C_D_LUT4_Z.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  4.2  Source ddr3.litedramecp5ddrphycrg_locked_LUT4_C_D_LUT4_Z.F
+Info:  0.6  4.8    Net ddr3.litedramecp5ddrphycrg_locked_LUT4_C_D[1] (5,45) -> (5,45)
+Info:                Sink ddr3.litedramecp5ddrphycrg_locked_LUT4_C.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  5.0  Source ddr3.litedramecp5ddrphycrg_locked_LUT4_C.F
+Info:  0.4  5.4    Net ddr3.FD1S3BX_2_LSR[1] (5,45) -> (5,45)
+Info:                Sink ddr3.ddrphy_reset1_LUT4_C.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  5.7  Source ddr3.ddrphy_reset1_LUT4_C.F
+Info:  1.5  7.2    Net ddr3.FD1S3BX_4_LSR (5,45) -> (21,39)
+Info:                Sink ddr3.FD1S3BX_5.LSR
+Info:  0.4  7.6  Setup ddr3.FD1S3BX_5.LSR
+Info: 2.1 ns logic, 5.5 ns routing
+
+Info: Critical path report for cross-domain path 'posedge $glbnet$ddr3.crg_clkout1' -> '<async>':
+Info: curr total
+Info:  0.5  0.5  Source ddr3.ddrphy_reset1_TRELLIS_FF_Q.Q
+Info:  4.8  5.3    Net ddr3.FD1S3BX_2_LSR[0] (5,45) -> (72,25)
+Info:                Sink ddr3.CLKDIVF.RST
+Info:                Defined in:
+Info:                  generated/lite_ddr3l.v:854.15-854.28
+Info: 0.5 ns logic, 4.8 ns routing
+
+Info: Critical path report for cross-domain path 'posedge $glbnet$ddr3.crg_clkout1' -> 'posedge $glbnet$vga_hsync$TRELLIS_IO_OUT':
+Info: curr total
+Info:  0.5  0.5  Source ddr3.ddrphy_reset1_TRELLIS_FF_Q.Q
+Info:  0.2  0.8    Net ddr3.FD1S3BX_2_LSR[0] (5,45) -> (5,45)
+Info:                Sink ddr3.ddrphy_reset1_LUT4_C.C
+Info:                Defined in:
+Info:                  generated/lite_ddr3l.v:854.15-854.28
+Info:  0.2  1.0  Source ddr3.ddrphy_reset1_LUT4_C.F
+Info:  1.5  2.5    Net ddr3.FD1S3BX_4_LSR (5,45) -> (21,39)
+Info:                Sink ddr3.FD1S3BX_5.LSR
+Info:  0.4  2.9  Setup ddr3.FD1S3BX_5.LSR
+Info: 1.2 ns logic, 1.8 ns routing
+
+Info: Critical path report for cross-domain path 'negedge $glbnet$root.pwm_div.counter_TRELLIS_FF_Q_LSR_LUT4_Z_B_LUT4_C_Z' -> '<async>':
+Info: curr total
+Info:  0.5  0.5  Source root.ledpwm[2].counter_TRELLIS_FF_Q_6.Q
+Info:  1.4  1.9    Net root.ledpwm[2].counter[1] (7,48) -> (8,47)
+Info:                Sink rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT_CIN_CCU2C_COUT_CIN_CCU2C_COUT$CCU2_COMB1.A
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.4  2.3  Source rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT_CIN_CCU2C_COUT_CIN_CCU2C_COUT$CCU2_COMB1.FCO
+Info:  0.0  2.3    Net rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT_CIN_CCU2C_COUT_CIN (8,47) -> (8,47)
+Info:                Sink rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT_CIN_CCU2C_COUT$CCU2_COMB0.FCI
+Info:                Defined in:
+Info:                  src/pwm.v:11.22-11.37
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/arith_map.v:74.7-80.4
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:82.9-82.13
+Info:  0.1  2.4  Source rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT_CIN_CCU2C_COUT$CCU2_COMB0.FCO
+Info:  0.0  2.4    Net rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT_CIN_CCU2C_COUT$CCU2_FCI_INT (8,47) -> (8,47)
+Info:                Sink rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT_CIN_CCU2C_COUT$CCU2_COMB1.FCI
+Info:  0.0  2.4  Source rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT_CIN_CCU2C_COUT$CCU2_COMB1.FCO
+Info:  0.0  2.4    Net rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT_CIN (8,47) -> (8,47)
+Info:                Sink rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT$CCU2_COMB0.FCI
+Info:                Defined in:
+Info:                  src/pwm.v:11.22-11.37
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/arith_map.v:74.7-80.4
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:82.9-82.13
+Info:  0.1  2.5  Source rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT$CCU2_COMB0.FCO
+Info:  0.0  2.5    Net rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT$CCU2_FCI_INT (8,47) -> (8,47)
+Info:                Sink rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT$CCU2_COMB1.FCI
+Info:  0.0  2.5  Source rgb_led0_b_CCU2C_COUT_CIN_CCU2C_COUT$CCU2_COMB1.FCO
+Info:  0.0  2.5    Net rgb_led0_b_CCU2C_COUT_CIN (8,47) -> (9,47)
+Info:                Sink rgb_led0_b_CCU2C_COUT$CCU2_COMB0.FCI
+Info:                Defined in:
+Info:                  src/pwm.v:11.22-11.37
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/arith_map.v:74.7-80.4
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_sim.v:82.9-82.13
+Info:  0.1  2.5  Source rgb_led0_b_CCU2C_COUT$CCU2_COMB0.FCO
+Info:  0.0  2.5    Net rgb_led0_b_CCU2C_COUT$CCU2_FCI_INT (9,47) -> (9,47)
+Info:                Sink rgb_led0_b_CCU2C_COUT$CCU2_COMB1.FCI
+Info:  0.0  2.5  Source rgb_led0_b_CCU2C_COUT$CCU2_COMB1.FCO
+Info:  0.0  2.5    Net $nextpnr_CCU2C_35$CIN (9,47) -> (9,47)
+Info:                Sink $nextpnr_CCU2C_35$CCU2_COMB0.FCI
+Info:  0.4  3.0  Source $nextpnr_CCU2C_35$CCU2_COMB0.F
+Info:  4.7  7.7    Net rgb_led0_b$TRELLIS_IO_OUT (9,47) -> (72,29)
+Info:                Sink rgb_led0_b$tr_io.I
+Info:                Defined in:
+Info:                  src-hardware/fpga_root.v:11.16-11.26
+Info: 1.6 ns logic, 6.1 ns routing
+
+Info: Critical path report for cross-domain path 'posedge $glbnet$vga_hsync$TRELLIS_IO_OUT' -> '<async>':
+Info: curr total
+Info:  0.5  0.5  Source root.cpucore.memctrl.arb.arb_inst.grant_valid_reg_TRELLIS_FF_Q.Q
+Info:  0.9  1.5    Net root.cpucore.memctrl.arb.grant_valid (19,41) -> (20,40)
+Info:                Sink root.cpucore.memctrl.arb.arb_inst.grant_valid_reg_LUT4_D.D
+Info:                Defined in:
+Info:                  external/verilog-wishbone/rtl/wb_arbiter_2.v:89.6-89.17
+Info:  0.2  1.7  Source root.cpucore.memctrl.arb.arb_inst.grant_valid_reg_LUT4_D.F
+Info:  0.5  2.2    Net root.adapter.wbm_adr_i_LUT4_Z_23_D[2] (20,40) -> (20,40)
+Info:                Sink ddr3.user_enable_LUT4_A_C_L6MUX21_Z_1_D1_PFUMX_Z_BLUT_LUT4_Z.M
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.3  2.4  Source ddr3.user_enable_LUT4_A_C_L6MUX21_Z_1_D1_PFUMX_Z_BLUT_LUT4_Z.OFX
+Info:  0.0  2.4    Net ddr3.user_enable_LUT4_A_C_L6MUX21_Z_1_D1 (20,40) -> (20,40)
+Info:                Sink ddr3.user_enable_LUT4_A_C_L6MUX21_Z_1_D1_PFUMX_Z_ALUT_LUT4_Z.FXB
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:141.38-141.40
+Info:  0.2  2.7  Source ddr3.user_enable_LUT4_A_C_L6MUX21_Z_1_D1_PFUMX_Z_ALUT_LUT4_Z.OFX
+Info:  1.1  3.8    Net ddr3.user_enable_LUT4_A_C[3] (20,40) -> (19,41)
+Info:                Sink root.adapter.wbs_stb_o_reg_LUT4_B_1_Z_LUT4_C_Z_LUT4_Z.C
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  4.0  Source root.adapter.wbs_stb_o_reg_LUT4_B_1_Z_LUT4_C_Z_LUT4_Z.F
+Info:  0.5  4.5    Net ddr3.user_enable_LUT4_C_Z_LUT4_D_Z[3] (19,41) -> (19,43)
+Info:                Sink ddr3.rhs_array_muxed13_LUT4_Z.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  4.7  Source ddr3.rhs_array_muxed13_LUT4_Z.F
+Info:  0.0  4.8    Net wb_mem_we_o (19,43) -> (19,43)
+Info:                Sink root.cpucore.memctrl.arb.wbs_stb_o_LUT4_B_D_LUT4_Z.D
+Info:                Defined in:
+Info:                  src-hardware/fpga_root.v:79.10-79.21
+Info:  0.2  5.0  Source root.cpucore.memctrl.arb.wbs_stb_o_LUT4_B_D_LUT4_Z.F
+Info:  0.7  5.7    Net root.cpucore.memctrl.arb.wbs_stb_o_LUT4_B_D[2] (19,43) -> (19,43)
+Info:                Sink root.cpucore.memctrl.arb.wbs_stb_o_LUT4_B.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  5.9  Source root.cpucore.memctrl.arb.wbs_stb_o_LUT4_B.F
+Info:  0.5  6.4    Net root.cpucore.memctrl.arb.wbs_stb_o_LUT4_B_Z[3] (19,43) -> (19,44)
+Info:                Sink ddr3.user_enable_LUT4_C_Z_LUT4_Z.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  6.7  Source ddr3.user_enable_LUT4_C_Z_LUT4_Z.F
+Info:  0.6  7.3    Net ddr3.user_enable_LUT4_C_Z[0] (19,44) -> (19,44)
+Info:                Sink root.cpucore.memctrl.arb.wbs_ack_i_PFUMX_Z_ALUT_LUT4_Z.A
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  7.5  Source root.cpucore.memctrl.arb.wbs_ack_i_PFUMX_Z_ALUT_LUT4_Z.F
+Info:  0.0  7.5    Net root.cpucore.memctrl.arb.wbs_ack_i_PFUMX_Z_ALUT (19,44) -> (19,44)
+Info:                Sink root.cpucore.memctrl.arb.wbs_ack_i_PFUMX_Z_BLUT_LUT4_Z.F1
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:133.22-133.24
+Info:  0.2  7.7  Source root.cpucore.memctrl.arb.wbs_ack_i_PFUMX_Z_BLUT_LUT4_Z.OFX
+Info:  2.1  9.8    Net debug[7] (19,44) -> (4,50)
+Info:                Sink vga_green[1]$tr_io.I
+Info:                Defined in:
+Info:                  src-hardware/fpga_root.v:16.22-16.31
+Info: 2.8 ns logic, 7.0 ns routing
+
+Info: Critical path report for cross-domain path 'posedge $glbnet$vga_hsync$TRELLIS_IO_OUT' -> 'posedge $glbnet$clk48$TRELLIS_IO_IN':
+Info: curr total
+Info:  0.5  0.5  Source ddr3.FD1S3BX_5.Q
+Info:  1.0  1.6    Net debug[4] (21,39) -> (28,38)
+Info:                Sink usb.uart.usb_fs_pe_inst.rx_data_put_LUT4_C_1.M
+Info:                Defined in:
+Info:                  src-hardware/fpga_root.v:17.22-17.30
+Info:  0.3  1.8  Source usb.uart.usb_fs_pe_inst.rx_data_put_LUT4_C_1.OFX
+Info:  0.8  2.6    Net usb.uart.usb_fs_pe_inst.rx_data_put_LUT4_C_1_Z_PFUMX_BLUT_Z[4] (28,38) -> (28,33)
+Info:                Sink usb.uart.usb_fs_pe_inst.usb_fs_out_pe_inst.ep_put_addr[1]_TRELLIS_FF_Q_DI_LUT4_Z_C_CCU2C_S1_B1_LUT4_C.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  2.8  Source usb.uart.usb_fs_pe_inst.usb_fs_out_pe_inst.ep_put_addr[1]_TRELLIS_FF_Q_DI_LUT4_Z_C_CCU2C_S1_B1_LUT4_C.F
+Info:  0.9  3.8    Net usb.uart.usb_fs_pe_inst.usb_fs_out_pe_inst.ep_put_addr[1]_TRELLIS_FF_Q_DI_LUT4_Z_C_CCU2C_S1_B1_LUT4_C_Z[2] (28,33) -> (26,34)
+Info:                Sink usb.uart.usb_fs_pe_inst.usb_fs_out_pe_inst.ep_put_addr[1]_TRELLIS_FF_Q_DI_LUT4_Z_C_CCU2C_S1_B1_LUT4_C_Z_LUT4_D.D
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/ecp5/cells_map.v:108.23-108.24
+Info:  0.2  4.0  Source usb.uart.usb_fs_pe_inst.usb_fs_out_pe_inst.ep_put_addr[1]_TRELLIS_FF_Q_DI_LUT4_Z_C_CCU2C_S1_B1_LUT4_C_Z_LUT4_D.F
+Info:  0.8  4.8    Net usb.uart.usb_fs_pe_inst.usb_fs_out_pe_inst.ep_put_addr[1]_TRELLIS_FF_Q_DI_LUT4_Z_C_CCU2C_S1_B1_LUT4_C_Z_LUT4_D_Z[3] (26,34) -> (25,35)
+Info:                Sink usb.uart.usb_fs_pe_inst.usb_fs_out_pe_inst.out_data_buffer.0.31$DPRAM_COMB3.WRE
+Info:                Defined in:
+Info:                  /opt/oss-cad-suite/lib/../share/yosys/techmap.v:614.34-614.35
+Info:  0.4  5.2  Setup usb.uart.usb_fs_pe_inst.usb_fs_out_pe_inst.out_data_buffer.0.31$DPRAM_COMB3.WRE
+Info: 1.6 ns logic, 3.6 ns routing
+
+Info: Max frequency for clock '$glbnet$root.pwm_div.counter_TRELLIS_FF_Q_LSR_LUT4_Z_B_LUT4_C_Z': 237.59 MHz (PASS at 12.00 MHz)
+Info: Max frequency for clock                                     '$glbnet$clk48$TRELLIS_IO_IN': 77.37 MHz (PASS at 48.00 MHz)
+Info: Max frequency for clock                                '$glbnet$vga_hsync$TRELLIS_IO_OUT': 46.76 MHz (PASS at 40.00 MHz)
+Info: Max frequency for clock                                        '$glbnet$ddr3.crg_clkout1': 242.60 MHz (PASS at 20.00 MHz)
+
+Info: Max delay <async>                                                                 -> <async>                                 : 0.15 ns
+Info: Max delay <async>                                                                 -> posedge $glbnet$clk48$TRELLIS_IO_IN     : 2.52 ns
+Info: Max delay <async>                                                                 -> posedge $glbnet$ddr3.crg_clkout1        : 3.68 ns
+Info: Max delay <async>                                                                 -> posedge $glbnet$vga_hsync$TRELLIS_IO_OUT: 4.97 ns
+Info: Max delay posedge $glbnet$clk48$TRELLIS_IO_IN                                     -> <async>                                 : 7.57 ns
+Info: Max delay posedge $glbnet$clk48$TRELLIS_IO_IN                                     -> posedge $glbnet$ddr3.crg_clkout1        : 6.32 ns
+Info: Max delay posedge $glbnet$clk48$TRELLIS_IO_IN                                     -> posedge $glbnet$vga_hsync$TRELLIS_IO_OUT: 7.62 ns
+Info: Max delay posedge $glbnet$ddr3.crg_clkout1                                        -> <async>                                 : 5.28 ns
+Info: Max delay posedge $glbnet$ddr3.crg_clkout1                                        -> posedge $glbnet$vga_hsync$TRELLIS_IO_OUT: 2.94 ns
+Info: Max delay negedge $glbnet$root.pwm_div.counter_TRELLIS_FF_Q_LSR_LUT4_Z_B_LUT4_C_Z -> <async>                                 : 7.73 ns
+Info: Max delay posedge $glbnet$vga_hsync$TRELLIS_IO_OUT                                -> <async>                                 : 9.82 ns
+Info: Max delay posedge $glbnet$vga_hsync$TRELLIS_IO_OUT                                -> posedge $glbnet$clk48$TRELLIS_IO_IN     : 5.21 ns
+
+Info: Slack histogram:
+Info:  legend: * represents 58 endpoint(s)
+Info:          + represents [1,58) endpoint(s)
+Info: [  3611,   7542) |*****+
+Info: [  7542,  11473) |*************************************+
+Info: [ 11473,  15404) |***************************+
+Info: [ 15404,  19335) |**********************************+
+Info: [ 19335,  23266) |************************************************************ 
+Info: [ 23266,  27197) |*************+
+Info: [ 27197,  31128) | 
+Info: [ 31128,  35059) | 
+Info: [ 35059,  38990) | 
+Info: [ 38990,  42921) | 
+Info: [ 42921,  46852) |+
+Info: [ 46852,  50783) |+
+Info: [ 50783,  54714) | 
+Info: [ 54714,  58645) | 
+Info: [ 58645,  62576) | 
+Info: [ 62576,  66507) | 
+Info: [ 66507,  70438) | 
+Info: [ 70438,  74369) | 
+Info: [ 74369,  78300) | 
+Info: [ 78300,  82231) |+
+Info: Using pin C15 as VREF for bank 7
+Info: Using pin H15 as VREF for bank 6
+
+Info: Program finished normally.

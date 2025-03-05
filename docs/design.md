@@ -63,7 +63,7 @@ sacrifice in order to preserve simplicity of design.
 
 When not at kernel privilege level, the following actions are illegal:
 
-* Reading or writing to the kernel registers (pta, ecause, ktemp, mode)
+<!-- * Reading or writing to the kernel registers (pta, ecause, ktemp, mode) -->
 * Loading or storing at a physical address
 * Loading from a page without read permissions
 * Storing to a page without write permissions

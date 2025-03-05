@@ -1,0 +1,57 @@
+`timescale 1ns/1ps
+`include "assert.vh"
+
+module tb_decode();
+
+    reg [31:0] instr;
+
+    wire [3:0] ra_pred, ra_a, ra_b, ra_m, ra_d;
+    wire pred_inv, pc_relative;
+    wire [31:0] imm;
+
+
+    decode dut(
+        .instr(instr),
+
+        .ra_pred(ra_pred),
+        .pred_inv(pred_inv),
+        .ra_a(ra_a),
+        .ra_b(ra_b),
+        .ra_m(ra_m),
+        .imm(imm),
+        .ra_d(ra_d),
+
+        .pc_relative(pc_relative)
+    );
+
+    initial begin
+        $dumpfile(`WAVEPATH);
+        $dumpvars;
+        // add r3, r4, r5
+        instr = 32'h03004005;
+        #1;
+        `assert(ra_pred, 4'h0);
+        `assert(pred_inv, 1'b0);
+        `assert(ra_d, 4'h3);
+        `assert(ra_a, 4'h4);
+        `assert(ra_b, 4'h5);
+        #1;
+        // j r6, pc-0xFFFFC000
+        instr = 32'h063FF000;
+        #1;
+        `assert(ra_pred, 4'h0);
+        `assert(pred_inv, 1'b0);
+        `assert(ra_d, 4'h6);
+        `assert(imm, 32'hFFFFC000);
+        #1;
+        // lui r9, 0xFEDC0000
+        instr = 32'h055FDB80;
+        #1;
+        `assert(ra_pred, 4'h0);
+        `assert(pred_inv, 1'b0);
+        `assert(ra_d, 4'h5);
+        `assert(imm, 32'hFEDC0000);
+        
+    end
+
+endmodule

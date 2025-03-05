@@ -8,12 +8,16 @@ synthesized on an Orangecrab 25F with a Lattice ECP5 but is designed to be
 reasonably portable to other development boards and architectures.
 
 The SOC offers the following processor features:
+
+> TODO: these specs will probably change
+
 * 40MHz, tightly pipelined MOLLUSC CPU capable of near-scalar operation
 * 16KB shared L1 cache, 16-byte blocked, non-set-associative
 * 2KB fixed boot ROM
 * 2KB SRAM scratch memory
 
 The SOC also offers the following I/O features:
+
 * RGB LED output with 8-bit hardware PWM per element
 * Unbuffered USB CDC serial port
 
