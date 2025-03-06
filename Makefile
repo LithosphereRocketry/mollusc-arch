@@ -20,7 +20,7 @@ DIRS = $(VVP_DIR) $(ROM_DIR) $(WAVE_DIR) $(GENERATE_DIR) $(BUILD_DIR)
 EXT_DIR = external
 EXT_WISHBONE_DIR = $(EXT_DIR)/verilog-wishbone/rtl
 
-SKIPPED_PLATFORMS = wishbone
+SKIPPED_PLATFORMS = 
 
 MUX_SIZES = 4
 MUX_PREREQS = $(MUX_SIZES:%=$(GENERATE_DIR)/wb_mux_%.v)

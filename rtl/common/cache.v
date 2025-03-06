@@ -44,7 +44,7 @@ module cache #(
         output wb_cyc_o
     );
 
-    reg [CACHE_LINE_DEPTH-1:0] scrub_addr;
+    reg [CACHE_DEPTH-1:0] scrub_addr;
     reg scrub_ready;
     reg [CACHE_TAG_WIDTH+CACHE_WIDTH:0] cache [0:CACHE_LINES-1];
 
@@ -101,7 +101,7 @@ module cache #(
 
     assign wb_cyc_o = wb_stb_o;
     assign wb_we_o = sync_wr;
-    assign wb_adr_o = {req_tag, {CACHE_DEPTH + CACHE_LINE_DEPTH{1'b0}}};
+    assign wb_adr_o = {req_tag, sync_caddr, {CACHE_LINE_DEPTH{1'b0}}};
 
     task reset; begin
         scrub_addr <= 0;

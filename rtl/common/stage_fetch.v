@@ -4,6 +4,8 @@ module stage_fetch(
         input clk,
         input rst,
 
+        input step_valid,
+
         input [31:0] jump_addr,
         input jump,
         output jump_ready,
@@ -29,7 +31,7 @@ module stage_fetch(
     initial reset();
 
     // TOOD is this right?
-    assign mem_addr_valid = 1;
+    assign mem_addr_valid = first_cycle | jump | step_valid;
 
     always @(posedge clk) if(rst) reset(); else begin
         if(mem_addr_valid & mem_addr_ready) begin

@@ -160,7 +160,6 @@ module tb_cache ();
         while(~dout_valid) step();
         `assert(dout, 32'h12345678);
         
-
-        repeat(10) step();
+        repeat(5) step();
     end
 endmodule

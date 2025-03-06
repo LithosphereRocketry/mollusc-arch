@@ -5,6 +5,8 @@ module stage_decode(
         input [31:0] write_val,
         input [3:0] write_addr,
 
+        output step_valid,
+
         input [31:0] pc,
         input [31:0] inc_pc,
         input [31:0] instr,
@@ -85,9 +87,11 @@ module stage_decode(
     // or our current one is leaving
     assign instr_ready = ~decode_valid | decode_ready;
 
+    assign step_valid = instr_ready & instr_valid & ~does_jump & ~first_cycle;
+
     always @(posedge clk) if(rst) reset(); else begin
         first_cycle <= 0;
-        if(instr_ready & instr_valid & ~does_jump & ~first_cycle) begin // if we just performed a jump, discard
+        if(step_valid) begin // if we just performed a jump, discard
             decode_valid <= 1; 
             
             alu_a_src <= pc_relative ? 4'h0 : ra_a;

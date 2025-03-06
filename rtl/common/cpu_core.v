@@ -22,10 +22,12 @@ module cpu_core(
     );
 
     wire [31:0] jump_addr, pc, inc_pc;
-    wire jump, jump_ready;
+    wire jump, jump_ready, step_valid;
     stage_fetch fetch(
         .clk(clk),
         .rst(rst),
+
+        .step_valid(step_valid),
 
         .jump_addr(jump_addr),
         .jump(jump),
@@ -56,6 +58,8 @@ module cpu_core(
 
         .write_addr(write_dest),
         .write_val(write_val),
+
+        .step_valid(step_valid),
 
         .pc(pc),
         .inc_pc(inc_pc),
@@ -88,7 +92,7 @@ module cpu_core(
     );
 
     wire execute_valid;
-    wire execute_ready = 1;// TODO more stages
+    wire execute_ready;
     wire [3:0] execute_dest;
     wire [31:0] execute_result, execute_mem_val;
     wire execute_is_mem, execute_mem_write;

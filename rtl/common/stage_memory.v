@@ -3,7 +3,7 @@ module stage_memory(
         input rst,
 
         input execute_valid,
-        input execute_ready,
+        output execute_ready,
 
         input [31:0] result_in,
         input [31:0] mdata_in,
@@ -51,6 +51,8 @@ module stage_memory(
     assign dest = memory_valid ? dest_sync : 4'h0;
 
     assign result = was_mem ? m_din : exe_res_sync;
+
+    assign execute_ready = m_addr_ready;
 
     always @(posedge clk) if(rst) reset(); else begin
         if(execute_valid & execute_ready) begin

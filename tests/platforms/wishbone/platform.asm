@@ -1,4 +1,6 @@
+
 init:
+    lui sp , 0x8000
     jx zero, zero, ra
 
 putc:
