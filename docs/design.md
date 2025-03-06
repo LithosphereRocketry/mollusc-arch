@@ -9,13 +9,18 @@ almost all instructions follow this pattern:
 
 * There is exactly one destination register.
 * There are two source values: one is a register, and one is either a register
-  or an 11-bit immediate.
+  or a signed 11-bit immediate.
 * There is additionally a condition register, which may apply either a positive
   (x != 0) or inverted (x == 0) boolean condition to the instruction.
-* Regardless of implemented pipeline design, instruction execution order is
-  transparent with respect to the order of the instructions as written; that is,
-  all results of any given instruction are available to all instructions that
-  follow it.
+* Regardless of implemented pipeline design, data flow is transparent with
+  respect to the order of the instructions as written; that is, all results of
+  any given instruction are available to all instructions that follow it.
+* Likewise, control flow is transparent; there are no branch-delay slots for any
+  branch or jump operation.
+* One important exception is that self-modifying code is not guaranteed to be
+  completely transparent; this is extremely costly to implement in a pipelined
+  design for fairly small benefit. Results of self-modifying code are guaranteed
+  to be available within a fixed number of instructions (TBD).
 
 Of course, no rule can be without exceptions; the most notable two are the long
 immediate group and the memory write group. Instructions in the long immediate
@@ -40,7 +45,17 @@ limit of a signed 11-bit immediate value.
 
 ### Constant loading
 
+Similar to other fixed-width architectures like RISC-V, constant loading is
+handled by two-part lower and upper operations. Upper immediates are handled by
+`lui` for absolute values and `auipc` for relative values; the lower portion is
+filled by an `addi` on the result.
+
 ### Jumps
+
+Two types of jumps are supported: relative jumps via the `j` instruction and
+register-absolute jumps via the `jx` instruction. Both have a return address
+parameter for use in function calling, and can be made into branches via the
+condition field.
 
 ### Memory access
 
