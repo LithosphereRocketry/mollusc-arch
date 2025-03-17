@@ -41,10 +41,10 @@ module stage_decode(
     reg [31:0] regfile [0:15];
     initial regfile[0] <= 32'h00000000;
 
+`ifdef SIM
     genvar g;
     for(g = 0; g < 16; g = g+1) wire[31:0] val = regfile[g];
-
-    always @(negedge clk) if(write_addr != 4'h0) regfile[write_addr] <= write_val;
+`endif
 
     wire [3:0] ra_pred, ra_a, ra_b, ra_m, ra_d;
     wire [31:0] imm;
@@ -77,6 +77,23 @@ module stage_decode(
     wire [31:0] rv_b = regfile[ra_b];
     wire [31:0] rv_m = regfile[ra_m];
 
+    wire [31:0] rv_a_fwd, rv_b_fwd, rv_m_fwd, rv_pred_fwd;
+
+    forwarder #(32, 4) fwd [3:0] (
+        .value({rv_a, rv_b, rv_m, rv_pred}),
+        .src({ra_a, ra_b, ra_m, ra_pred}),
+
+        .fwd_first_src(4'h0),
+        .fwd_first_val(32'hxxxxxxxx),
+        .fwd_first_used(),
+
+        .fwd_second_src(write_addr),
+        .fwd_second_val(write_val),
+        .fwd_second_used(),
+
+        .forwarded_value({rv_a_fwd, rv_b_fwd, rv_m_fwd, rv_pred_fwd})
+    );
+
     reg first_cycle;
     task reset; begin
         decode_valid <= 0;
@@ -85,26 +102,28 @@ module stage_decode(
 
     // We are able to accept a new instruction if either we don't have one
     // or our current one is leaving
-    assign instr_ready = ~decode_valid | decode_ready;
+    assign instr_ready = ~decode_valid | decode_ready | does_jump;
 
     assign step_valid = instr_ready & instr_valid & ~does_jump & ~first_cycle;
 
     always @(posedge clk) if(rst) reset(); else begin
         first_cycle <= 0;
+        if(write_addr != 4'h0) regfile[write_addr] <= write_val;
+
         if(step_valid) begin // if we just performed a jump, discard
             decode_valid <= 1; 
-            
+
             alu_a_src <= pc_relative ? 4'h0 : ra_a;
-            alu_a <= pc_relative ? pc : rv_a;
+            alu_a <= pc_relative ? pc : rv_a_fwd;
 
             alu_b_src <= use_imm ? 4'h0 : ra_b;
-            alu_b <= use_imm ? imm : rv_b;
+            alu_b <= use_imm ? imm : rv_b_fwd;
 
             mem_val_src <= dec_jump ? 4'h0 : ra_m;
-            mem_val <= dec_jump ? inc_pc : rv_m;
+            mem_val <= dec_jump ? inc_pc : rv_m_fwd;
 
             pred_val_src <= ra_pred;
-            pred_val <= rv_pred;
+            pred_val <= rv_pred_fwd;
             pred_invert <= pred_inv;
 
             aluop <= dec_aluop;
@@ -137,6 +156,11 @@ module stage_decode(
             mem_write <= 'x;
 
             dest <= 'x;
+        end else begin
+            if(alu_a_src != 4'h0 && alu_a_src == write_addr) alu_a <= write_val; 
+            if(alu_b_src != 4'h0 && alu_b_src == write_addr) alu_b <= write_val;
+            if(mem_val_src != 4'h0 && mem_val_src == write_addr) mem_val <= write_val;
+            if(pred_val_src != 4'h0 && pred_val_src == write_addr) pred_val <= write_val;
         end
     end
 endmodule

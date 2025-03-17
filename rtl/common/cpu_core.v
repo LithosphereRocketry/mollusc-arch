@@ -66,7 +66,7 @@ module cpu_core(
         .instr(i_data),
         .instr_valid(i_data_valid),
         .instr_ready(i_data_ready),
-        .does_jump(jump),
+        .does_jump(jump | ~jump_ready),
 
         .alu_a_src(decode_alu_a_src),
         .alu_b_src(decode_alu_b_src),

@@ -44,7 +44,7 @@ module stage_execute(
 
     wire [31:0] alu_a_fwd, alu_b_fwd, mem_val_fwd, pred_val_fwd;
 
-    wire [3:0] fwd_used;
+    wire [3:0] fwd_used, fwd_second_used;
     forwarder #(32, 4) fwd [3:0] (
         .value({alu_a, alu_b, mem_val_in, pred_val}),
         .src({alu_a_src, alu_b_src, mem_val_src, pred_val_src}),
@@ -55,7 +55,7 @@ module stage_execute(
 
         .fwd_second_src(writeback_addr),
         .fwd_second_val(writeback_data),
-        .fwd_second_used(),
+        .fwd_second_used(fwd_second_used),
 
         .forwarded_value({alu_a_fwd, alu_b_fwd, mem_val_fwd, pred_val_fwd})
     );
@@ -75,10 +75,12 @@ module stage_execute(
 
     wire pred_taken = (pred_val_fwd == 0) ^ pred_inv;
     assign jump_addr = alu_res;
-    assign jump_valid = decode_valid & is_jump & pred_taken;
+    assign jump_valid = decode_valid & decode_ready & is_jump & pred_taken;
     assign decode_ready = ~decode_valid | (execute_ready
-            & (~is_jump | jump_ready)) // jump isn't stalling
-            & (~is_mem | ~|fwd_used); // we aren't waiting on memory
+            & (~is_jump | jump_ready) // jump isn't stalling
+            & (~is_mem | ~|fwd_used)
+            // & (~|fwd_second_used)
+            ); // we aren't waiting on memory
 
     reg was_taken, has_instr;
     task reset; begin

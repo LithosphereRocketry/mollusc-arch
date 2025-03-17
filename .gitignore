@@ -4,11 +4,12 @@
 vvp
 rom
 waveforms
+build
+out
 rtl/generated
+rtl/generated-hw
+/*-log.txt
 
-# out/
-# build/
 # verilator/
 # logs/
 # failed_logs/
-# /*-log.txt

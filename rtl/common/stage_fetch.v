@@ -20,23 +20,31 @@ module stage_fetch(
 
     assign inc_pc = pc + 4;
 
+    reg jump_queued;
+    reg [31:0] jump_queue;
     assign mem_addr = first_cycle ? `RESET_VECTOR
+                    : jump_queued ? jump_queue
                     : jump ? jump_addr : inc_pc;
-    assign jump_ready = mem_addr_ready;
+    assign jump_ready = ~jump_queued;
 
-    reg first_cycle;    
+    reg first_cycle;
     task reset; begin
         first_cycle <= 1;
+        jump_queued <= 0;
     end endtask
     initial reset();
 
-    // TOOD is this right?
-    assign mem_addr_valid = first_cycle | jump | step_valid;
+    assign mem_addr_valid = first_cycle | jump | jump_queued | step_valid;
 
     always @(posedge clk) if(rst) reset(); else begin
         if(mem_addr_valid & mem_addr_ready) begin
             first_cycle <= 0;
+            jump_queued <= 0;
+            jump_queue <= 'x;
             pc <= mem_addr;
+        end else if(jump & jump_ready) begin
+            jump_queue <= jump_addr;
+            jump_queued <= 1;
         end
     end
 endmodule
