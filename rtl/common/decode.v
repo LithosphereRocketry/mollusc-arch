@@ -38,7 +38,7 @@ module decode(
     assign is_cmp = basecode == 2'b00 & subcode == 2'b10 & funccode[2] == 1'b0;
     assign is_mem = !use_upper_imm & subcode[1] & funccode[2] & (funccode[1:0] != 2'b11);
     assign mem_write = mtype; // todo slightly more complicated with tlb
-    assign aluop = (is_jump | is_mem) ? 4'h0 : {subcode[1], funccode[2:0]};
+    assign aluop = is_mem ? 4'h0 : {subcode[1], funccode[2:0]};
 
     // Sign-extended immediates
     wire [31:0] upper_ext = upper_shiftmode ? {upper_imm, 11'b0}

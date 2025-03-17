@@ -74,7 +74,7 @@ module stage_execute(
     reg was_mem;
 
     wire pred_taken = (pred_val_fwd == 0) ^ pred_inv;
-    assign jump_addr = alu_res;
+    assign jump_addr = alu_a + alu_b;
     assign jump_valid = decode_valid & decode_ready & is_jump & pred_taken;
     assign decode_ready = ~decode_valid | (execute_ready
             & (~is_jump | jump_ready) // jump isn't stalling

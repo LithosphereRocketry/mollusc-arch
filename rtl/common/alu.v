@@ -8,21 +8,26 @@ module alu(
         output [31:0] result
     );
 
-    wire [31:0] alumux = ~op[3] ? (
-        ~op[2] ? (
-            ~op[1] ? (~op[0] ? alu_a + alu_b : alu_a - alu_b)
-                   : (~op[0] ? alu_a & alu_b : alu_a | alu_b)
-        ) : (
-            ~op[1] ? (~op[0] ? alu_a ^ alu_b : alu_a << alu_b)
-                   : (~op[0] ? alu_a >> alu_b : alu_a >>> alu_b)
-        )
-    ) : (
-        32'hxxxxxxxx // mult operations
-    );
+    reg [31:0] alu_res; // combinational
 
-    wire [31:0] cmpmux  = {27'h0000000, ~op[1] ?
-        ({4'h0, ~op[0] ? alu_a < alu_b : (alu_a ^ 32'h80000000) < (alu_b ^ 32'h80000000)})
-      : (~op[0] ? {4'h0, alu_a == alu_b} : 5'hxx)};
+    always @* begin
+        if(~cmp) case(op) 
+            4'h0: alu_res = alu_a + alu_b;
+            4'h1: alu_res = alu_a - alu_b;
+            4'h2: alu_res = alu_a & alu_b;
+            4'h3: alu_res = alu_a | alu_b;
+            4'h4: alu_res = alu_a ^ alu_b;
+            4'h5: alu_res = alu_a << alu_b;
+            4'h6: alu_res = alu_a >> alu_b;
+            4'h7: alu_res = alu_a >>> alu_b;
+            default: alu_res = 'x;
+        endcase else case(op[1:0])
+            2'h0: alu_res = {31'h0, alu_a < alu_b};
+            2'h1: alu_res = {31'h0, (alu_a ^ 32'h80000000) < (alu_b ^ 32'h80000000)};
+            2'h2: alu_res = {31'h0, alu_a == alu_b};
+            2'h3: alu_res = 'x;
+        endcase
+    end
     
-    assign result = cmp ? cmpmux : alumux;
+    assign result = alu_res;
 endmodule
