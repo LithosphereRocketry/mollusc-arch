@@ -2,10 +2,9 @@
 `include "assert.vh"
 
 module tb_cache ();
-    `timeout(clk, 1000);
-
     reg clk = 0;
     reg rst = 0;
+    `timeout(clk, 1000);
     
     reg [15:0] addr;
     reg addr_volatile;

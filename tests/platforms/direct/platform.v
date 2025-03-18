@@ -14,6 +14,10 @@ module platform(
     wire [31:0] i_addr, d_addr, d_dout;
     wire d_wr; 
 
+    wire i_addr_ready, i_addr_valid, d_addr_ready, d_addr_valid;
+    reg i_data_valid = 0, d_data_valid = 0;
+    wire i_data_ready, d_data_ready;
+
     wire dport_sel = d_addr == 32'h01000000;
     wire halt_sel = d_addr == 32'h01001000;
 
@@ -28,10 +32,6 @@ module platform(
     assign haltcode = d_dout;
 
     reg [31:0] i_din, d_din;
-
-    wire i_addr_ready, i_addr_valid, d_addr_ready, d_addr_valid;
-    reg i_data_valid = 0, d_data_valid = 0;
-    wire i_data_ready, d_data_ready;
 
     assign i_addr_ready = ~i_data_valid | i_data_ready;
     assign d_addr_ready = ~d_data_valid | d_data_ready;
@@ -60,6 +60,10 @@ module platform(
         .d_data_ready(d_data_ready)
     );
 
+    reg [31:0] rom [0:(1<<13)-1];
+    initial $readmemh(`ROMPATH, rom);
+    reg [31:0] ram [0:(1<<13)-1];
+
     always @(posedge clk) begin
         if(i_addr_valid & i_addr_ready) begin
             i_data_valid <= 1'b1;
@@ -87,8 +91,4 @@ module platform(
             d_din <= 32'hxxxxxxxx;
         end
     end
-
-    reg [31:0] rom [0:(1<<13)-1];
-    initial $readmemh(`ROMPATH, rom);
-    reg [31:0] ram [0:(1<<13)-1];
 endmodule

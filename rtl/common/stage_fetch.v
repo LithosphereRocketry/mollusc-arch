@@ -22,12 +22,12 @@ module stage_fetch(
 
     reg jump_queued;
     reg [31:0] jump_queue;
+    reg first_cycle;
     assign mem_addr = first_cycle ? `RESET_VECTOR
                     : jump_queued ? jump_queue
                     : jump ? jump_addr : inc_pc;
     assign jump_ready = ~jump_queued;
 
-    reg first_cycle;
     task reset; begin
         first_cycle <= 1;
         jump_queued <= 0;
