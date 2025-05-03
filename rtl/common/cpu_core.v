@@ -51,6 +51,7 @@ module cpu_core(
 
     wire [3:0] write_dest;
     wire [31:0] write_val;
+    wire write_valid;
 
     stage_decode decode(
         .rst(rst),
@@ -58,6 +59,7 @@ module cpu_core(
 
         .write_addr(write_dest),
         .write_val(write_val),
+        .write_valid(write_valid),
 
         .step_valid(step_valid),
 
@@ -124,6 +126,7 @@ module cpu_core(
 
         .writeback_data(write_val),
         .writeback_addr(write_dest),
+        .writeback_valid(write_valid),
 
         .jump_addr(jump_addr),
         .jump_valid(jump),
@@ -164,7 +167,8 @@ module cpu_core(
         .m_data_ready(d_data_ready),
 
         .dest(write_dest),
-        .result(write_val)
+        .result(write_val),
+        .result_valid(write_valid)
     );
 
 endmodule

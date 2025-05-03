@@ -21,8 +21,9 @@ module stage_memory(
         input m_data_valid,
         output m_data_ready,
 
-        output [3:0] dest,
-        output [31:0] result
+        output reg [3:0] dest,
+        output [31:0] result,
+        output result_valid
     );
 
     // For now, we're the last on the line, so we don't ever stall
@@ -35,20 +36,17 @@ module stage_memory(
     assign m_wr = mem_write;
     assign m_addr_valid = execute_valid & is_mem;
     
-    reg [3:0] dest_sync;
     reg [31:0] exe_res_sync;
     reg has_instr;
     task reset; begin
         has_instr <= 0;
         was_mem <= 'x;
-        dest_sync <= 'x;
+        dest <= 'x;
         exe_res_sync <= 'x;
     end endtask
     initial reset();
 
-    wire memory_valid = has_instr & (~was_mem | m_data_valid);
-
-    assign dest = memory_valid ? dest_sync : 4'h0;
+    assign result_valid = has_instr & (~was_mem | m_data_valid);
 
     assign result = was_mem ? m_din : exe_res_sync;
 
@@ -58,12 +56,12 @@ module stage_memory(
         if(execute_valid & execute_ready) begin
             has_instr <= 1;
             was_mem <= is_mem;
-            dest_sync <= dest_in;
+            dest <= dest_in;
             exe_res_sync <= result_in;
-        end else if(memory_valid) begin
+        end else if(result_valid) begin
             has_instr <= 0;
             was_mem <= 'x;
-            dest_sync <= 'x;
+            dest <= 'x;
             exe_res_sync <= 'x;
         end
     end

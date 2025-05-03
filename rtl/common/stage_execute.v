@@ -26,6 +26,7 @@ module stage_execute(
 
         input [31:0] writeback_data,
         input [3:0] writeback_addr,
+        input writeback_valid,
 
         output [31:0] jump_addr,
         output jump_valid,
@@ -51,10 +52,12 @@ module stage_execute(
 
         .fwd_first_src(dest),
         .fwd_first_val(result),
+        .fwd_first_valid(execute_valid),
         .fwd_first_used(fwd_used),
 
         .fwd_second_src(writeback_addr),
         .fwd_second_val(writeback_data),
+        .fwd_second_valid(writeback_valid),
         .fwd_second_used(fwd_second_used),
 
         .forwarded_value({alu_a_fwd, alu_b_fwd, mem_val_fwd, pred_val_fwd})

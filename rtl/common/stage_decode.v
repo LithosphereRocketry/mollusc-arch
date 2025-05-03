@@ -4,6 +4,7 @@ module stage_decode(
 
         input [31:0] write_val,
         input [3:0] write_addr,
+        input write_valid,
 
         output step_valid,
 
@@ -83,12 +84,14 @@ module stage_decode(
         .value({rv_a, rv_b, rv_m, rv_pred}),
         .src({ra_a, ra_b, ra_m, ra_pred}),
 
-        .fwd_first_src(4'h0),
+        .fwd_first_src(4'hx),
         .fwd_first_val(32'hxxxxxxxx),
+        .fwd_first_valid(1'b0),
         .fwd_first_used(),
 
         .fwd_second_src(write_addr),
         .fwd_second_val(write_val),
+        .fwd_second_valid(write_valid),
         .fwd_second_used(),
 
         .forwarded_value({rv_a_fwd, rv_b_fwd, rv_m_fwd, rv_pred_fwd})

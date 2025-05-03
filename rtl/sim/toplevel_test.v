@@ -2,7 +2,7 @@
 
 module toplevel_test();
     localparam OUT_SIZE = 1<<16;
-    localparam MAX_CYCLES = 1000;//1<<20; // 1M cycles
+    localparam MAX_CYCLES = 100_000;
 
     reg clk = 0;
     reg rst = 1;
