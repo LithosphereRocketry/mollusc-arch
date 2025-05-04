@@ -46,7 +46,8 @@ module cache #(
 
     reg [CACHE_DEPTH-1:0] scrub_addr;
     reg scrub_ready;
-    reg [CACHE_TAG_WIDTH+CACHE_WIDTH:0] cache [0:CACHE_LINES-1];
+    reg [CACHE_TAG_WIDTH:0] cache_tags [0:CACHE_LINES-1];
+    reg [CACHE_WIDTH-1:0] cache_data [0:CACHE_LINES-1];
 
     wire [CACHE_DEPTH-1:0] caddr = addr[CACHE_LINE_DEPTH +: CACHE_DEPTH];
     reg [ADDR_WIDTH-1:0] sync_addr;
@@ -76,11 +77,9 @@ module cache #(
     assign wb_sel_o = (wb_we_o | sync_volatile) ? word_sel : {CACHE_WIDTH/ADDR_GRANULARITY{1'b1}};
 
     reg line_full;
-    reg [CACHE_TAG_WIDTH+CACHE_WIDTH:0] cache_line;
-    wire [CACHE_TAG_WIDTH-1:0] tag = cache_line[CACHE_TAG_WIDTH+CACHE_WIDTH-1:CACHE_WIDTH];
-    // wire [WORD_WIDTH-1:0] cache_word = cache_line[CACHE_TAG_WIDTH+CACHE];
-
-    wire cvalid = cache_line[CACHE_TAG_WIDTH+CACHE_WIDTH];
+    reg cvalid;
+    reg [CACHE_TAG_WIDTH-1:0] tag;
+    reg [CACHE_WIDTH-1:0] cache_line;
 
     wire cache_correct = cvalid & tag == req_tag & ~sync_volatile;
 
@@ -91,10 +90,10 @@ module cache #(
     assign dout = line_full ? cache_word : fetch_word;
     assign dout_valid = scrub_ready & ~sync_wr & (line_full ? cache_correct : fetch_word_fresh);
 
-    wire [CACHE_TAG_WIDTH+CACHE_WIDTH:0] cache_update;
-    replace #(CACHE_TAG_WIDTH+CACHE_WIDTH+1, WORD_WIDTH) repl_update(
+    wire [CACHE_WIDTH-1:0] cache_update;
+    replace #(CACHE_WIDTH, WORD_WIDTH) repl_update(
         .din(cache_line),
-        .addr({1'b0, in_line_addr}), // assuming the tag is smaller than the address
+        .addr(in_line_addr), // assuming the tag is smaller than the address
         .insert(sync_din),
         .dout(cache_update)
     );
@@ -121,10 +120,11 @@ module cache #(
         if(~scrub_ready) begin
             scrub_ready <= (scrub_addr == {CACHE_DEPTH{1'b1}});
             scrub_addr <= scrub_addr + 1;
-            cache[scrub_addr] <= {1'b0, {CACHE_TAG_WIDTH+CACHE_WIDTH{1'bx}}};
+            cache_tags[scrub_addr] <= {1'b0, {CACHE_TAG_WIDTH{1'bx}}};
         end else begin
             if(addr_valid & addr_ready) begin
-                cache_line <= cache[caddr];
+                cache_line <= cache_data[caddr];
+                {cvalid, tag} <= cache_tags[caddr];
                 sync_addr <= addr;
                 sync_volatile <= addr_volatile;
                 sync_wr <= wr;
@@ -146,11 +146,14 @@ module cache #(
                     wb_stb_o <= 0;
                     line_full <= 0;
                     if(~wb_we_o) begin
-                        if(~sync_volatile) cache[sync_caddr] <= {1'b1, req_tag, wb_dat_i};
+                        if(~sync_volatile) begin
+                            cache_data[sync_caddr] <= wb_dat_i;
+                            cache_tags[sync_caddr] <= {1'b1, req_tag};
+                        end 
                         fetch_word <= wb_dat_i[in_line_addr*WORD_WIDTH +: WORD_WIDTH];
                         fetch_word_fresh <= 1;
                     end else if(cache_correct) begin
-                        cache[sync_caddr] <= cache_update;
+                        cache_data[sync_caddr] <= cache_update;
                     end
                 end
             end
