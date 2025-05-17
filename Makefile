@@ -1,6 +1,17 @@
 # Update with your installation location
 YOSYS_GATEWARE_LOC = /opt/oss-cad-suite/share/yosys
 
+# Update with your part
+NEXTPNR_DEVICE = 25k
+NEXTPNR_PACKAGE = CSFBGA285
+NEXTPNR_SPEEDGRADE = 6
+
+# Nothing I've done in the pnr settings seems to do much, but it's there
+PLACER_OPTS = --placer heap
+ROUTER_OPTS = --router router1
+
+PNR_OPTS = --$(NEXTPNR_DEVICE) --package $(NEXTPNR_PACKAGE) --speed $(NEXTPNR_SPEEDGRADE) $(PLACER_OPTS) $(ROUTER_OPTS)
+
 RTL_DIR = rtl
 RTL_COMMON_DIR = $(RTL_DIR)/common
 RTL_SIM_DIR = $(RTL_DIR)/sim
@@ -106,10 +117,10 @@ $(BUILD_DIR)/%.json: $(BUILD_DIR)/%.ys | $(BUILD_DIR)
 	yosys -s "$<" > yosys-log.txt
 
 $(BUILD_DIR)/%_out.config $(BUILD_DIR)/%.pnr.json: $(BUILD_DIR)/%.json $(PCF) | $(BUILD_DIR)
-	nextpnr-ecp5 --json $< --textcfg $(BUILD_DIR)/$*_out.config $(NEXTPNR_DENSITY) --package CSFBGA285 --lpf $(PCF) --write $(BUILD_DIR)/$*.pnr.json 2> nextpnr-log.txt
+	nextpnr-ecp5 --json $< --textcfg $(BUILD_DIR)/$*_out.config $(PNR_OPTS) --lpf $(PCF) --write $(BUILD_DIR)/$*.pnr.json 2> nextpnr-log.txt
 
 nextpnrgui: $(BUILD_DIR)/$(TOPLEVEL).pnr.json
-	nextpnr-ecp5 --json $< $(NEXTPNR_DENSITY) --package CSFBGA285 --lpf $(PCF) --gui &
+	nextpnr-ecp5 --json $< $(NEXTPNR_DEVICE) --package CSFBGA285 --lpf $(PCF) --gui &
 
 $(BUILD_DIR)/%.bit: $(BUILD_DIR)/%_out.config | $(BUILD_DIR)
 	ecppack --compress --freq 38.8 --input $< --bit $@
