@@ -5,6 +5,7 @@ module stage_decode(
         input [31:0] write_val,
         input [3:0] write_addr,
         input write_valid,
+        input write_pred,
 
         output step_valid,
 
@@ -39,6 +40,7 @@ module stage_decode(
         input decode_ready
     );
 
+    reg [7:0] predfile = 8'bxxxxxxx0;
     reg [31:0] regfile [0:15];
     initial regfile[0] <= 32'h00000000;
 
@@ -47,7 +49,8 @@ module stage_decode(
     for(g = 0; g < 16; g = g+1) wire[31:0] val = regfile[g];
 `endif
 
-    wire [3:0] ra_pred, ra_a, ra_b, ra_m, ra_d;
+    wire [3:0] ra_a, ra_b, ra_m, ra_d;
+    wire [2:0] ra_pred;
     wire [31:0] imm;
     wire [3:0] dec_aluop;
     wire pred_inv, use_imm, pc_relative, dec_cmp, dec_jump, dec_mem, dec_memwr;
@@ -73,16 +76,17 @@ module stage_decode(
         .aluop(dec_aluop)
     );
 
-    wire [31:0] rv_pred = regfile[ra_pred];
+    wire rv_pred = regfile[ra_pred];
     wire [31:0] rv_a = regfile[ra_a];
     wire [31:0] rv_b = regfile[ra_b];
     wire [31:0] rv_m = regfile[ra_m];
 
-    wire [31:0] rv_a_fwd, rv_b_fwd, rv_m_fwd, rv_pred_fwd;
+    wire [31:0] rv_a_fwd, rv_b_fwd, rv_m_fwd;
+    wire rv_pred_fwd;
 
-    forwarder #(32, 4) fwd [3:0] (
-        .value({rv_a, rv_b, rv_m, rv_pred}),
-        .src({ra_a, ra_b, ra_m, ra_pred}),
+    forwarder #(32, 4) fwd [2:0] (
+        .value({rv_a, rv_b, rv_m}),
+        .src({ra_a, ra_b, ra_m}),
 
         .fwd_first_src(4'hx),
         .fwd_first_val(32'hxxxxxxxx),
@@ -91,10 +95,27 @@ module stage_decode(
 
         .fwd_second_src(write_addr),
         .fwd_second_val(write_val),
-        .fwd_second_valid(write_valid),
+        .fwd_second_valid(write_valid & ~write_pred),
         .fwd_second_used(),
 
-        .forwarded_value({rv_a_fwd, rv_b_fwd, rv_m_fwd, rv_pred_fwd})
+        .forwarded_value({rv_a_fwd, rv_b_fwd, rv_m_fwd})
+    );
+
+    forwarder #(1, 3) predfwd (
+        .value(rv_pred),
+        .src(ra_pred),
+
+        .fwd_first_src(3'hx),
+        .fwd_first_val(1'bx),
+        .fwd_first_valid(1'b0),
+        .fwd_first_used(),
+
+        .fwd_second_src(write_addr[2:0]),
+        .fwd_second_val(write_val[0]),
+        .fwd_second_valid(write_valid & write_pred),
+        .fwd_second_used(),
+
+        .forwarded_value(rv_pred_fwd)
     );
 
     reg first_cycle;
@@ -111,8 +132,9 @@ module stage_decode(
 
     always @(posedge clk) if(rst) reset(); else begin
         first_cycle <= 0;
-        if(write_addr != 4'h0) regfile[write_addr] <= write_val;
-
+        if(write_addr != 4'h0) begin
+            regfile[write_addr] <= write_val;
+        end
         if(step_valid) begin // if we just performed a jump, discard
             decode_valid <= 1; 
 

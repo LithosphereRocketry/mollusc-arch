@@ -4,7 +4,7 @@ YOSYS_GATEWARE_LOC = /opt/oss-cad-suite/share/yosys
 # Update with your part
 NEXTPNR_DEVICE = 25k
 NEXTPNR_PACKAGE = CSFBGA285
-NEXTPNR_SPEEDGRADE = 6
+NEXTPNR_SPEEDGRADE = 8
 
 # Nothing I've done in the pnr settings seems to do much, but it's there
 PLACER_OPTS = --placer heap

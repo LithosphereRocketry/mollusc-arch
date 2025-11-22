@@ -4,3 +4,6 @@
 [submodule "external/verilog-wishbone"]
 	path = external/verilog-wishbone
 	url = git@github.com:LithosphereRocketry/verilog-wishbone.git
+[submodule "mollusc-toolchain"]
+	path = mollusc-toolchain
+	url = git@github.com:LithosphereRocketry/mollusc-toolchain.git

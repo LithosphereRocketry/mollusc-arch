@@ -20,12 +20,12 @@ module alu(
             4'h5: alu_res = alu_a << alu_b;
             4'h6: alu_res = alu_a >> alu_b;
             4'h7: alu_res = alu_a >>> alu_b;
+            4'h8: alu_res = {31'h0, (alu_a ^ 32'h80000000) < (alu_b ^ 32'h80000000)};
+            4'h9: alu_res = {31'h0, alu_a < alu_b};
+            4'ha: alu_res = {31'h0, alu_a == alu_b};
             default: alu_res = 'x;
         endcase else case(op[1:0])
-            2'h0: alu_res = {31'h0, alu_a < alu_b};
-            2'h1: alu_res = {31'h0, (alu_a ^ 32'h80000000) < (alu_b ^ 32'h80000000)};
-            2'h2: alu_res = {31'h0, alu_a == alu_b};
-            2'h3: alu_res = 'x;
+            default: alu_res = 'x;
         endcase
     end
     
